@@ -36,7 +36,7 @@ partial credit. Maximum score: 6.
 | 1 | Exact amount disclosed for every active ingredient | No proprietary blend appears anywhere on the Supplement Facts panel |
 | 2 | Standardization percentage stated where potency depends on it | e.g. % withanolides, % curcuminoids |
 | 3 | Specific chemical form named | "Magnesium glycinate," not "magnesium" |
-| 4 | Disclosed dose falls within published human-trial range | Cross-checked against the reference table in this repository |
+| 4 | Disclosed dose falls within the trial range for the outcome the product claims | Cross-checked against `clinical-doses.csv` |
 | 5 | Third-party certificate of analysis publicly accessible | No email gate, no account required |
 | 6 | Amounts stated per serving, with serving size and servings per container both visible | Both figures present on the panel |
 
