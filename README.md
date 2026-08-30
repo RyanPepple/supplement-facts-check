@@ -4,7 +4,7 @@ An independent audit of dose disclosure on gut-health supplement labels.
 
 - **Status:** Methodology locked. Data collection not yet begun.
 - **Author:** Ryan Pepple
-- **Methodology version:** 1.3 — locked 2026-08-30
+- **Methodology version:** 1.4 — locked 2026-08-30
 
 ---
 
@@ -24,7 +24,7 @@ can reproduce, check, or dispute the results.
 
 ---
 
-## Methodology v1.3
+## Methodology v1.4
 
 ### Scoring rubric
 
@@ -68,6 +68,11 @@ falls outside it.
 reference table. Criterion 4 requires published human-trial evidence for
 the claimed outcome. An ingredient with substantial preclinical support
 but no human trial is treated as having no reference range.
+
+**Positive-outcome trials only.** Reference dose ranges are drawn from
+trials that found a significant effect on the outcome measured. Trials
+that found no effect are recorded in the notes field but do not set the
+range. A dose shown not to work is not evidence that the dose is correct.
 
 **Probiotics.** Clinical trials of probiotic strains report dosing
 predominantly in milligrams of preparation rather than colony-forming
