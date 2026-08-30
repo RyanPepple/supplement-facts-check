@@ -39,6 +39,37 @@ partial credit. Maximum score: 6.
 | 4 | Disclosed dose falls within the trial range for the outcome the product claims | Cross-checked against `clinical-doses.csv` |
 | 5 | Third-party certificate of analysis publicly accessible | No email gate, no account required |
 | 6 | Amounts stated per serving, with serving size and servings per container both visible | Both figures present on the panel |
+### How criterion 4 is applied
+
+Clinical dose ranges are outcome-specific. Glutamine trials measuring
+intestinal permeability and glutamine trials measuring IBS symptom
+severity used different doses; zinc carnosine trials for permeability and
+for gastric ulcer healing used different doses. There is no single
+"clinical dose" for most ingredients.
+
+Criterion 4 is therefore scored against the outcome the product claims on
+its label or product page. A product marketed for intestinal permeability
+is scored against permeability trials. A product marketed for symptom
+relief is scored against symptom trials.
+
+Where the literature is contested, the reference table records the range
+and the disagreement in the notes field, and the product is given the
+benefit of the doubt: falling within any credible published range for the
+claimed outcome scores 1.
+
+Where no adequate human trial exists for an ingredient at all, that
+ingredient is marked "no adequate human trial identified" and excluded
+from the product's criterion 4 assessment. A product scores 0 on
+criterion 4 only if at least one of its actives has a reference range and
+falls outside it.
+
+**Probiotics.** Clinical trials of probiotic strains report dosing
+predominantly in milligrams of preparation rather than colony-forming
+units, while product labels almost universally report CFU. These units are
+not reliably interconvertible, as CFU per milligram varies by manufacturer
+and by viability at manufacture versus expiry. Probiotic ingredients are
+therefore excluded from criterion 4 and assessed on criteria 1, 2, 3, 5
+and 6 only.
 
 ### Criteria deliberately excluded
 
