@@ -4,7 +4,7 @@ An independent audit of dose disclosure on gut-health supplement labels.
 
 - **Status:** Methodology locked. Data collection not yet begun.
 - **Author:** Ryan Pepple
-- **Methodology version:** 1.2 — locked 2026-08-30
+- **Methodology version:** 1.3 — locked 2026-08-30
 
 ---
 
@@ -24,7 +24,7 @@ can reproduce, check, or dispute the results.
 
 ---
 
-## Methodology v1.2
+## Methodology v1.3
 
 ### Scoring rubric
 
@@ -39,6 +39,7 @@ partial credit. Maximum score: 6.
 | 4 | Disclosed dose falls within the trial range for the outcome the product claims | Cross-checked against `clinical-doses.csv` |
 | 5 | Third-party certificate of analysis publicly accessible | No email gate, no account required |
 | 6 | Amounts stated per serving, with serving size and servings per container both visible | Both figures present on the panel |
+
 ### How criterion 4 is applied
 
 Clinical dose ranges are outcome-specific. Glutamine trials measuring
@@ -62,6 +63,11 @@ ingredient is marked "no adequate human trial identified" and excluded
 from the product's criterion 4 assessment. A product scores 0 on
 criterion 4 only if at least one of its actives has a reference range and
 falls outside it.
+
+**Human trials only.** Animal and in vitro studies are excluded from the
+reference table. Criterion 4 requires published human-trial evidence for
+the claimed outcome. An ingredient with substantial preclinical support
+but no human trial is treated as having no reference range.
 
 **Probiotics.** Clinical trials of probiotic strains report dosing
 predominantly in milligrams of preparation rather than colony-forming
@@ -142,5 +148,5 @@ public domain. No attribution required, though it is appreciated.
 ## Suggested citation
 
 Pepple, R. (2026). *Supplement Facts Check: an audit of dose disclosure on
-gut-health supplement labels.* Version 1.2.
+gut-health supplement labels.* Version 1.3.
 https://github.com/RyanPepple/supplement-facts-check
