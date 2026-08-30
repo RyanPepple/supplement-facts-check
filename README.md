@@ -2,9 +2,9 @@
 
 An independent audit of dose disclosure on gut-health supplement labels.
 
-**Status:** Methodology locked. Data collection not yet begun.
-**Author:** Ryan Pepple 
-**Methodology version:** 1.0 — locked 08/30/2026
+- **Status:** Methodology locked. Data collection not yet begun.
+- **Author:** Ryan Pepple
+- **Methodology version:** 1.0 — locked 2026-08-30
 
 ---
 
