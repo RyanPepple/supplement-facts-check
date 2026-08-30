@@ -4,7 +4,7 @@ An independent audit of dose disclosure on gut-health supplement labels.
 
 - **Status:** Methodology locked. Data collection not yet begun.
 - **Author:** Ryan Pepple
-- **Methodology version:** 1.0 — locked 2026-08-30
+- **Methodology version:** 1.2 — locked 2026-08-30
 
 ---
 
@@ -24,7 +24,7 @@ can reproduce, check, or dispute the results.
 
 ---
 
-## Methodology v1.0
+## Methodology v1.2
 
 ### Scoring rubric
 
@@ -142,5 +142,5 @@ public domain. No attribution required, though it is appreciated.
 ## Suggested citation
 
 Pepple, R. (2026). *Supplement Facts Check: an audit of dose disclosure on
-gut-health supplement labels.* Version 1.0.
+gut-health supplement labels.* Version 1.2.
 https://github.com/RyanPepple/supplement-facts-check
