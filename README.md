@@ -4,7 +4,7 @@ An independent audit of dose disclosure on gut-health supplement labels.
 
 - **Status:** Methodology locked. Data collection not yet begun.
 - **Author:** Ryan Pepple
-- **Methodology version:** 1.4 — locked 2026-08-30
+- **Methodology version:** 1.5 — locked 2026-08-30
 
 ---
 
@@ -24,7 +24,7 @@ can reproduce, check, or dispute the results.
 
 ---
 
-## Methodology v1.4
+## Methodology v1.5
 
 ### Scoring rubric
 
@@ -73,6 +73,12 @@ but no human trial is treated as having no reference range.
 trials that found a significant effect on the outcome measured. Trials
 that found no effect are recorded in the notes field but do not set the
 range. A dose shown not to work is not evidence that the dose is correct.
+
+**Absorption enhancers.** Ingredients included to increase the
+bioavailability of other ingredients rather than to produce an
+independent effect are excluded from criterion 4. Their doses are
+recorded in the reference table where trials state them, but no trial
+tests them against the outcome the product claims.
 
 **Probiotics.** Clinical trials of probiotic strains report dosing
 predominantly in milligrams of preparation rather than colony-forming
@@ -153,5 +159,5 @@ public domain. No attribution required, though it is appreciated.
 ## Suggested citation
 
 Pepple, R. (2026). *Supplement Facts Check: an audit of dose disclosure on
-gut-health supplement labels.* Version 1.3.
+gut-health supplement labels.* Version 1.5.
 https://github.com/RyanPepple/supplement-facts-check
