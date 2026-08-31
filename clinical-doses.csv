@@ -1,5 +1,6 @@
 ingredient,form,dose_low,dose_high,unit,outcome_measured,pmid,notes
-L-glutamine,free-form,,,mg,,,
+L-glutamine,free-form,15,15,g,"post-infectious IBS-D symptom severity and permeability; 5g TID for 8 weeks (Zhou 2019)",30108163,
+L-glutamine,free-form,30,,g,"intestinal permeability; meta-analysis found no overall effect, significant reduction only in subgroup >30g/day",39397201,
 Zinc carnosine,polaprezinc,,,mg,,,
 Slippery elm,inner bark powder,,,mg,,,
 Marshmallow root,root extract,,,mg,,,
