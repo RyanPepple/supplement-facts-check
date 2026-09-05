@@ -101,7 +101,17 @@ The following were considered and rejected as scoring criteria:
 
 ### Sample selection
 
-[TO BE FINALIZED — stated rule, fixed date, applied without exception]
+The top 30 gut-health supplements ranked in Amazon Best Sellers in Probiotic Nutritional Supplements,
+captured on 09/05/2026. This list
+is fixed at capture and not revised as rankings change afterward.
+
+A product is included only if the digestive/gut-health benefit is the
+first-listed claim in its product title or primary bullet. Products
+whose first-listed claim is vaginal/urinary tract health, oral/dental
+health, or an unrelated function (e.g., pre-alcohol support) are
+excluded, even if digestive support is mentioned secondarily. This test
+is applied to every product in the category ranking, in rank order,
+without exception.
 
 ### Data sources
 
@@ -124,8 +134,9 @@ from scoring.
 
 ### Conflict of interest
 
-This project is authored by Ryan Pepple, who has a commercial interest in
-the dietary supplement category. Mitigations:
+This project is authored by Ryan Pepple, who owns CalmGut (operating as
+SHUVEN), a gut-brain axis supplement brand. CalmGut/SHUVEN products
+compete directly with several products scored in this report. Mitigations:
 
 - The rubric was written and committed to version control before any
   product data was collected. The commit history in this repository is the
