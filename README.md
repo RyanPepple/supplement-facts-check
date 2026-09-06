@@ -40,6 +40,20 @@ partial credit. Maximum score: 6.
 | 5 | Third-party certificate of analysis publicly accessible | No email gate, no account required |
 | 6 | Amounts stated per serving, with serving size and servings per container both visible | Both figures present on the panel |
 
+### How criterion 2 is applied
+
+Criterion 2 applies only where potency depends on a marker compound:
+standardized herbal or botanical extracts (e.g., % withanolides,
+% curcuminoids). Products containing no such ingredient are not
+penalized for its absence. Criterion 2 scores 1 by default when
+nothing in the formula requires a stated percentage.
+
+Unlike the probiotic exclusion under criterion 4, this is not a
+unit-mismatch problem; the requirement simply does not apply. The
+criterion therefore remains a scored point rather than reducing the
+total possible score, keeping every product comparable on the same
+6-point scale.
+
 ### How criterion 4 is applied
 
 Clinical dose ranges are outcome-specific. Glutamine trials measuring
