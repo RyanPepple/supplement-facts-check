@@ -114,6 +114,14 @@ trials that found a significant effect on the outcome measured. Trials
 that found no effect are recorded in the notes field but do not set the
 range. A dose shown not to work is not evidence that the dose is correct.
 
+**Negative findings carry their search.** "No adequate human trial
+identified" is a claim about the literature, and it is what excludes an
+ingredient from criterion 4 — so a wrong one silently spares a product a
+point it should have lost. Rows making that claim record the date the
+search was run and what it returned, the same standard criterion 5 applies
+to a missing certificate. Absence of evidence is recorded as of a date, not
+asserted in general.
+
 **Absorption enhancers.** Ingredients included to increase the
 bioavailability of other ingredients rather than to produce an
 independent effect are excluded from criterion 4. Their doses are
