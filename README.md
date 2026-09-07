@@ -5,7 +5,7 @@ An independent audit of dose disclosure on gut-health supplement labels.
 - **Status:** Methodology locked. Pilot scoring under way; full data
   collection not yet begun.
 - **Author:** Ryan Pepple
-- **Methodology version:** 1.6 — locked 2026-09-07
+- **Methodology version:** 1.7 — locked 2026-09-07
 
 ---
 
@@ -25,7 +25,7 @@ can reproduce, check, or dispute the results.
 
 ---
 
-## Methodology v1.6
+## Methodology v1.7
 
 ### Scoring rubric
 
@@ -48,6 +48,16 @@ standardized herbal or botanical extracts (e.g., % withanolides,
 % curcuminoids). Products containing no such ingredient are not
 penalized for its absence. Criterion 2 scores 1 by default when
 nothing in the formula requires a stated percentage.
+
+**What counts as standardization-dependent.** Criterion 2 applies wherever
+a stated percentage is required to compare the label to a reference range —
+not only to botanical marker compounds. An ingredient sold at graded
+purities, such as xylooligosaccharide (marketed anywhere from roughly 35% to
+95% XOS), declared only as an extract weight cannot be compared to a range
+expressed in the active compound. The percentage is therefore
+potency-determining and its absence scores 0. The test is functional: if the
+disclosed figure cannot be converted into the unit the evidence uses, the
+standardization is missing.
 
 Unlike the probiotic exclusion under criterion 4, this is not a
 unit-mismatch problem; the requirement simply does not apply. The
@@ -128,6 +138,25 @@ independent effect are excluded from criterion 4. Their doses are
 recorded in the reference table where trials state them, but no trial
 tests them against the outcome the product claims.
 
+**Evidence hierarchy.** Where more than one trial could set a range, they
+are not equal. Two rules apply, in order, after the human-trials-only and
+positive-outcome-only rules above:
+
+1. **Attribution.** A trial of a multi-ingredient formula cannot set a range
+   for any single component, because the effect cannot be attributed to that
+   component. This already governs the multi-herb blends in the reference
+   table, and it applies identically to a finished commercial product: a
+   synbiotic trialled whole does not establish the dose of its prebiotic.
+2. **Independence.** Where an independent trial of the ingredient exists, it
+   sets the range. A trial authored or funded by the manufacturer of the
+   ingredient or product is recorded in the notes, and sets a range only
+   where no independent trial does — flagged in the row as the weaker basis.
+
+Without the first rule a brand could establish its own dose by trialling the
+formula rather than the ingredient; without the second, by funding the only
+study. Both would let the audited party set the standard it is audited
+against.
+
 **Probiotics.** Clinical trials of probiotic strains report dosing
 predominantly in milligrams of preparation rather than colony-forming
 units, while product labels almost universally report CFU. These units are
@@ -188,6 +217,30 @@ excluded, even if digestive support is mentioned secondarily. This test
 is applied to every product in the category ranking, in rank order,
 without exception.
 
+**What "first-listed" means.** The test asks whether the product is
+presented as a gut-health product, not how a marketing string is punctuated.
+Where a title opens with a compound benefit phrase naming several systems
+together — "Immune, Digestive & Gut Health" — digestive health counts as
+first-listed. A product is excluded only where the first benefit named is
+wholly unrelated to the gut and digestive support appears later as a
+secondary claim. The listed exclusions are the guide: vaginal or urinary
+tract health, oral or dental health, and unrelated functions such as
+pre-alcohol support are products that are fundamentally about something
+else, which is what this test is for.
+
+**What "top 30" counts.** The sample is the first 30 rows of the category
+ranking as captured, examined in rank order. Exclusions are not backfilled
+from further down the ranking: a captured boundary is only fixed if it does
+not move with the number of products that fail the test. The scored set will
+therefore be smaller than 30.
+
+**The captured ranking is recorded in `sample.csv`**, one row per product
+in rank order, carrying the first-listed claim the test was applied to, the
+include/exclude decision, and the reason for every exclusion. Excluded
+products stay in the file: a sample is only auditable if the rejections are
+visible alongside the acceptances. Without this file the claim that the list
+was fixed at capture cannot be checked by anyone, including its author.
+
 ### Data sources
 
 Primary: the NIH Office of Dietary Supplements
@@ -240,6 +293,7 @@ compete directly with several products scored in this report. Mitigations:
 | File | Contents |
 |------|----------|
 | `README.md` | This methodology |
+| `sample.csv` | The captured Amazon ranking in rank order, with the first-listed claim, include/exclude decision, and reason for each exclusion |
 | `clinical-doses.csv` | Reference table: ingredient, form, trial dose range, unit, outcome measured, PubMed ID |
 | `pilot-scores.csv` | Pilot scoring worksheet: one row per ranked product, scored per criterion |
 | `captures/` | Label captures backing every scored row: Supplement Facts panel and product listing per product |
@@ -265,5 +319,5 @@ public domain. No attribution required, though it is appreciated.
 ## Suggested citation
 
 Pepple, R. (2026). *Supplement Facts Check: an audit of dose disclosure on
-gut-health supplement labels.* Version 1.6.
+gut-health supplement labels.* Version 1.7.
 https://github.com/RyanPepple/supplement-facts-check
