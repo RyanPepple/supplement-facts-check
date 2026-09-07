@@ -188,6 +188,21 @@ excluded, even if digestive support is mentioned secondarily. This test
 is applied to every product in the category ranking, in rank order,
 without exception.
 
+**The captured ranking is recorded in `sample.csv`**, one row per product
+in rank order, carrying the first-listed claim the test was applied to, the
+include/exclude decision, and the reason for every exclusion. Excluded
+products stay in the file: a sample is only auditable if the rejections are
+visible alongside the acceptances. Without this file the claim that the list
+was fixed at capture cannot be checked by anyone, including its author.
+
+**Open question — what "top 30" counts.** The sentence above admits two
+readings: the first 30 rows of the category ranking, which after exclusions
+yields fewer than 30 scored products; or enough of the ranking to reach 30
+products that pass the test, which goes deeper than rank 30. These produce
+different samples. `sample.csv` records the rank of every row examined, so
+whichever reading is adopted the file shows what was actually done — but the
+methodology should say which, before the ranking is filled in.
+
 ### Data sources
 
 Primary: the NIH Office of Dietary Supplements
@@ -240,6 +255,7 @@ compete directly with several products scored in this report. Mitigations:
 | File | Contents |
 |------|----------|
 | `README.md` | This methodology |
+| `sample.csv` | The captured Amazon ranking in rank order, with the first-listed claim, include/exclude decision, and reason for each exclusion |
 | `clinical-doses.csv` | Reference table: ingredient, form, trial dose range, unit, outcome measured, PubMed ID |
 | `pilot-scores.csv` | Pilot scoring worksheet: one row per ranked product, scored per criterion |
 | `captures/` | Label captures backing every scored row: Supplement Facts panel and product listing per product |
