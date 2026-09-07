@@ -2,9 +2,10 @@
 
 An independent audit of dose disclosure on gut-health supplement labels.
 
-- **Status:** Methodology locked. Data collection not yet begun.
+- **Status:** Methodology locked. Pilot scoring under way; full data
+  collection not yet begun.
 - **Author:** Ryan Pepple
-- **Methodology version:** 1.5 — locked 2026-08-30
+- **Methodology version:** 1.6 — locked 2026-09-07
 
 ---
 
@@ -24,7 +25,7 @@ can reproduce, check, or dispute the results.
 
 ---
 
-## Methodology v1.5
+## Methodology v1.6
 
 ### Scoring rubric
 
@@ -35,7 +36,7 @@ partial credit. Maximum score: 6.
 |---|-----------|---------------|
 | 1 | Exact amount disclosed for every active ingredient | No proprietary blend appears anywhere on the Supplement Facts panel |
 | 2 | Standardization percentage stated where potency depends on it | e.g. % withanolides, % curcuminoids |
-| 3 | Specific chemical form named | "Magnesium glycinate," not "magnesium" |
+| 3 | Specific chemical form named, or strain designation for live organisms | "Magnesium glycinate," not "magnesium"; "*L. rhamnosus* GG," not "*L. rhamnosus*" |
 | 4 | Disclosed dose falls within the trial range for the outcome the product claims | Cross-checked against `clinical-doses.csv` |
 | 5 | Third-party certificate of analysis publicly accessible | No email gate, no account required |
 | 6 | Amounts stated per serving, with serving size and servings per container both visible | Both figures present on the panel |
@@ -53,6 +54,31 @@ unit-mismatch problem; the requirement simply does not apply. The
 criterion therefore remains a scored point rather than reducing the
 total possible score, keeping every product comparable on the same
 6-point scale.
+
+### How criterion 3 is applied
+
+Criterion 3 asks whether the specific chemical form is named, because the
+form determines what the body actually receives. "Magnesium glycinate"
+scores 1; "magnesium" scores 0.
+
+**Probiotics.** The equivalent of chemical form for a live microorganism is
+the strain designation. Probiotic effects are strain-specific and do not
+generalize across a species: *Lactobacillus rhamnosus* GG has been trialled
+for outcomes that other *L. rhamnosus* strains have not, and evidence for
+one *Bifidobacterium longum* strain is not evidence for another. A label
+naming only genus and species does not identify what is in the bottle, and
+the published literature cannot be matched to it.
+
+Criterion 3 therefore scores 1 for a probiotic product only when every
+listed organism carries a strain designation — for example
+*Lactobacillus rhamnosus* GG or *Bifidobacterium longum* 35624. Genus and
+species alone — "*Lactobacillus acidophilus*" — scores 0, and a single
+undesignated organism anywhere in the formula is enough to score 0. A
+strain designation means a specific identifier assigned by a culture
+depositary or the manufacturer, not a marketing name for a blend.
+
+This rule governs the criterion 3 point only. Probiotics remain excluded
+from criterion 4 for the separate unit-mismatch reason given below.
 
 ### How criterion 4 is applied
 
@@ -146,6 +172,11 @@ discrepancy is noted in the dataset.
 Products that cannot be verified against a current label are excluded
 from scoring.
 
+Label captures are stored in `captures/`, named
+`<brand>-<product>-<YYYY-MM-DD>.png`, with the same date recorded in the
+`capture_date` field of the row that cites them. A scored row without a
+corresponding capture is incomplete, not merely undocumented.
+
 ### Conflict of interest
 
 This project is authored by Ryan Pepple, who owns CalmGut (operating as
@@ -158,7 +189,11 @@ compete directly with several products scored in this report. Mitigations:
 - No criterion rewards any attribute specific to the author's own products.
 - Products in which the author has a commercial interest are excluded from
   the ranking and scored separately in an appendix, using the identical
-  rubric.
+  rubric. The appendix is a physically separate file
+  (`appendix-scores.csv`, and `appendix-*.csv` for the full run) sharing
+  the ranked file's header, so no ranking, mean, or count computed over
+  the ranked data can include an author-owned product without a deliberate
+  choice to combine the two files.
 
 ---
 
@@ -167,9 +202,16 @@ compete directly with several products scored in this report. Mitigations:
 | File | Contents |
 |------|----------|
 | `README.md` | This methodology |
-| `clinical-doses.csv` | Reference table: ingredient, form, trial dose range, PubMed ID |
+| `clinical-doses.csv` | Reference table: ingredient, form, trial dose range, unit, outcome measured, PubMed ID |
+| `pilot-scores.csv` | Pilot scoring worksheet: one row per ranked product, scored per criterion |
+| `appendix-scores.csv` | Same rubric, same columns, for products in which the author has a commercial interest — kept out of the ranked file so they cannot be aggregated into it by accident |
+
+Planned, not yet created:
+
+| File | Contents |
+|------|----------|
 | `labels-raw.csv` | One row per ingredient per product, as captured |
-| `scores.csv` | One row per product, scored per criterion |
+| `scores.csv` | One row per product in the full sample, scored per criterion |
 
 _(Data files added as collection proceeds.)_
 
@@ -184,5 +226,5 @@ public domain. No attribution required, though it is appreciated.
 ## Suggested citation
 
 Pepple, R. (2026). *Supplement Facts Check: an audit of dose disclosure on
-gut-health supplement labels.* Version 1.5.
+gut-health supplement labels.* Version 1.6.
 https://github.com/RyanPepple/supplement-facts-check
