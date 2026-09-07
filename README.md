@@ -128,6 +128,33 @@ and by viability at manufacture versus expiry. Probiotic ingredients are
 therefore excluded from criterion 4 and assessed on criteria 1, 2, 3, 5
 and 6 only.
 
+### How criterion 5 is applied
+
+Criterion 5 asks whether a third-party certificate of analysis for the
+product is publicly accessible: reachable without an email address, an
+account, or a support request. A batch-number lookup that returns a
+certificate scores 1, provided no email or account is required to use it.
+
+Three things are not a certificate of analysis:
+
+- A "third-party tested" claim, badge, or seal with no document behind it.
+  The criterion is about the document being accessible, not the claim being
+  made.
+- A GMP or facility registration certificate, which covers the
+  manufacturing site rather than the product.
+- A certificate issued by the manufacturer's own laboratory, which is not
+  third-party.
+
+**A zero is a negative finding and is recorded as one.** The search covers
+the product page, the brand site (footer links commonly named Quality,
+Testing, Lab Results, Transparency, or Certificate of Analysis), a
+site-scoped web search for "certificate of analysis", and the retail
+listing's images. Where that search returns nothing, the row records that
+no publicly accessible certificate was *located* on the capture date — not
+that none exists. A certificate published later, or reachable by a route
+this search did not cover, would change the score, and the dated record
+makes that revision auditable rather than silent.
+
 ### Criteria deliberately excluded
 
 The following were considered and rejected as scoring criteria:
@@ -207,6 +234,7 @@ compete directly with several products scored in this report. Mitigations:
 | `README.md` | This methodology |
 | `clinical-doses.csv` | Reference table: ingredient, form, trial dose range, unit, outcome measured, PubMed ID |
 | `pilot-scores.csv` | Pilot scoring worksheet: one row per ranked product, scored per criterion |
+| `captures/` | Label captures backing every scored row: Supplement Facts panel and product listing per product |
 | `appendix-scores.csv` | Same rubric, same columns, for products in which the author has a commercial interest — kept out of the ranked file so they cannot be aggregated into it by accident |
 
 Planned, not yet created:
