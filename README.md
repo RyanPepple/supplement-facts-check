@@ -173,8 +173,11 @@ Products that cannot be verified against a current label are excluded
 from scoring.
 
 Label captures are stored in `captures/`, named
-`<brand>-<product>-<YYYY-MM-DD>.png`, with the same date recorded in the
-`capture_date` field of the row that cites them. A scored row without a
+`<brand>-<product>-<view>-<YYYY-MM-DD>.png`, where `<view>` is `panel`
+for the Supplement Facts panel or `listing` for the product page carrying
+the claims that criterion 4 is scored against. Both views are captured for
+each product, and the same date is recorded in the `capture_date` field of
+the row that cites them. A scored row without a
 corresponding capture is incomplete, not merely undocumented.
 
 ### Conflict of interest
