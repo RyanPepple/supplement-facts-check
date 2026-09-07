@@ -172,6 +172,11 @@ discrepancy is noted in the dataset.
 Products that cannot be verified against a current label are excluded
 from scoring.
 
+Label captures are stored in `captures/`, named
+`<brand>-<product>-<YYYY-MM-DD>.png`, with the same date recorded in the
+`capture_date` field of the row that cites them. A scored row without a
+corresponding capture is incomplete, not merely undocumented.
+
 ### Conflict of interest
 
 This project is authored by Ryan Pepple, who owns CalmGut (operating as
@@ -184,7 +189,11 @@ compete directly with several products scored in this report. Mitigations:
 - No criterion rewards any attribute specific to the author's own products.
 - Products in which the author has a commercial interest are excluded from
   the ranking and scored separately in an appendix, using the identical
-  rubric.
+  rubric. The appendix is a physically separate file
+  (`appendix-scores.csv`, and `appendix-*.csv` for the full run) sharing
+  the ranked file's header, so no ranking, mean, or count computed over
+  the ranked data can include an author-owned product without a deliberate
+  choice to combine the two files.
 
 ---
 
@@ -194,7 +203,8 @@ compete directly with several products scored in this report. Mitigations:
 |------|----------|
 | `README.md` | This methodology |
 | `clinical-doses.csv` | Reference table: ingredient, form, trial dose range, unit, outcome measured, PubMed ID |
-| `pilot-scores.csv` | Pilot scoring worksheet: one row per product, scored per criterion |
+| `pilot-scores.csv` | Pilot scoring worksheet: one row per ranked product, scored per criterion |
+| `appendix-scores.csv` | Same rubric, same columns, for products in which the author has a commercial interest — kept out of the ranked file so they cannot be aggregated into it by accident |
 
 Planned, not yet created:
 
