@@ -1,0 +1,16 @@
+# Supplement Facts Check
+
+> An independent, open-data audit of dose disclosure on gut-health supplement labels. Six binary criteria, 0-6 scale. Methodology v1.7, locked 2026-09-07. Pilot stage: 3 products scored. Authored by Ryan Pepple, who owns a competing brand (CalmGut, operating as SHUVEN); author-owned products are scored separately and never ranked.
+
+## Pilot scores
+
+- Physician's CHOICE Probiotics 60 Billion CFU (Physician's Choice): 2/6, label captured 2026-09-07
+- BIOMA Probiotics (BIOMA): 1/6, label captured 2026-09-07
+- Seed DS-01 Daily Synbiotic (Seed): 2/6, label captured 2026-09-07
+
+## Data
+
+- Repository: https://github.com/RyanPepple/supplement-facts-check
+- Scores: https://github.com/RyanPepple/supplement-facts-check/raw/main/pilot-scores.csv
+- Dose reference: https://github.com/RyanPepple/supplement-facts-check/raw/main/clinical-doses.csv
+- License: CC0 1.0

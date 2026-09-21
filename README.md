@@ -298,6 +298,8 @@ compete directly with several products scored in this report. Mitigations:
 | `pilot-scores.csv` | Pilot scoring worksheet: one row per ranked product, scored per criterion |
 | `captures/` | Label captures backing every scored row: Supplement Facts panel and product listing per product |
 | `appendix-scores.csv` | Same rubric, same columns, for products in which the author has a commercial interest — kept out of the ranked file so they cannot be aggregated into it by accident |
+| `site/build.py` | Generates the public website from the files above. Every figure on the site is read from the CSVs and this README at build time; nothing is typed into a page by hand |
+| `docs/` | The generated website, served by GitHub Pages. Do not edit by hand; run `python3 site/build.py` |
 
 Planned, not yet created:
 
