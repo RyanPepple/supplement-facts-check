@@ -13,10 +13,7 @@ evidence that only the 09/05/2026 ranking capture or a fresh screenshot can supp
    - Seed DS-01, "30-Days with Jar": B0CMJR4XGR. The committed panel capture shows
      "Style: 30-Day Starter", which is consistent with this listing.
    - Seed DS-01, "30-Day Refill": B0G99WQ4PG. "60-Day Refill": B0G99BV4K9.
-3. ~~Seed DS-01 listing capture~~ Resolved 2026-09-21: `captures/seed-ds-01-listing-2026-09-07.png` committed; inclusion applied in `sample.csv`.
-   inclusion test has not been applied from evidence. Needs
-   `captures/seed-ds-01-listing-<date>.png`. The site flags this on Seed's page
-   automatically and drops the flag once the capture exists.
+3. ~~Seed DS-01 listing capture.~~ Resolved 2026-09-21: `captures/seed-ds-01-listing-2026-09-07.png` committed; inclusion test applied in `sample.csv`.
 4. ~~`appendix-scores.csv`: SHUVEN Reset is unscored.~~ Resolved 2026-09-22:
    SHUVEN Reset has no current live production label — pages are in draft,
    sellable launch gated on trademark resolution. Per methodology, only
