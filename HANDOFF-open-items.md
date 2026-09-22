@@ -20,8 +20,12 @@ evidence that only the 09/05/2026 ranking capture or a fresh screenshot can supp
    products with a current live label are scored. Row left unscored, `notes`
    field updated with that status, conflict-of-interest page now surfaces it
    instead of a blanket "Not yet scored."
-5. **L-glutamine >30 g/d row** carries its own warning that the source abstract
-   is internally inconsistent and should be checked against the full text before
-   it scores any product. Still open.
+5. ~~L-glutamine >30 g/d row carries its own warning...~~ Resolved 2026-09-22:
+   full text checked (PMID 39397201, PMC11471693). 30 g/day confirmed correct
+   via Methods, Table 1, and Table 2's per-study doses; the source paper's own
+   Discussion/Conclusion repeat the "30 mg/day" error, not just the abstract.
+   CI inconsistency on the subgroup statistic remains unresolved -- no fix
+   available from full text. A second, separate duration-subgroup mismatch
+   found in the same paper, noted in clinical-doses.csv.
 6. **Domain.** supplementfactscheck.org (Cloudflare DNS). `SITE_URL` is set in `site/build.py`; the build writes canonical tags, `sitemap.xml`, `robots.txt` and `CNAME`.
 7. **Publishing.** Repo Settings -> Pages -> Deploy from a branch -> `main`, `/docs`.
