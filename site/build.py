@@ -329,9 +329,13 @@ to it is in the <a href="{REPO_URL}/commits/main/README.md">commit history</a>.<
     if scored_app:
         app_html = f'<div class="grid">{"".join(panel(a) for a in scored_app)}</div>'
     else:
-        names = ", ".join(e(a["product"]) for a in appendix) or "none listed"
-        app_html = (f"<p>Author-owned products on file: {names}. <b>Not yet scored.</b> When they are, they will be "
-                    f"scored by the identical rubric and shown here, never in the ranked results.</p>")
+        parts = []
+        for a in appendix:
+            note = a["notes"].strip()
+            parts.append(f"{e(a['product'])} — {e(note)}" if note else e(a["product"]))
+        names = "; ".join(parts) or "none listed"
+        app_html = (f"<p>Author-owned products on file: {names}</p>"
+                    f"<p>When scored, they will be shown here by the identical rubric, never in the ranked results.</p>")
     body = f"""<h1>Conflict of interest</h1><div class="prose">{coi}</div>
 <h2>Appendix: the author’s own products</h2><div class="prose">{app_html}</div>"""
     page("conflict-of-interest.html", "Conflict of interest | Supplement Facts Check",

@@ -17,10 +17,12 @@ evidence that only the 09/05/2026 ranking capture or a fresh screenshot can supp
    inclusion test has not been applied from evidence. Needs
    `captures/seed-ds-01-listing-<date>.png`. The site flags this on Seed's page
    automatically and drops the flag once the capture exists.
-4. **`appendix-scores.csv`: SHUVEN Reset is unscored.** The methodology excludes
-   products that cannot be verified against a current live label. Decide whether
-   Reset has a label that qualifies yet; if not, the honest entry is "not scored:
-   no production label" rather than a score from a formula sheet.
+4. ~~`appendix-scores.csv`: SHUVEN Reset is unscored.~~ Resolved 2026-09-22:
+   SHUVEN Reset has no current live production label — pages are in draft,
+   sellable launch gated on trademark resolution. Per methodology, only
+   products with a current live label are scored. Row left unscored, `notes`
+   field updated with that status, conflict-of-interest page now surfaces it
+   instead of a blanket "Not yet scored."
 5. **L-glutamine >30 g/d row** carries its own warning that the source abstract
    is internally inconsistent and should be checked against the full text before
    it scores any product. Still open.
