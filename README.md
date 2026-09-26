@@ -4,9 +4,9 @@ An independent audit of dose disclosure on gut-health supplement labels.
 
 - **Status:** Rubric locked. Sample captured 09/26/2026; scoring under way.
 - **Author:** Ryan Pepple
-- **Methodology version:** 1.10 — locked 2026-09-26. Ruling on titles and primary
-  bullets that carry no health claim; scoring rubric unchanged since v1.7 (locked
-  2026-09-07).
+- **Methodology version:** 1.11 — locked 2026-09-26. Ruling on criterion 4 for
+  products whose only actives are probiotics; scoring rubric unchanged since v1.7
+  (locked 2026-09-07).
 
 ---
 
@@ -26,7 +26,7 @@ can reproduce, check, or dispute the results.
 
 ---
 
-## Methodology v1.10
+## Methodology v1.11
 
 ### Scoring rubric
 
@@ -165,6 +165,20 @@ not reliably interconvertible, as CFU per milligram varies by manufacturer
 and by viability at manufacture versus expiry. Probiotic ingredients are
 therefore excluded from criterion 4 and assessed on criteria 1, 2, 3, 5
 and 6 only.
+
+**Ruling on probiotic-only formulas (v1.11, 2026-09-26).** Where every active
+ingredient in a product is a probiotic, criterion 4 scores 0. The exclusion above
+removes probiotic ingredients from the comparison; it does not award the point in
+their absence. Criterion 4 asks whether the disclosed dose can be checked against
+the trial range for the outcome claimed, and for a probiotic-only formula it cannot
+be, so the product does not deliver what the criterion tests. This is deliberately
+different from the criterion 2 treatment, where a requirement that does not arise
+leaves the point standing: there the label is complete as printed and nothing is
+withheld, whereas here the check is impossible. The objection this invites is
+recorded openly: a brand may fairly argue it is marked down for a units problem in
+the evidence base rather than for anything on its own label. That objection is sound
+as far as it goes, and the answer is that this audit scores what a buyer can verify,
+not what a manufacturer intended.
 
 ### How criterion 5 is applied
 
@@ -359,13 +373,16 @@ public domain. No attribution required, though it is appreciated.
 ## Suggested citation
 
 Pepple, R. (2026). *Supplement Facts Check: an audit of dose disclosure on
-gut-health supplement labels.* Version 1.10.
+gut-health supplement labels.* Version 1.11.
 https://github.com/RyanPepple/supplement-facts-check
 
 ---
 
 ## Revision history
 
+- **v1.11 — 2026-09-26.** Ruling on criterion 4 for probiotic-only formulas: scores 0,
+  because the dose cannot be checked against any trial range. Affects every product
+  whose only actives are probiotics. Scoring rubric unchanged from v1.7.
 - **v1.10 — 2026-09-26.** Ruling on listings whose title and primary bullet carry no
   health claim: ranks 20 and 25 both included. Eligible sample moves from 16 to 18 and
   no rows remain undecided. Scoring rubric unchanged from v1.7.
