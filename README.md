@@ -2,10 +2,10 @@
 
 An independent audit of dose disclosure on gut-health supplement labels.
 
-- **Status:** Methodology locked. Pilot scoring under way; full data
-  collection not yet begun.
+- **Status:** Rubric locked. Sample captured 09/26/2026; scoring under way.
 - **Author:** Ryan Pepple
-- **Methodology version:** 1.7 — locked 2026-09-07
+- **Methodology version:** 1.8 — locked 2026-09-26. Sample definition revised;
+  scoring rubric unchanged since v1.7 (locked 2026-09-07).
 
 ---
 
@@ -25,7 +25,7 @@ can reproduce, check, or dispute the results.
 
 ---
 
-## Methodology v1.7
+## Methodology v1.8
 
 ### Scoring rubric
 
@@ -205,9 +205,12 @@ The following were considered and rejected as scoring criteria:
 
 ### Sample selection
 
-The top 30 gut-health supplements ranked in Amazon Best Sellers in Probiotic Nutritional Supplements,
-captured on 09/05/2026. This list
-is fixed at capture and not revised as rankings change afterward.
+The top 30 gut-health supplements ranked in Amazon Best Sellers in Probiotic
+Nutritional Supplements (category node 3774071, reached via Health & Household >
+Vitamins, Minerals & Supplements > Digestive Supplements > Probiotics), captured
+on 09/26/2026. The capture is committed at
+[`captures/amazon-probiotics-bestsellers-top30-2026-09-26.png`](https://github.com/RyanPepple/supplement-facts-check/blob/main/captures/amazon-probiotics-bestsellers-top30-2026-09-26.png). This list is fixed
+at capture and not revised as rankings change afterward.
 
 A product is included only if the digestive/gut-health benefit is the
 first-listed claim in its product title or primary bullet. Products
@@ -240,6 +243,17 @@ include/exclude decision, and the reason for every exclusion. Excluded
 products stay in the file: a sample is only auditable if the rejections are
 visible alongside the acceptances. Without this file the claim that the list
 was fixed at capture cannot be checked by anyone, including its author.
+
+**Note on the pilot sample (added 2026-09-26).** Methodology v1.7 stated a sample
+captured on 09/05/2026. The selection was made from the live category page on that
+date, but the ranking screenshot was never saved. No such file exists in this
+repository or anywhere on the author's machine. By the standard set in the
+paragraph above, a sample whose capture was not retained cannot be checked, so it
+is not published as one. The sample was re-captured on 09/26/2026 and that capture
+is the sample of record. The three products scored during the pilot are all present
+in it, at ranks 1, 4 and 15, and all pass the inclusion test, so their scores carry
+forward unchanged. Their label capture dates remain 09/07/2026, recorded separately
+per product.
 
 ### Data sources
 
@@ -321,5 +335,16 @@ public domain. No attribution required, though it is appreciated.
 ## Suggested citation
 
 Pepple, R. (2026). *Supplement Facts Check: an audit of dose disclosure on
-gut-health supplement labels.* Version 1.7.
+gut-health supplement labels.* Version 1.8.
 https://github.com/RyanPepple/supplement-facts-check
+
+---
+
+## Revision history
+
+- **v1.8 — 2026-09-26.** Sample re-captured and the capture committed; the
+  09/05/2026 capture was never saved and is not published as a sample. Ranks and
+  ASINs filled from the new capture for all 30 rows. Category node ID recorded.
+  Scoring rubric unchanged from v1.7.
+- **v1.7 — 2026-09-07.** Four scoring rulings; Seed DS-01 falls to 2/6.
+- **v1.6.** Probiotics require a strain designation; a species name alone scores 0.

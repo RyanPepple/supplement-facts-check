@@ -203,6 +203,10 @@ def build():
     ver, locked = version_and_status(readme)
     ctx = {"ver": ver, "locked": locked}
     pilot = [r for r in read_csv("pilot-scores.csv") if r["total_score"].strip()]
+    sample = read_csv("sample.csv")
+    n_inc = sum(1 for r in sample if r["included"].strip() == "1")
+    n_exc = sum(1 for r in sample if r["included"].strip() == "0")
+    n_pend = sum(1 for r in sample if r["included"].strip() == "pending")
     appendix = read_csv("appendix-scores.csv")
     doses = read_csv("clinical-doses.csv")
     (OUT / "style.css").write_text(CSS.strip(), encoding="utf-8")
@@ -230,6 +234,24 @@ def build():
     no_blend = sum(r[CRITERIA[0][0]] == "1" for r in pilot)
     no_coa = sum(r[CRITERIA[4][0]] == "0" for r in pilot)
     top = max(int(r["total_score"]) for r in pilot)
+    _rank_src = "amazon-probiotics-bestsellers-top30-2026-09-26.png"
+    if _rank_src in caps:
+        _n, _w, _h = caps[_rank_src]
+        rank_fig = (
+            f'<figure><a href="captures/{_n}"><img loading="lazy" src="captures/{_n}" width="{_w}" height="{_h}" '
+            f'alt="Amazon Best Sellers in Probiotic Nutritional Supplements, ranks 1 to 30, captured 09/26/2026."></a>'
+            f'<figcaption>The ranking the sample was taken from, captured 09/26/2026. '
+            f'<a href="{RAW_URL}captures/{_rank_src}">Original file</a></figcaption></figure>')
+    else:
+        rank_fig = ""
+    _mark = {"1": '<span class="pass">included</span>', "0": '<span class="fail">excluded</span>',
+              "pending": "undecided"}
+    sample_rows = "".join(
+        f'<tr><td class="n">{r["rank"]}</td><td>{e(r["product"])}<br><small style="color:var(--soft)">{e(r["brand"])}</small></td>'
+        f'<td>{_mark.get(r["included"].strip(), "")}</td>'
+        f'<td class="muted">{"scored " + r["scored_in"].split(".")[0].replace("pilot-scores", "") if r["scored_in"].strip() else ("not scored yet" if r["included"].strip() == "1" else "")}</td></tr>'
+        for r in sample)
+    sample_rows = sample_rows.replace("scored  ", "scored")
     crit = "".join(f"<div><b>{i}. {e(l)}</b><span>{e(d)}</span></div>" for i, (_, l, d) in enumerate(CRITERIA, 1))
     body = f"""
 <p class="kicker" style="margin-top:40px">An independent audit of gut-health supplement labels</p>
@@ -237,14 +259,26 @@ def build():
 <p class="lede">Supplement Facts Check scores best-selling gut-health supplements on six yes-or-no questions about
 what their labels disclose: the exact doses, the specific forms, and whether any of it can be verified. The rubric
 was committed in public before any product data was collected, and every ruling made since is in the commit history.</p>
-<div class="note"><b class="sans">Pilot stage.</b> {n} products are scored so far, to test the rubric. The full sample is
-the top 30 of Amazon’s Best Sellers in Probiotic Nutritional Supplements as captured on 09/05/2026, and scoring of
-that sample has not started. Read these as pilot results, not a ranking.</div>
+<div class="note"><b class="sans">Pilot stage.</b> {n} of {n_inc} eligible products are scored so far. The full sample is
+the top 30 of Amazon’s Best Sellers in Probiotic Nutritional Supplements as captured on 09/26/2026, listed in full below
+with every inclusion decision. Read these as pilot results, not a ranking.</div>
 
 <h2>Pilot results</h2>
 <p class="lede" style="font-size:18px">Of {n} products scored, {no_blend} disclosed an exact amount for every active
 ingredient, and a public third-party certificate of analysis could not be located for {no_coa}. The highest score was {top} out of 6.</p>
 <div class="grid">{''.join(panel(r) for r in pilot)}</div>
+
+<h2>The sample</h2>
+<p class="lede" style="font-size:18px">All {len(sample)} products in the captured ranking, in rank order.
+{n_inc} pass the inclusion test, {n_exc} are excluded, {n_pend} are undecided. Exclusions stay visible: a sample
+is only auditable if the rejections are shown alongside the acceptances.</p>
+<div class="tablewrap"><table>
+<tr><th>#</th><th>Product</th><th>Inclusion</th><th>Status</th></tr>
+{sample_rows}
+</table></div>
+<p class="prose" style="font-size:15px">Full reasoning for every decision, including the exclusion reason on each
+excluded row, is in <a href="{REPO_URL}/blob/main/sample.csv">sample.csv</a>.</p>
+{rank_fig}
 
 <h2>The six criteria</h2>
 <p>Each one scores 1 or 0. The maximum is 6. A product using a generic ingredient at a studied dose scores the same
@@ -377,7 +411,9 @@ q.addEventListener('input',()=>{{const s=q.value.toLowerCase();rows.forEach(r=>r
     # ------------------------------------------------------------ llms.txt, sitemap
     lines = ["# Supplement Facts Check", "",
              "> An independent, open-data audit of dose disclosure on gut-health supplement labels. Six binary "
-             f"criteria, 0-6 scale. Methodology v{ver}, locked {locked}. Pilot stage: {n} products scored. "
+             f"criteria, 0-6 scale. Methodology v{ver}, locked {locked}. Sample: the top 30 of Amazon's Best Sellers in "
+             f"Probiotic Nutritional Supplements captured 09/26/2026; {n_inc} pass the inclusion test, {n_exc} are excluded "
+             f"as not gut-health-first, {n_pend} undecided. {n} scored so far. "
              "Authored by Ryan Pepple, who owns a competing brand (CalmGut, operating as SHUVEN); author-owned "
              "products are scored separately and never ranked.", "", "## Pilot scores", ""]
     lines += [f"- {r['product']} ({r['brand']}): {r['total_score']}/6, label captured {r['capture_date']}" for r in pilot]

@@ -1,6 +1,6 @@
 # Supplement Facts Check
 
-> An independent, open-data audit of dose disclosure on gut-health supplement labels. Six binary criteria, 0-6 scale. Methodology v1.7, locked 2026-09-07. Pilot stage: 3 products scored. Authored by Ryan Pepple, who owns a competing brand (CalmGut, operating as SHUVEN); author-owned products are scored separately and never ranked.
+> An independent, open-data audit of dose disclosure on gut-health supplement labels. Six binary criteria, 0-6 scale. Methodology v1.8, locked 2026-09-26. Sample: the top 30 of Amazon's Best Sellers in Probiotic Nutritional Supplements captured 09/26/2026; 15 pass the inclusion test, 11 are excluded as not gut-health-first, 4 undecided. 3 scored so far. Authored by Ryan Pepple, who owns a competing brand (CalmGut, operating as SHUVEN); author-owned products are scored separately and never ranked.
 
 ## Pilot scores
 
