@@ -4,8 +4,9 @@ An independent audit of dose disclosure on gut-health supplement labels.
 
 - **Status:** Rubric locked. Sample captured 09/26/2026; scoring under way.
 - **Author:** Ryan Pepple
-- **Methodology version:** 1.9 — locked 2026-09-26. Inclusion ruling on women's
-  multi-system probiotics; scoring rubric unchanged since v1.7 (locked 2026-09-07).
+- **Methodology version:** 1.10 — locked 2026-09-26. Ruling on titles and primary
+  bullets that carry no health claim; scoring rubric unchanged since v1.7 (locked
+  2026-09-07).
 
 ---
 
@@ -25,7 +26,7 @@ can reproduce, check, or dispute the results.
 
 ---
 
-## Methodology v1.9
+## Methodology v1.10
 
 ### Scoring rubric
 
@@ -242,6 +243,18 @@ feminine-health line and gut appears only inside a later benefit string; rank 18
 named and the product is not vaginal-specific. Both were carried as undecided until
 this ruling rather than being resolved silently.
 
+**Ruling on listings with no health claim in the title or primary bullet (v1.10,
+2026-09-26).** The inclusion test reads the title first, then the primary bullet. Where
+neither carries any health claim, the test reads down the bullets in order and applies
+to the first bullet that names a health benefit. A bullet about manufacturing, format,
+certification or guarantee is not a health claim and is skipped. Applied to the 09/26
+sample: rank 20 (NOW Probiotic-10) passes on its primary bullet, which names the human
+GI tract and no competing system; rank 25 (NewRhythm) has a title of format and quality
+attributes only and a primary bullet claiming manufacture in New York, so the test reads
+down to its third bullet, which opens "Digestive Health and Immune Health", and the
+product passes. This extends the rule rather than restating it: the v1.7 text assumed
+the primary bullet would carry a benefit phrase, as it did at rank 4.
+
 **What "top 30" counts.** The sample is the first 30 rows of the category
 ranking as captured, examined in rank order. Exclusions are not backfilled
 from further down the ranking: a captured boundary is only fixed if it does
@@ -346,13 +359,16 @@ public domain. No attribution required, though it is appreciated.
 ## Suggested citation
 
 Pepple, R. (2026). *Supplement Facts Check: an audit of dose disclosure on
-gut-health supplement labels.* Version 1.9.
+gut-health supplement labels.* Version 1.10.
 https://github.com/RyanPepple/supplement-facts-check
 
 ---
 
 ## Revision history
 
+- **v1.10 — 2026-09-26.** Ruling on listings whose title and primary bullet carry no
+  health claim: ranks 20 and 25 both included. Eligible sample moves from 16 to 18 and
+  no rows remain undecided. Scoring rubric unchanged from v1.7.
 - **v1.9 — 2026-09-26.** Inclusion ruling on women's multi-system probiotics: rank 7
   excluded, rank 18 included. Eligible sample moves from 15 to 16. Ranks 20 and 25
   remain undecided pending listing captures. Scoring rubric unchanged from v1.7.

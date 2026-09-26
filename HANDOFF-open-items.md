@@ -30,8 +30,10 @@ evidence that only the 09/05/2026 ranking capture or a fresh screenshot can supp
 6. **Domain.** supplementfactscheck.org (Cloudflare DNS). `SITE_URL` is set in `site/build.py`; the build writes canonical tags, `sitemap.xml`, `robots.txt` and `CNAME`.
 7. **Publishing.** Repo Settings -> Pages -> Deploy from a branch -> `main`, `/docs`.
 
-8. **Two inclusion decisions remain undecided** (updated 2026-09-26). Ranks 7 and 18
-   were ruled under methodology v1.9: rank 7 excluded, rank 18 included. Ranks 20 (NOW
-   Probiotic-10) and 25 (NewRhythm) carry no benefit phrase in the title at all and
-   still need the primary-bullet test applied from a listing capture, per the precedent
-   set at rank 4. Both are marked `pending` in `sample.csv`.
+8. ~~Inclusion decisions undecided~~ Resolved 2026-09-26. All 30 rows now carry a
+   decision: 18 included, 12 excluded, 0 undecided. Ranks 7 and 18 ruled under v1.9;
+   ranks 20 and 25 ruled under v1.10 with listing captures committed for both.
+
+9. **14 of the 18 eligible products are unscored.** Ranks 8, 9, 13, 16, 17, 18, 20, 21,
+   22, 24, 25, 26, 29 and 30 need a Supplement Facts panel capture each and a score
+   against the six criteria and `clinical-doses.csv`. Ranks 1, 4, 5 and 15 are scored.

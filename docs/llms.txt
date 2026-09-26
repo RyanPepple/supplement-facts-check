@@ -1,12 +1,13 @@
 # Supplement Facts Check
 
-> An independent, open-data audit of dose disclosure on gut-health supplement labels. Six binary criteria, 0-6 scale. Methodology v1.9, locked 2026-09-26. Sample: the top 30 of Amazon's Best Sellers in Probiotic Nutritional Supplements captured 09/26/2026; 16 pass the inclusion test, 12 are excluded as not gut-health-first, 2 undecided. 3 scored so far. Authored by Ryan Pepple, who owns a competing brand (CalmGut, operating as SHUVEN); author-owned products are scored separately and never ranked.
+> An independent, open-data audit of dose disclosure on gut-health supplement labels. Six binary criteria, 0-6 scale. Methodology v1.10, locked 2026-09-26. Sample: the top 30 of Amazon's Best Sellers in Probiotic Nutritional Supplements captured 09/26/2026; 18 pass the inclusion test, 12 are excluded as not gut-health-first, 0 undecided. 4 scored so far. Authored by Ryan Pepple, who owns a competing brand (CalmGut, operating as SHUVEN); author-owned products are scored separately and never ranked.
 
 ## Pilot scores
 
 - Physician's CHOICE Probiotics 60 Billion CFU (Physician's Choice): 2/6, label captured 2026-09-07
 - BIOMA Probiotics (BIOMA): 1/6, label captured 2026-09-07
 - Seed DS-01 Daily Synbiotic (Seed): 2/6, label captured 2026-09-07
+- Culturelle Pro Strength Probiotics (Culturelle): 3/6, label captured 2026-09-26
 
 ## Data
 

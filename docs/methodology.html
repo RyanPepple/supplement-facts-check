@@ -1,15 +1,15 @@
 <!doctype html>
 <html lang="en"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Methodology v1.9 | Supplement Facts Check</title>
+<title>Methodology v1.10 | Supplement Facts Check</title>
 <meta name="description" content="The six-criterion rubric, how each criterion is applied, how the sample was chosen, and what was deliberately left out.">
 <link rel="canonical" href="https://supplementfactscheck.org/methodology.html">
-<meta property="og:title" content="Methodology v1.9 | Supplement Facts Check"><meta property="og:description" content="The six-criterion rubric, how each criterion is applied, how the sample was chosen, and what was deliberately left out.">
+<meta property="og:title" content="Methodology v1.10 | Supplement Facts Check"><meta property="og:description" content="The six-criterion rubric, how each criterion is applied, how the sample was chosen, and what was deliberately left out.">
 <meta property="og:type" content="website">
 <link rel="stylesheet" href="style.css">
 </head><body>
 <header class="site"><div class="wrap"><a class="brand" href="index.html">Supplement Facts Check</a><nav><a href="index.html">Results</a><a href="methodology.html" aria-current="page">Methodology</a><a href="reference.html">Dose reference</a><a href="conflict-of-interest.html">Conflict of interest</a></nav></div></header>
-<main class="wrap"><p class="kicker" style="margin-top:40px">Version 1.9 · locked 2026-09-26</p>
+<main class="wrap"><p class="kicker" style="margin-top:40px">Version 1.10 · locked 2026-09-26</p>
 <h1 style="margin-top:8px">Methodology</h1>
 <p class="lede">This page is generated from the repository’s README, which is the governing text. Every change
 to it is in the <a href="https://github.com/RyanPepple/supplement-facts-check/commits/main/README.md">commit history</a>.</p>
@@ -229,6 +229,17 @@ feminine-health line and gut appears only inside a later benefit string; rank 18
 (Doctor's Recipes Women's Probiotic) is included, since digestive is the first benefit
 named and the product is not vaginal-specific. Both were carried as undecided until
 this ruling rather than being resolved silently.</p>
+<p><strong>Ruling on listings with no health claim in the title or primary bullet (v1.10,
+2026-09-26).</strong> The inclusion test reads the title first, then the primary bullet. Where
+neither carries any health claim, the test reads down the bullets in order and applies
+to the first bullet that names a health benefit. A bullet about manufacturing, format,
+certification or guarantee is not a health claim and is skipped. Applied to the 09/26
+sample: rank 20 (NOW Probiotic-10) passes on its primary bullet, which names the human
+GI tract and no competing system; rank 25 (NewRhythm) has a title of format and quality
+attributes only and a primary bullet claiming manufacture in New York, so the test reads
+down to its third bullet, which opens "Digestive Health and Immune Health", and the
+product passes. This extends the rule rather than restating it: the v1.7 text assumed
+the primary bullet would carry a benefit phrase, as it did at rank 4.</p>
 <p><strong>What "top 30" counts.</strong> The sample is the first 30 rows of the category
 ranking as captured, examined in rank order. Exclusions are not backfilled
 from further down the ranking: a captured boundary is only fixed if it does
@@ -273,7 +284,7 @@ each product, and the same date is recorded in the <code>capture_date</code> fie
 the row that cites them. A scored row without a
 corresponding capture is incomplete, not merely undocumented.</p></div></main>
 <footer><div class="wrap">
-<p>Methodology v1.9, locked 2026-09-26. All data is public domain under
+<p>Methodology v1.10, locked 2026-09-26. All data is public domain under
 <a href="https://creativecommons.org/publicdomain/zero/1.0/">CC0 1.0</a>. Every figure on this site is generated from the
 <a href="https://github.com/RyanPepple/supplement-facts-check">public repository</a>, where the full commit history is the record.</p>
 <p>Authored by Ryan Pepple, who owns a competing supplement brand. Read the
