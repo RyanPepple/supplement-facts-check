@@ -4,8 +4,8 @@ An independent audit of dose disclosure on gut-health supplement labels.
 
 - **Status:** Rubric locked. Sample captured 09/26/2026; scoring under way.
 - **Author:** Ryan Pepple
-- **Methodology version:** 1.8 — locked 2026-09-26. Sample definition revised;
-  scoring rubric unchanged since v1.7 (locked 2026-09-07).
+- **Methodology version:** 1.9 — locked 2026-09-26. Inclusion ruling on women's
+  multi-system probiotics; scoring rubric unchanged since v1.7 (locked 2026-09-07).
 
 ---
 
@@ -25,7 +25,7 @@ can reproduce, check, or dispute the results.
 
 ---
 
-## Methodology v1.8
+## Methodology v1.9
 
 ### Scoring rubric
 
@@ -231,6 +231,17 @@ tract health, oral or dental health, and unrelated functions such as
 pre-alcohol support are products that are fundamentally about something
 else, which is what this test is for.
 
+**Ruling on women's multi-system probiotics (v1.9, 2026-09-26).** Where a product
+names gut health first inside a benefit string but the product line itself is built
+around another system, the exclusion test governs and the product is excluded. Where
+gut health is named first and the product is not specific to another system, the
+literal first-listed test governs and the product is included. Applied to the 09/26
+sample: rank 7 (vH essentials Probiotics for Women) is excluded, since the line is a
+feminine-health line and gut appears only inside a later benefit string; rank 18
+(Doctor's Recipes Women's Probiotic) is included, since digestive is the first benefit
+named and the product is not vaginal-specific. Both were carried as undecided until
+this ruling rather than being resolved silently.
+
 **What "top 30" counts.** The sample is the first 30 rows of the category
 ranking as captured, examined in rank order. Exclusions are not backfilled
 from further down the ranking: a captured boundary is only fixed if it does
@@ -335,13 +346,16 @@ public domain. No attribution required, though it is appreciated.
 ## Suggested citation
 
 Pepple, R. (2026). *Supplement Facts Check: an audit of dose disclosure on
-gut-health supplement labels.* Version 1.8.
+gut-health supplement labels.* Version 1.9.
 https://github.com/RyanPepple/supplement-facts-check
 
 ---
 
 ## Revision history
 
+- **v1.9 — 2026-09-26.** Inclusion ruling on women's multi-system probiotics: rank 7
+  excluded, rank 18 included. Eligible sample moves from 15 to 16. Ranks 20 and 25
+  remain undecided pending listing captures. Scoring rubric unchanged from v1.7.
 - **v1.8 — 2026-09-26.** Sample re-captured and the capture committed; the
   09/05/2026 capture was never saved and is not published as a sample. Ranks and
   ASINs filled from the new capture for all 30 rows. Category node ID recorded.

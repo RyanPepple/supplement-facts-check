@@ -30,9 +30,8 @@ evidence that only the 09/05/2026 ranking capture or a fresh screenshot can supp
 6. **Domain.** supplementfactscheck.org (Cloudflare DNS). `SITE_URL` is set in `site/build.py`; the build writes canonical tags, `sitemap.xml`, `robots.txt` and `CNAME`.
 7. **Publishing.** Repo Settings -> Pages -> Deploy from a branch -> `main`, `/docs`.
 
-8. **Four inclusion decisions are undecided** (added 2026-09-26). Ranks 7 and 18
-   turn on whether the literal first-listed test or the "fundamentally about
-   something else" test governs when they conflict; they are mirror images and
-   must be ruled on together. Ranks 20 and 25 carry no benefit phrase in the title
-   and need the primary-bullet test applied from a listing capture, per the
-   precedent set at rank 4. All four are marked `pending` in `sample.csv`.
+8. **Two inclusion decisions remain undecided** (updated 2026-09-26). Ranks 7 and 18
+   were ruled under methodology v1.9: rank 7 excluded, rank 18 included. Ranks 20 (NOW
+   Probiotic-10) and 25 (NewRhythm) carry no benefit phrase in the title at all and
+   still need the primary-bullet test applied from a listing capture, per the precedent
+   set at rank 4. Both are marked `pending` in `sample.csv`.
