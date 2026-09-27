@@ -4,9 +4,9 @@ An independent audit of dose disclosure on gut-health supplement labels.
 
 - **Status:** Rubric locked. Sample captured 09/26/2026; scoring under way.
 - **Author:** Ryan Pepple
-- **Methodology version:** 1.11 — locked 2026-09-26. Ruling on criterion 4 for
-  products whose only actives are probiotics; scoring rubric unchanged since v1.7
-  (locked 2026-09-07).
+- **Methodology version:** 1.12 — locked 2026-09-26. Ruling on criterion 4 for
+  probiotic ingredients declared in milligrams rather than CFU; scoring rubric
+  unchanged since v1.7 (locked 2026-09-07).
 
 ---
 
@@ -162,9 +162,11 @@ against.
 predominantly in milligrams of preparation rather than colony-forming
 units, while product labels almost universally report CFU. These units are
 not reliably interconvertible, as CFU per milligram varies by manufacturer
-and by viability at manufacture versus expiry. Probiotic ingredients are
-therefore excluded from criterion 4 and assessed on criteria 1, 2, 3, 5
-and 6 only.
+and by viability at manufacture versus expiry. A probiotic ingredient
+declared in CFU is therefore excluded from criterion 4 and assessed on
+criteria 1, 2, 3, 5 and 6 only. The exclusion exists because of the unit
+mismatch and reaches only as far as the mismatch does, which the v1.12
+ruling below makes explicit.
 
 **Ruling on probiotic-only formulas (v1.11, 2026-09-26).** Where every active
 ingredient in a product is a probiotic, criterion 4 scores 0. The exclusion above
@@ -179,6 +181,44 @@ recorded openly: a brand may fairly argue it is marked down for a units problem 
 the evidence base rather than for anything on its own label. That objection is sound
 as far as it goes, and the answer is that this audit scores what a buyer can verify,
 not what a manufacturer intended.
+
+**Ruling on probiotic ingredients declared in milligrams (v1.12, 2026-09-26).** Where
+a label declares a probiotic in milligrams of preparation rather than CFU, the unit
+mismatch does not arise and the ingredient is scored on criterion 4 like any other
+ingredient. The exclusion was written for a stated reason and extends only as far as
+that reason does. Applying it to a label that reports its dose in the same unit the
+trials use would mark a product down for a problem it does not have.
+
+Rank 9, Florastor, forced this. Its panel declares *Saccharomyces boulardii*
+CNCM I-745 at 500 mg per serving, not in CFU. A search of the literature found that
+independent adult randomised trials of this strain also dose in milligrams, across a
+range of 500 to 1000 mg per day: 250 mg twice daily (Seddik 2019, PMID 30694338),
+500 mg twice daily (Sjomina 2023, PMID 37942999) and 600 mg daily (Salazar-Parra
+2023, PMID 37400812). Both halves of the mismatch fail for this label, the disclosed
+dose can be checked, and it falls inside the range. The product scores 1.
+
+One trial was set aside under the independence rule rather than counted: Maev 2025
+(PMID 40884341) dosed 500 mg twice daily but administered Enterol, a Biocodex product,
+and Biocodex is the manufacturer of Florastor. It is recorded in the reference table
+and does not set the range. The three trials above carry only academic and hospital
+affiliations; their funding statements were not verifiable from the abstracts and are
+recorded as unverified rather than asserted to be independent.
+
+The v1.11 ruling is unchanged and still governs the ordinary case, where the label
+declares CFU. Nature's Bounty Acidophilus, declared as 0.5 mg (100 million CFU)
+against a literature reported in CFU, remains 0.
+
+The objection this invites is recorded openly. The trials that set the range studied
+antibiotic-associated diarrhoea, *Helicobacter pylori* eradication support and acute
+viral diarrhoea, in patients who were being treated or were symptomatic, while
+Florastor is sold for digestive and immune health in daily use by people who are
+neither. A reader could fairly argue that a range drawn from those trials does not
+establish a dose for that claim, and that criterion 4 should have scored 0 on outcome
+grounds even with the units matching. That argument is sound enough to publish. The
+answer is that every one of those trials measures a digestive outcome, and that the
+benefit-of-the-doubt rule stated above scores 1 for falling within any credible
+published range for the claimed outcome. Applying a stricter outcome test to this
+product than to the rest of the sample would be the larger inconsistency.
 
 ### How criterion 5 is applied
 
