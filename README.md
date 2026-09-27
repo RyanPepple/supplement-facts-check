@@ -4,9 +4,9 @@ An independent audit of dose disclosure on gut-health supplement labels.
 
 - **Status:** Rubric locked. Sample captured 09/26/2026; scoring under way.
 - **Author:** Ryan Pepple
-- **Methodology version:** 1.12 — locked 2026-09-26. Ruling on criterion 4 for
-  probiotic ingredients declared in milligrams rather than CFU; scoring rubric
-  unchanged since v1.7 (locked 2026-09-07).
+- **Methodology version:** 1.13 — locked 2026-09-27. Ruling on criterion 4 where a
+  probiotic count is declared at manufacture rather than through expiry; scoring
+  rubric unchanged since v1.7 (locked 2026-09-07).
 
 ---
 
@@ -219,6 +219,35 @@ answer is that every one of those trials measures a digestive outcome, and that 
 benefit-of-the-doubt rule stated above scores 1 for falling within any credible
 published range for the claimed outcome. Applying a stricter outcome test to this
 product than to the rest of the sample would be the larger inconsistency.
+
+**Ruling on CFU declared at manufacture versus through expiry (v1.13, 2026-09-27).** Where
+a label declares a probiotic count both at the time of manufacture and as an amount
+guaranteed through the best-by date, criterion 4 is scored against the through-expiry
+figure. That is the only quantity the brand commits to delivering to the person
+swallowing the capsule, and this audit scores what a buyer receives rather than what
+leaves the factory. Scoring the higher figure would also make the criterion easy to pass
+by construction, since viability at manufacture can be set as high as the process allows
+and says nothing about the dose taken months later.
+
+The rule has a second half, and it is the half that makes it fair. Where a label declares
+only an at-manufacture count and gives no expiry guarantee, the delivered dose cannot be
+established at all, and criterion 4 scores 0 on that ingredient. Without this, a brand
+printing a single unqualified "1 billion CFU" would score better than one that disclosed
+its own decay, and the rubric would reward withholding information.
+
+Applied to rank 13, Align Pro Formula. The panel declares 1 x 10^9 CFU at manufacture and
+1 x 10^7 through the best-by date. The pivotal encapsulated trial of this strain found
+1 x 10^8 CFU significantly superior to placebo, while 1 x 10^6 and 1 x 10^10 were not
+(Whorwell 2006, PMID 16863564, n=362). The guaranteed dose is ten times below the only
+capsule dose shown to work, and one order of magnitude above a dose shown not to work.
+Criterion 4 scores 0.
+
+The objection is recorded openly. Align discloses more than most of this sample: many
+labels state a single CFU figure and never say what survives to the best-by date. It is
+uncomfortable that the more candid label is the one whose shortfall becomes visible. The
+answer is the second half of the rule above, which scores the less candid label no
+better, and the observation that the disclosure is what makes the shortfall checkable
+rather than what creates it.
 
 ### How criterion 5 is applied
 

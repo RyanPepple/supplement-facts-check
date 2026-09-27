@@ -34,7 +34,7 @@ evidence that only the 09/05/2026 ranking capture or a fresh screenshot can supp
    decision: 18 included, 12 excluded, 0 undecided. Ranks 7 and 18 ruled under v1.9;
    ranks 20 and 25 ruled under v1.10 with listing captures committed for both.
 
-9. **12 of the 18 eligible products are unscored.** Ranks 13, 16, 17, 18, 20, 21,
+9. **10 of the 18 eligible products are unscored.** Ranks 17, 18, 20, 21,
    22, 24, 25, 26, 29 and 30 need a Supplement Facts panel capture each and a score
-   against the six criteria and `clinical-doses.csv`. Ranks 1, 4, 5, 8, 9 and 15 are
-   scored.
+   against the six criteria and `clinical-doses.csv`. Ranks 1, 4, 5, 8, 9, 13, 15 and
+   16 are scored.

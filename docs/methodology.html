@@ -1,15 +1,15 @@
 <!doctype html>
 <html lang="en"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Methodology v1.12 | Supplement Facts Check</title>
+<title>Methodology v1.13 | Supplement Facts Check</title>
 <meta name="description" content="The six-criterion rubric, how each criterion is applied, how the sample was chosen, and what was deliberately left out.">
 <link rel="canonical" href="https://supplementfactscheck.org/methodology.html">
-<meta property="og:title" content="Methodology v1.12 | Supplement Facts Check"><meta property="og:description" content="The six-criterion rubric, how each criterion is applied, how the sample was chosen, and what was deliberately left out.">
+<meta property="og:title" content="Methodology v1.13 | Supplement Facts Check"><meta property="og:description" content="The six-criterion rubric, how each criterion is applied, how the sample was chosen, and what was deliberately left out.">
 <meta property="og:type" content="website">
 <link rel="stylesheet" href="style.css">
 </head><body>
 <header class="site"><div class="wrap"><a class="brand" href="index.html">Supplement Facts Check</a><nav><a href="index.html">Results</a><a href="methodology.html" aria-current="page">Methodology</a><a href="reference.html">Dose reference</a><a href="conflict-of-interest.html">Conflict of interest</a></nav></div></header>
-<main class="wrap"><p class="kicker" style="margin-top:40px">Version 1.12 · locked 2026-09-26</p>
+<main class="wrap"><p class="kicker" style="margin-top:40px">Version 1.13 · locked 2026-09-27</p>
 <h1 style="margin-top:8px">Methodology</h1>
 <p class="lede">This page is generated from the repository’s README, which is the governing text. Every change
 to it is in the <a href="https://github.com/RyanPepple/supplement-facts-check/commits/main/README.md">commit history</a>.</p>
@@ -209,6 +209,31 @@ answer is that every one of those trials measures a digestive outcome, and that 
 benefit-of-the-doubt rule stated above scores 1 for falling within any credible
 published range for the claimed outcome. Applying a stricter outcome test to this
 product than to the rest of the sample would be the larger inconsistency.</p>
+<p><strong>Ruling on CFU declared at manufacture versus through expiry (v1.13, 2026-09-27).</strong> Where
+a label declares a probiotic count both at the time of manufacture and as an amount
+guaranteed through the best-by date, criterion 4 is scored against the through-expiry
+figure. That is the only quantity the brand commits to delivering to the person
+swallowing the capsule, and this audit scores what a buyer receives rather than what
+leaves the factory. Scoring the higher figure would also make the criterion easy to pass
+by construction, since viability at manufacture can be set as high as the process allows
+and says nothing about the dose taken months later.</p>
+<p>The rule has a second half, and it is the half that makes it fair. Where a label declares
+only an at-manufacture count and gives no expiry guarantee, the delivered dose cannot be
+established at all, and criterion 4 scores 0 on that ingredient. Without this, a brand
+printing a single unqualified "1 billion CFU" would score better than one that disclosed
+its own decay, and the rubric would reward withholding information.</p>
+<p>Applied to rank 13, Align Pro Formula. The panel declares 1 x 10^9 CFU at manufacture and
+1 x 10^7 through the best-by date. The pivotal encapsulated trial of this strain found
+1 x 10^8 CFU significantly superior to placebo, while 1 x 10^6 and 1 x 10^10 were not
+(Whorwell 2006, PMID 16863564, n=362). The guaranteed dose is ten times below the only
+capsule dose shown to work, and one order of magnitude above a dose shown not to work.
+Criterion 4 scores 0.</p>
+<p>The objection is recorded openly. Align discloses more than most of this sample: many
+labels state a single CFU figure and never say what survives to the best-by date. It is
+uncomfortable that the more candid label is the one whose shortfall becomes visible. The
+answer is the second half of the rule above, which scores the less candid label no
+better, and the observation that the disclosure is what makes the shortfall checkable
+rather than what creates it.</p>
 <h3>How criterion 5 is applied</h3>
 <p>Criterion 5 asks whether a third-party certificate of analysis for the
 product is publicly accessible: reachable without an email address, an
@@ -332,7 +357,7 @@ each product, and the same date is recorded in the <code>capture_date</code> fie
 the row that cites them. A scored row without a
 corresponding capture is incomplete, not merely undocumented.</p></div></main>
 <footer><div class="wrap">
-<p>Methodology v1.12, locked 2026-09-26. All data is public domain under
+<p>Methodology v1.13, locked 2026-09-27. All data is public domain under
 <a href="https://creativecommons.org/publicdomain/zero/1.0/">CC0 1.0</a>. Every figure on this site is generated from the
 <a href="https://github.com/RyanPepple/supplement-facts-check">public repository</a>, where the full commit history is the record.</p>
 <p>Authored by Ryan Pepple, who owns a competing supplement brand. Read the
