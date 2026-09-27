@@ -1,6 +1,6 @@
 # Supplement Facts Check
 
-> An independent, open-data audit of dose disclosure on gut-health supplement labels. Six binary criteria, 0-6 scale. Methodology v1.13, locked 2026-09-27. Sample: the top 30 of Amazon's Best Sellers in Probiotic Nutritional Supplements captured 09/26/2026; 18 pass the inclusion test, 12 are excluded as not gut-health-first, 0 undecided. 8 scored so far. Authored by Ryan Pepple, who owns a competing brand (CalmGut, operating as SHUVEN); author-owned products are scored separately and never ranked.
+> An independent, open-data audit of dose disclosure on gut-health supplement labels. Six binary criteria, 0-6 scale. Methodology v1.13, locked 2026-09-27. Sample: the top 30 of Amazon's Best Sellers in Probiotic Nutritional Supplements captured 09/26/2026; 18 pass the inclusion test, 12 are excluded as not gut-health-first, 0 undecided. 18 scored so far. Authored by Ryan Pepple, who owns a competing brand (CalmGut, operating as SHUVEN); author-owned products are scored separately and never ranked.
 
 ## Pilot scores
 
@@ -12,6 +12,16 @@
 - Florastor Probiotic (Florastor): 5/6, label captured 2026-09-26
 - Align Probiotic Pro Formula (Align): 4/6, label captured 2026-09-27
 - Garden of Life Dr Formulated Probiotics for Men (Garden of Life): 1/6, label captured 2026-09-27
+- Align Probiotic Bloating Relief + Food Digestion (Align): 2/6, label captured 2026-09-27
+- Doctor's Recipes Women's Probiotic (Doctor's Recipes): 1/6, label captured 2026-09-27
+- NOW Supplements Probiotic-10 (NOW Foods): 2/6, label captured 2026-09-27
+- Culturelle Daily Chewable Probiotics for Kids (Culturelle): 3/6, label captured 2026-09-27
+- Lemme Debloat Digestive & Gut Health Gummies (Lemme): 2/6, label captured 2026-09-27
+- MaryRuth Organics Kids Probiotics (MaryRuth Organics): 4/6, label captured 2026-09-27
+- NewRhythm Probiotics 50 Billion CFU (NewRhythm): 2/6, label captured 2026-09-27
+- Digestive Advantage Probiotic Gummies (Digestive Advantage): 4/6, label captured 2026-09-27
+- Phillips' Colon Health Daily Probiotic (Phillips'): 2/6, label captured 2026-09-27
+- Garden of Life Dr. Formulated Kids+ Probiotics (Garden of Life): 1/6, label captured 2026-09-27
 
 ## Data
 
