@@ -263,6 +263,7 @@ def page(path, title, desc, body, ctx, jsonld=None):
 {canon}
 <meta property="og:title" content="{e(title)}"><meta property="og:description" content="{e(desc)}">
 <meta property="og:type" content="website">
+<link rel="icon" href="{rel}favicon.ico" sizes="48x48"><link rel="icon" href="{rel}favicon.svg" type="image/svg+xml"><link rel="icon" href="{rel}favicon-48.png" type="image/png" sizes="48x48"><link rel="icon" href="{rel}favicon-192.png" type="image/png" sizes="192x192"><link rel="apple-touch-icon" href="{rel}apple-touch-icon.png">
 <link rel="stylesheet" href="{rel}style.css">{ld}
 </head><body>
 <header class="site"><div class="wrap"><a class="brand" href="{rel}index.html">Supplement Facts Check</a><nav>{nav}</nav></div></header>
@@ -320,6 +321,9 @@ def build():
     appendix = read_csv("appendix-scores.csv")
     doses = read_csv("clinical-doses.csv")
     (OUT / "style.css").write_text(CSS.strip(), encoding="utf-8")
+    # static icons live in site/assets and are copied to the site root (docs/ is wiped on every build)
+    for icon in sorted((ROOT / "site" / "assets").iterdir()):
+        shutil.copy2(icon, OUT / icon.name)
     (OUT / ".nojekyll").write_text("")
 
     # integrity check: totals must equal the sum of the criteria
