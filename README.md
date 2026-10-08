@@ -392,8 +392,12 @@ corresponding capture is incomplete, not merely undocumented.
 ### Conflict of interest
 
 This project is authored by Ryan Pepple, who owns CalmGut (operating as
-SHUVEN), a gut-brain axis supplement brand. CalmGut/SHUVEN products
-compete directly with several products scored in this report. Mitigations:
+SHUVEN, [shuven.co](https://shuven.co)), a gut-brain axis supplement
+brand. CalmGut/SHUVEN products compete directly with several products
+scored in this report. The brand is named and linked here so a reader can
+see for themselves what the author sells; the link appears on this page
+only, and carries `rel="nofollow"` so it passes no ranking signal to a
+site the author controls. Mitigations:
 
 - The rubric was written and committed to version control before any
   product data was collected. The commit history in this repository is the

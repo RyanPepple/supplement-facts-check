@@ -74,6 +74,12 @@ def split_notes(notes):
     return pre, out
 
 
+def capture_date(filename):
+    """The date a capture was taken, read off its own filename."""
+    m = re.search(r"-(\d{4}-\d{2}-\d{2})\.png$", filename)
+    return m.group(1) if m else ""
+
+
 def source_caveat(dose_row):
     """Any problem with the source paper that the row flagged but could not fix.
 
@@ -133,10 +139,11 @@ def capture_nodes(r, figs_srcs, caps):
     for src in figs_srcs:
         name, w, h = caps[src]
         view = "Supplement Facts panel" if "-panel-" in src else "Product listing"
+        when = capture_date(src) or r["capture_date"]
         out.append({"@type": "ImageObject", "contentUrl": f"{SITE_URL}/captures/{name}",
                     "width": w, "height": h, "license": LICENSE_URL,
-                    "caption": f"{view} of {r['product']}, captured {r['capture_date']}",
-                    "dateCreated": r["capture_date"], "creditText": "Supplement Facts Check",
+                    "caption": f"{view} of {r['product']}, captured {when}",
+                    "dateCreated": when, "creditText": "Supplement Facts Check",
                     "sameAs": f"{RAW_URL}captures/{src}"})
     return out
 
@@ -443,12 +450,16 @@ what was done about it, in the <a href="conflict-of-interest.html">conflict-of-i
         srcs = [src for src in caps
                 if src in r["notes"] or src.startswith(slug_prefix(r, caps))]
         figs = ""
-        for src in srcs:
+        for src in sorted(srcs, key=capture_date):
             name, w, h = caps[src]
             view = "Supplement Facts panel" if "-panel-" in src else "Product listing"
+            # Each capture is dated from its own filename, not from the row: a
+            # re-capture pass adds files without restating when the score was read.
+            when = capture_date(src) or r["capture_date"]
+            later = " (later capture, after this score was read)" if when > r["capture_date"] else ""
             figs += (f'<figure><a href="../captures/{name}"><img loading="lazy" src="../captures/{name}" width="{w}" '
-                     f'height="{h}" alt="{e(view)} of {e(r["product"])}, captured {e(r["capture_date"])}"></a>'
-                     f'<figcaption>{view}, captured {e(r["capture_date"])}. '
+                     f'height="{h}" alt="{e(view)} of {e(r["product"])}, captured {e(when)}"></a>'
+                     f'<figcaption>{view}, captured {e(when)}{later}. '
                      f'<a href="{RAW_URL}captures/{src}">Original file</a></figcaption></figure>')
         body = f"""
 <p class="kicker" style="margin-top:40px">Pilot scorecard</p>
@@ -503,6 +514,10 @@ to it is in the <a href="{REPO_URL}/commits/main/README.md">commit history</a>.<
 
     # ------------------------------------------------------------ COI
     coi = md_section(readme, "### Conflict of interest", "## Repository contents").replace("<h3>Conflict of interest</h3>", "")
+    # The author's own brand is linked once, here, and passes no ranking signal:
+    # a followed link from an audit to a site its author sells from would be the
+    # self-dealing this page exists to disclose.
+    coi = coi.replace('<a href="https://shuven.co">', '<a href="https://shuven.co" rel="nofollow">')
     scored_app = [a for a in appendix if a["total_score"].strip()]
     if scored_app:
         app_html = f'<div class="grid">{"".join(panel(a) for a in scored_app)}</div>'
