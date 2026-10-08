@@ -32,6 +32,9 @@ RAW_URL = REPO_URL + "/blob/main/"
 # are written, and every link on the site stays relative.
 SITE_URL = "https://supplementfactscheck.org"
 
+LICENSE_URL = "https://creativecommons.org/publicdomain/zero/1.0/"
+AUTHOR = {"@type": "Person", "name": "Ryan Pepple", "url": "https://github.com/RyanPepple"}
+
 CRITERIA = [
     ("criterion_1_exact_dose_disclosed", "Exact amount for every active ingredient",
      "No proprietary blend appears anywhere on the Supplement Facts panel."),
@@ -74,6 +77,88 @@ def split_notes(notes):
 def version_and_status(readme):
     ver = re.search(r"\*\*Methodology version:\*\*\s*([\d.]+)\s*—\s*locked\s*([\d-]+)", readme)
     return (ver.group(1), ver.group(2)) if ver else ("", "")
+
+
+# ----------------------------------------------------------- structured data
+# One JSON-LD graph per page, built from the same rows that render the HTML, so
+# a machine reading the page gets the score, the per-criterion reasoning and the
+# capture it was read from without having to parse the markup.
+
+
+def page_url(path):
+    return f"{SITE_URL}/{'' if path == 'index.html' else path}"
+
+
+def graph(*nodes):
+    return {"@context": "https://schema.org", "@graph": [n for n in nodes if n]}
+
+
+def website_node():
+    return {"@type": "WebSite", "@id": f"{SITE_URL}/#website", "url": f"{SITE_URL}/",
+            "name": "Supplement Facts Check", "inLanguage": "en",
+            "author": AUTHOR, "publisher": AUTHOR, "license": LICENSE_URL}
+
+
+def webpage_node(path, title, desc, main=None, modified=None, image=None):
+    url = page_url(path)
+    node = {"@type": "WebPage", "@id": url + "#page", "url": url, "name": title,
+            "description": desc, "isPartOf": {"@id": f"{SITE_URL}/#website"},
+            "license": LICENSE_URL, "author": AUTHOR}
+    if main:
+        node["mainEntity"] = {"@id": main}
+    if modified:
+        node["dateModified"] = modified
+    if image:
+        node["primaryImageOfPage"] = image
+    return node
+
+
+def capture_nodes(r, figs_srcs, caps):
+    """ImageObject per committed capture: the evidence, addressable on its own."""
+    out = []
+    for src in figs_srcs:
+        name, w, h = caps[src]
+        view = "Supplement Facts panel" if "-panel-" in src else "Product listing"
+        out.append({"@type": "ImageObject", "contentUrl": f"{SITE_URL}/captures/{name}",
+                    "width": w, "height": h, "license": LICENSE_URL,
+                    "caption": f"{view} of {r['product']}, captured {r['capture_date']}",
+                    "dateCreated": r["capture_date"], "creditText": "Supplement Facts Check",
+                    "sameAs": f"{RAW_URL}captures/{src}"})
+    return out
+
+
+def review_node(r, pre, why, path, images):
+    """The score as a Review: 0-6 on label disclosure, with the criteria split out."""
+    notes = [({"@type": "ListItem", "position": i, "name": label}, r[key] == "1")
+             for i, (key, label, _) in enumerate(CRITERIA, 1)]
+    body = " ".join(f"{i}. {label}: scored {r[key]}. {why.get(i, 'No reasoning recorded.')}"
+                    for i, (key, label, _) in enumerate(CRITERIA, 1))
+    product = {"@type": "Product", "name": r["product"],
+               "brand": {"@type": "Brand", "name": r["brand"]}}
+    if r.get("asin", "").strip():
+        product["identifier"] = {"@type": "PropertyValue", "propertyID": "ASIN",
+                                 "value": r["asin"].strip()}
+    node = {
+        "@type": "Review", "@id": page_url(path) + "#review",
+        "name": f"{r['product']}: label disclosure score {r['total_score']}/6",
+        "itemReviewed": product,
+        "reviewAspect": "Supplement Facts label disclosure",
+        "reviewRating": {
+            "@type": "Rating", "ratingValue": int(r["total_score"]), "bestRating": 6, "worstRating": 0,
+            "ratingExplanation": "Six yes-or-no criteria on what the label discloses, 1 point each, no "
+                                 "weighting and no partial credit. This rates disclosure only. It is not an "
+                                 "assessment of whether the product works, and nothing was lab-tested.",
+        },
+        "positiveNotes": {"@type": "ItemList", "itemListElement": [n for n, ok in notes if ok]},
+        "negativeNotes": {"@type": "ItemList", "itemListElement": [n for n, ok in notes if not ok]},
+        "reviewBody": (pre + " " + body).strip(),
+        "author": AUTHOR, "publisher": AUTHOR, "license": LICENSE_URL,
+        "datePublished": r["capture_date"],
+        "isBasedOn": {"@id": f"{SITE_URL}/#dataset"},
+    }
+    if images:
+        node["associatedMedia"] = images
+    return node
 
 
 # ---------------------------------------------------------------- templates
@@ -144,7 +229,9 @@ def page(path, title, desc, body, ctx, jsonld=None):
     cur = ' aria-current="page"'
     nav = "".join(f'<a href="{rel}{h}"{cur if h == path else ""}>{t}</a>' for h, t in NAV)
     canon = f'<link rel="canonical" href="{SITE_URL}/{"" if path == "index.html" else path}">' if SITE_URL else ""
-    ld = f'<script type="application/ld+json">{json.dumps(jsonld)}</script>' if jsonld else ""
+    # "</" is split so a string in the data can never close the script element early
+    blob = json.dumps(jsonld).replace("</", "<\\/") if jsonld else ""
+    ld = f'<script type="application/ld+json">{blob}</script>' if jsonld else ""
     doc = f"""<!doctype html>
 <html lang="en"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
@@ -295,20 +382,38 @@ show it is one click away, and <a href="{REPO_URL}/issues">corrections are welco
 what was done about it, in the <a href="conflict-of-interest.html">conflict-of-interest statement</a>.</p>
 """
     dataset_ld = {
-        "@context": "https://schema.org", "@type": "Dataset",
+        "@type": "Dataset", "@id": f"{SITE_URL}/#dataset",
         "name": "Supplement Facts Check",
         "description": "An independent audit of dose disclosure on gut-health supplement labels, scoring products "
                        "on six binary criteria. Includes a reference table of clinical trial dose ranges with PubMed IDs.",
-        "license": "https://creativecommons.org/publicdomain/zero/1.0/",
-        "creator": {"@type": "Person", "name": "Ryan Pepple"},
-        "version": ver, "isAccessibleForFree": True, "url": SITE_URL or REPO_URL, "sameAs": REPO_URL,
+        "license": LICENSE_URL, "creator": AUTHOR, "publisher": AUTHOR,
+        "version": ver, "isAccessibleForFree": True, "url": SITE_URL, "sameAs": REPO_URL,
+        "dateModified": locked, "inLanguage": "en",
+        "measurementTechnique": "Manual reading of the Supplement Facts panel and product listing from a dated "
+                                "screenshot capture of the live label, scored against a rubric committed to public "
+                                "version control before any product data was collected.",
+        "variableMeasured": [{"@type": "PropertyValue", "name": label, "description": desc}
+                             for _, label, desc in CRITERIA],
         "distribution": [{"@type": "DataDownload", "encodingFormat": "text/csv",
                           "contentUrl": f"{REPO_URL}/raw/main/{f}"}
                          for f in ("pilot-scores.csv", "clinical-doses.csv", "sample.csv")],
+        "creditText": "Supplement Facts Check (supplementfactscheck.org), CC0 1.0",
     }
-    page("index.html", "Supplement Facts Check: what gut-health supplement labels actually disclose",
-         "An independent, open-data audit scoring best-selling gut-health supplements on six yes-or-no questions "
-         "about dose disclosure. Rubric locked before scoring. All data public domain.", body, ctx, dataset_ld)
+    results_ld = {
+        "@type": "ItemList", "@id": f"{SITE_URL}/#pilot-results",
+        "name": "Pilot results: label disclosure scores", "numberOfItems": n,
+        "itemListElement": [{"@type": "ListItem", "position": i,
+                             "url": page_url(f"products/{slugify(r['product'])}.html"),
+                             "name": f"{r['product']} ({r['brand']}): {r['total_score']}/6"}
+                            for i, r in enumerate(pilot, 1)],
+    }
+    title = "Supplement Facts Check: what gut-health supplement labels actually disclose"
+    desc = ("An independent, open-data audit scoring best-selling gut-health supplements on six yes-or-no questions "
+            "about dose disclosure. Rubric locked before scoring. All data public domain.")
+    page("index.html", title, desc, body, ctx,
+         graph(website_node(), webpage_node("index.html", title, desc, main=f"{SITE_URL}/#dataset",
+                                           modified=locked),
+               dataset_ld, results_ld))
 
     # ------------------------------------------------------------ products
     for r in pilot:
@@ -319,14 +424,16 @@ what was done about it, in the <a href="conflict-of-interest.html">conflict-of-i
             ok = r[key] == "1"
             rows += (f'<div class="why"><div class="m {"pass" if ok else "fail"}">{r[key]}</div><div>'
                      f'<b>{i}. {e(label)}</b><p>{e(why.get(i, "No reasoning recorded."))}</p></div></div>')
+        srcs = [src for src in caps
+                if src in r["notes"] or src.startswith(slug_prefix(r, caps))]
         figs = ""
-        for src, (name, w, h) in caps.items():
-            if src in r["notes"] or src.startswith(slug_prefix(r, caps)):
-                view = "Supplement Facts panel" if "-panel-" in src else "Product listing"
-                figs += (f'<figure><a href="../captures/{name}"><img loading="lazy" src="../captures/{name}" width="{w}" '
-                         f'height="{h}" alt="{e(view)} of {e(r["product"])}, captured {e(r["capture_date"])}"></a>'
-                         f'<figcaption>{view}, captured {e(r["capture_date"])}. '
-                         f'<a href="{RAW_URL}captures/{src}">Original file</a></figcaption></figure>')
+        for src in srcs:
+            name, w, h = caps[src]
+            view = "Supplement Facts panel" if "-panel-" in src else "Product listing"
+            figs += (f'<figure><a href="../captures/{name}"><img loading="lazy" src="../captures/{name}" width="{w}" '
+                     f'height="{h}" alt="{e(view)} of {e(r["product"])}, captured {e(r["capture_date"])}"></a>'
+                     f'<figcaption>{view}, captured {e(r["capture_date"])}. '
+                     f'<a href="{RAW_URL}captures/{src}">Original file</a></figcaption></figure>')
         body = f"""
 <p class="kicker" style="margin-top:40px">Pilot scorecard</p>
 <h1 style="margin-top:8px;font-size:clamp(30px,5vw,48px)">{e(r['product'])}</h1>
@@ -343,9 +450,16 @@ what the label discloses. It says nothing about whether the product works, and n
 <div class="caps">{figs or '<p>No captures on file.</p>'}</div>
 <p><a class="btn" href="{RAW_URL}pilot-scores.csv">See this row in the dataset →</a></p>
 """
-        page(f"products/{slug}.html", f"{r['product']}: label disclosure score {r['total_score']}/6",
-             f"{r['product']} scored {r['total_score']} of 6 on dose and label disclosure. See the reasoning for "
-             f"each criterion and the dated label capture behind it.", body, ctx)
+        path = f"products/{slug}.html"
+        title = f"{r['product']}: label disclosure score {r['total_score']}/6"
+        desc = (f"{r['product']} scored {r['total_score']} of 6 on dose and label disclosure. See the reasoning for "
+                f"each criterion and the dated label capture behind it.")
+        images = capture_nodes(r, srcs, caps)
+        page(path, title, desc, body, ctx,
+             graph(website_node(),
+                   webpage_node(path, title, desc, main=page_url(path) + "#review",
+                                modified=r["capture_date"], image=images[0] if images else None),
+                   review_node(r, pre, why, path, images)))
 
     # ------------------------------------------------------------ methodology
     body = f"""<p class="kicker" style="margin-top:40px">Version {ver} · locked {locked}</p>
@@ -353,9 +467,23 @@ what the label discloses. It says nothing about whether the product works, and n
 <p class="lede">This page is generated from the repository’s README, which is the governing text. Every change
 to it is in the <a href="{REPO_URL}/commits/main/README.md">commit history</a>.</p>
 <div class="prose">{md_section(readme, "### Scoring rubric", "### Conflict of interest")}</div>"""
-    page("methodology.html", f"Methodology v{ver} | Supplement Facts Check",
-         "The six-criterion rubric, how each criterion is applied, how the sample was chosen, and what was "
-         "deliberately left out.", body, ctx)
+    title = f"Methodology v{ver} | Supplement Facts Check"
+    desc = ("The six-criterion rubric, how each criterion is applied, how the sample was chosen, and what was "
+            "deliberately left out.")
+    method_ld = {
+        "@type": "TechArticle", "@id": page_url("methodology.html") + "#article",
+        "headline": f"Supplement Facts Check methodology v{ver}", "name": title, "description": desc,
+        "version": ver, "datePublished": locked, "dateModified": locked,
+        "author": AUTHOR, "publisher": AUTHOR, "license": LICENSE_URL,
+        "url": page_url("methodology.html"), "inLanguage": "en",
+        "about": {"@id": f"{SITE_URL}/#dataset"},
+        "sameAs": f"{REPO_URL}/blob/main/README.md",
+    }
+    page("methodology.html", title, desc, body, ctx,
+         graph(website_node(),
+               webpage_node("methodology.html", title, desc,
+                            main=page_url("methodology.html") + "#article", modified=locked),
+               method_ld))
 
     # ------------------------------------------------------------ COI
     coi = md_section(readme, "### Conflict of interest", "## Repository contents").replace("<h3>Conflict of interest</h3>", "")
@@ -372,9 +500,25 @@ to it is in the <a href="{REPO_URL}/commits/main/README.md">commit history</a>.<
                     f"<p>When scored, they will be shown here by the identical rubric, never in the ranked results.</p>")
     body = f"""<h1>Conflict of interest</h1><div class="prose">{coi}</div>
 <h2>Appendix: the author’s own products</h2><div class="prose">{app_html}</div>"""
-    page("conflict-of-interest.html", "Conflict of interest | Supplement Facts Check",
-         "The author owns a competing supplement brand. What that means for this audit and what was done about it.",
-         body, ctx)
+    title = "Conflict of interest | Supplement Facts Check"
+    desc = ("The author owns a competing supplement brand. What that means for this audit and what was done "
+            "about it.")
+    # The disclosure in machine-readable form: anything citing this audit can read
+    # the competing interest off the page instead of having to find the prose.
+    coi_ld = {
+        "@type": "WebPage", "@id": page_url("conflict-of-interest.html") + "#page",
+        "url": page_url("conflict-of-interest.html"), "name": title, "description": desc,
+        "isPartOf": {"@id": f"{SITE_URL}/#website"}, "license": LICENSE_URL, "author": AUTHOR,
+        "about": {"@id": f"{SITE_URL}/#dataset"},
+        "disambiguatingDescription": "The author of this audit, Ryan Pepple, owns CalmGut (operating as SHUVEN), "
+                                     "a gut-brain axis supplement brand whose products compete with products "
+                                     "scored here. Author-owned products are excluded from the ranked results and "
+                                     "scored in a physically separate appendix file using the identical rubric. "
+                                     "The rubric was committed to public version control before any product data "
+                                     "was collected.",
+        "mentions": [{"@type": "Brand", "name": "CalmGut", "alternateName": "SHUVEN"}],
+    }
+    page("conflict-of-interest.html", title, desc, body, ctx, graph(website_node(), coi_ld))
 
     # ------------------------------------------------------------ reference
     trs = ""
@@ -404,9 +548,30 @@ including the date the literature was searched.</p>
 <p><a class="btn" href="{RAW_URL}clinical-doses.csv">Download the CSV →</a></p>
 <script>const q=document.getElementById('q'),rows=[...document.querySelectorAll('#t tbody tr')];
 q.addEventListener('input',()=>{{const s=q.value.toLowerCase();rows.forEach(r=>r.hidden=!r.textContent.toLowerCase().includes(s))}});</script>"""
-    page("reference.html", "Clinical dose reference table | Supplement Facts Check",
-         "Human-trial dose ranges for common gut-health supplement ingredients, each tied to the outcome measured "
-         "and a PubMed ID.", body, ctx)
+    title = "Clinical dose reference table | Supplement Facts Check"
+    desc = ("Human-trial dose ranges for common gut-health supplement ingredients, each tied to the outcome "
+            "measured and a PubMed ID.")
+    pmids = sorted({d["pmid"].strip() for d in doses if d["pmid"].strip()})
+    doses_ld = {
+        "@type": "Dataset", "@id": page_url("reference.html") + "#dose-reference",
+        "name": "Clinical dose reference table", "description": desc,
+        "url": page_url("reference.html"), "license": LICENSE_URL,
+        "creator": AUTHOR, "publisher": AUTHOR, "isAccessibleForFree": True,
+        "dateModified": locked, "inLanguage": "en", "isPartOf": {"@id": f"{SITE_URL}/#dataset"},
+        "variableMeasured": [{"@type": "PropertyValue", "name": v} for v in
+                             ("ingredient", "form", "daily dose range", "outcome measured", "PubMed ID")],
+        "distribution": [{"@type": "DataDownload", "encodingFormat": "text/csv",
+                          "contentUrl": f"{REPO_URL}/raw/main/clinical-doses.csv"}],
+        "citation": [{"@type": "ScholarlyArticle", "@id": f"https://pubmed.ncbi.nlm.nih.gov/{p}/",
+                      "url": f"https://pubmed.ncbi.nlm.nih.gov/{p}/",
+                      "identifier": {"@type": "PropertyValue", "propertyID": "PMID", "value": p}}
+                     for p in pmids],
+    }
+    page("reference.html", title, desc, body, ctx,
+         graph(website_node(),
+               webpage_node("reference.html", title, desc,
+                            main=page_url("reference.html") + "#dose-reference", modified=locked),
+               doses_ld))
 
     # ------------------------------------------------------------ llms.txt, sitemap
     lines = ["# Supplement Facts Check", "",
