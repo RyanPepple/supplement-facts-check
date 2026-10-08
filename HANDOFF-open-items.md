@@ -27,6 +27,10 @@ evidence that only the 09/05/2026 ranking capture or a fresh screenshot can supp
    CI inconsistency on the subgroup statistic remains unresolved -- no fix
    available from full text. A second, separate duration-subgroup mismatch
    found in the same paper, noted in clinical-doses.csv.
+   Closed 2026-10-08 as a disclosed limitation rather than a fix: both problems
+   are now published on reference.html under "Known limitations", against the
+   row they affect, and in llms.txt. The row stays in the table so the judgment
+   can be checked. Nothing further is available from the source.
 6. **Domain.** supplementfactscheck.org (Cloudflare DNS). `SITE_URL` is set in `site/build.py`; the build writes canonical tags, `sitemap.xml`, `robots.txt` and `CNAME`.
 7. **Publishing.** Repo Settings -> Pages -> Deploy from a branch -> `main`, `/docs`.
 

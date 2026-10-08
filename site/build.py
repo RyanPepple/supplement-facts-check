@@ -74,6 +74,20 @@ def split_notes(notes):
     return pre, out
 
 
+def source_caveat(dose_row):
+    """Any problem with the source paper that the row flagged but could not fix.
+
+    The dose rows mark these inline with UNRESOLVED: or SEPARATE INCONSISTENCY:.
+    They are the audit's own notes against its own sources, so they belong on the
+    page rather than only in the CSV.
+    """
+    m = re.search(r"UNRESOLVED:|SEPARATE INCONSISTENCY:", dose_row["outcome_measured"])
+    if not m:
+        return "", ""
+    text = dose_row["outcome_measured"]
+    return text[:m.start()].rstrip(" ;-"), text[m.start():].strip()
+
+
 def version_and_status(readme):
     ver = re.search(r"\*\*Methodology version:\*\*\s*([\d.]+)\s*—\s*locked\s*([\d-]+)", readme)
     return (ver.group(1), ver.group(2)) if ver else ("", "")
@@ -208,6 +222,8 @@ th{text-align:left;font-size:12px;text-transform:uppercase;letter-spacing:.05em;
 td{vertical-align:top;border-bottom:1px solid var(--hair);padding:8px 10px}
 .prose .tablewrap td,.prose .tablewrap th{font-size:14px}
 td.n{white-space:nowrap;font-weight:700}td.muted{color:var(--soft)}
+.cav{display:block;margin-top:7px;font-family:"Helvetica Neue",Helvetica,Arial,sans-serif;font-size:12.5px;line-height:1.45;color:var(--fail)}
+.cav b{font-weight:800}
 input[type=search]{font:16px "Helvetica Neue",Helvetica,Arial,sans-serif;width:100%;max-width:420px;padding:10px 12px;border:2px solid var(--rule);background:var(--card);color:var(--ink)}
 .why{display:grid;grid-template-columns:auto 1fr;gap:6px 18px;border-bottom:1px solid var(--hair);padding:16px 0;max-width:52em}
 .why .m{font-family:"Helvetica Neue",Helvetica,Arial,sans-serif;font-weight:900;font-size:26px;line-height:1}
@@ -534,9 +550,14 @@ to it is in the <a href="{REPO_URL}/commits/main/README.md">commit history</a>.<
             rng = "No range set"
         pm = d["pmid"].strip()
         link = f'<a href="https://pubmed.ncbi.nlm.nih.gov/{e(pm)}/">{e(pm)}</a>' if pm else "—"
-        text = d["outcome_measured"] + (" " + d["notes"] if d["notes"].strip() else "")
+        clean, caveat = source_caveat(d)
+        text = (clean or d["outcome_measured"]) + (" " + d["notes"] if d["notes"].strip() else "")
+        flag = (f'<span class="cav"><b>Unresolved problem in the source.</b> {e(caveat)}</span>'
+                if caveat else "")
         trs += (f'<tr><td class="n">{e(d["ingredient"])}</td><td>{e(d["form"])}</td>'
-                f'<td class="n{"" if lo else " muted"}">{e(rng)}</td><td>{e(text)}</td><td class="n">{link}</td></tr>')
+                f'<td class="n{"" if lo else " muted"}">{e(rng)}</td><td>{e(text)}{flag}</td>'
+                f'<td class="n">{link}</td></tr>')
+    flagged = [(d, source_caveat(d)[1]) for d in doses if source_caveat(d)[1]]
     with_range = sum(1 for d in doses if d["dose_low"].strip())
     body = f"""<h1>Dose reference table</h1>
 <p class="lede">Criterion 4 checks a label’s dose against the range human trials actually used for the outcome the
@@ -546,6 +567,15 @@ including the date the literature was searched.</p>
 <div class="tablewrap"><table id="t"><thead><tr><th>Ingredient</th><th>Form</th><th>Daily range</th>
 <th>Outcome measured, and basis</th><th>PubMed ID</th></tr></thead><tbody>{trs}</tbody></table></div>
 <p><a class="btn" href="{RAW_URL}clinical-doses.csv">Download the CSV →</a></p>
+
+<h2>Known limitations</h2>
+<p class="prose">A dose range is only as good as the paper it came from. Where a source turned out to contain a
+problem that could not be resolved from its full text, the problem is recorded against the row rather than quietly
+dropped, and the row stays in the table so the judgment can be checked. {len(doses) - with_range} of
+{len(doses)} rows have no range set at all; each one records why, and criterion 4 cannot be scored from them.</p>
+{"".join(f'''<div class="why"><div class="m fail">!</div><div><b>{e(d["ingredient"])} ({e(d["form"])}) — PMID
+<a href="https://pubmed.ncbi.nlm.nih.gov/{e(d["pmid"].strip())}/">{e(d["pmid"].strip())}</a></b>
+<p>{e(cav)}</p></div></div>''' for d, cav in flagged) or "<p>No source on file currently carries an unresolved problem.</p>"}
 <script>const q=document.getElementById('q'),rows=[...document.querySelectorAll('#t tbody tr')];
 q.addEventListener('input',()=>{{const s=q.value.toLowerCase();rows.forEach(r=>r.hidden=!r.textContent.toLowerCase().includes(s))}});</script>"""
     title = "Clinical dose reference table | Supplement Facts Check"
@@ -566,6 +596,11 @@ q.addEventListener('input',()=>{{const s=q.value.toLowerCase();rows.forEach(r=>r
                       "url": f"https://pubmed.ncbi.nlm.nih.gov/{p}/",
                       "identifier": {"@type": "PropertyValue", "propertyID": "PMID", "value": p}}
                      for p in pmids],
+        "disambiguatingDescription":
+            f"{len(doses) - with_range} of {len(doses)} rows have no dose range set, each recording why; "
+            f"criterion 4 cannot be scored from those. {len(flagged)} row(s) carry an unresolved problem found "
+            f"in the source paper itself, stated on the page against the row: "
+            + " ".join(f"{d['ingredient']} ({d['form']}), PMID {d['pmid'].strip()}." for d, _ in flagged),
     }
     page("reference.html", title, desc, body, ctx,
          graph(website_node(),
@@ -582,6 +617,15 @@ q.addEventListener('input',()=>{{const s=q.value.toLowerCase();rows.forEach(r=>r
              "Authored by Ryan Pepple, who owns a competing brand (CalmGut, operating as SHUVEN); author-owned "
              "products are scored separately and never ranked.", "", "## Pilot scores", ""]
     lines += [f"- {r['product']} ({r['brand']}): {r['total_score']}/6, label captured {r['capture_date']}" for r in pilot]
+    lines += ["", "## Known limitations", "",
+              f"- {len(doses) - with_range} of {len(doses)} dose-reference rows have no range set; each records "
+              "why, and criterion 4 cannot be scored from them.",
+              "- Criterion 5 records a certificate of analysis as not publicly accessible when a documented search "
+              "failed to find one. That is a negative finding, not a claim that none exists.",
+              "- Scores describe what a label discloses on the capture date. Nothing here was lab-tested, and no "
+              "claim is made about whether a product works."]
+    lines += [f"- Source problem, {d['ingredient']} ({d['form']}), PMID {d['pmid'].strip()}: {cav}"
+              for d, cav in flagged]
     lines += ["", "## Data", "", f"- Repository: {REPO_URL}", f"- Scores: {REPO_URL}/raw/main/pilot-scores.csv",
               f"- Dose reference: {REPO_URL}/raw/main/clinical-doses.csv", "- License: CC0 1.0", ""]
     (OUT / "llms.txt").write_text("\n".join(lines), encoding="utf-8")

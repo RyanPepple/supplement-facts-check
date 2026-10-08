@@ -23,6 +23,13 @@
 - Phillips' Colon Health Daily Probiotic (Phillips'): 2/6, label captured 2026-09-27
 - Garden of Life Dr. Formulated Kids+ Probiotics (Garden of Life): 1/6, label captured 2026-09-27
 
+## Known limitations
+
+- 14 of 35 dose-reference rows have no range set; each records why, and criterion 4 cannot be scored from them.
+- Criterion 5 records a certificate of analysis as not publicly accessible when a documented search failed to find one. That is a negative finding, not a claim that none exists.
+- Scores describe what a label discloses on the capture date. Nothing here was lab-tested, and no claim is made about whether a product works.
+- Source problem, L-glutamine (free-form), PMID 39397201: UNRESOLVED: the subgroup statistic is printed as WMD -0.01 with 95% CI -0.10 to -0.08 (n=5 studies), an interval that excludes its own point estimate; full text gives no way to determine the correct figures. SEPARATE INCONSISTENCY: Table 1 defines duration subgroups as ≥4 weeks / <4 weeks, but the Discussion/Conclusion instead describe the significant effect as occurring in interventions "less than 2 weeks" -- a cutoff absent from the paper's own methodology. Flag this if this row is ever used for a duration-based judgment, not just dose.
+
 ## Data
 
 - Repository: https://github.com/RyanPepple/supplement-facts-check
