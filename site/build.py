@@ -38,7 +38,10 @@ AHREFS_KEY = "35knwYMmqmBZ6XSpedl1oA"
 ANALYTICS = (f'<script src="https://analytics.ahrefs.com/analytics.js" data-key="{AHREFS_KEY}" async></script>'
              if AHREFS_KEY else "")
 
-LICENSE_URL ="https://creativecommons.org/publicdomain/zero/1.0/"
+# Share image for Open Graph / X cards. Source file lives in site/, copied to docs/ at build.
+OG_IMAGE = "og-image.png"
+
+LICENSE_URL = "https://creativecommons.org/publicdomain/zero/1.0/"
 AUTHOR = {"@type": "Person", "name": "Ryan Pepple", "url": "https://github.com/RyanPepple"}
 
 CRITERIA = [
@@ -160,15 +163,18 @@ def review_node(r, pre, why, path, images):
              for i, (key, label, _) in enumerate(CRITERIA, 1)]
     body = " ".join(f"{i}. {label}: scored {r[key]}. {why.get(i, 'No reasoning recorded.')}"
                     for i, (key, label, _) in enumerate(CRITERIA, 1))
-    product = {"@type": "Product", "name": r["product"],
-               "brand": {"@type": "Brand", "name": r["brand"]}}
+    # Product is its own node and points back at the review: Google rejects a
+    # Product that has none of review / aggregateRating / offers.
+    product = {"@type": "Product", "@id": page_url(path) + "#product", "name": r["product"],
+               "brand": {"@type": "Brand", "name": r["brand"]},
+               "review": {"@id": page_url(path) + "#review"}}
     if r.get("asin", "").strip():
         product["identifier"] = {"@type": "PropertyValue", "propertyID": "ASIN",
                                  "value": r["asin"].strip()}
     node = {
         "@type": "Review", "@id": page_url(path) + "#review",
         "name": f"{r['product']}: label disclosure score {r['total_score']}/6",
-        "itemReviewed": product,
+        "itemReviewed": {"@id": page_url(path) + "#product"},
         "reviewAspect": "Supplement Facts label disclosure",
         "reviewRating": {
             "@type": "Rating", "ratingValue": int(r["total_score"]), "bestRating": 6, "worstRating": 0,
@@ -185,7 +191,8 @@ def review_node(r, pre, why, path, images):
     }
     if images:
         node["associatedMedia"] = images
-    return node
+        product["image"] = [i["contentUrl"] for i in images]
+    return product, node
 
 
 # ---------------------------------------------------------------- templates
@@ -256,11 +263,18 @@ def page(path, title, desc, body, ctx, jsonld=None):
     depth = path.count("/")
     rel = "../" * depth
     cur = ' aria-current="page"'
-    nav = "".join(f'<a href="{rel}{h}"{cur if h == path else ""}>{t}</a>' for h, t in NAV)
+    home = rel or "./"  # link the canonical "/" rather than /index.html
+    nav = "".join(f'<a href="{home if h == "index.html" else rel + h}"{cur if h == path else ""}>{t}</a>'
+                  for h, t in NAV)
     canon = f'<link rel="canonical" href="{SITE_URL}/{"" if path == "index.html" else path}">' if SITE_URL else ""
     # "</" is split so a string in the data can never close the script element early
     blob = json.dumps(jsonld).replace("</", "<\\/") if jsonld else ""
     ld = f'<script type="application/ld+json">{blob}</script>' if jsonld else ""
+    social = (f'<meta property="og:url" content="{page_url(path)}">'
+              f'<meta property="og:image" content="{SITE_URL}/{OG_IMAGE}">'
+              f'<meta property="og:image:width" content="1200"><meta property="og:image:height" content="630">'
+              f'<meta name="twitter:card" content="summary_large_image">'
+              f'<meta name="twitter:image" content="{SITE_URL}/{OG_IMAGE}">') if SITE_URL else ""
     doc = f"""<!doctype html>
 <html lang="en"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
@@ -268,11 +282,12 @@ def page(path, title, desc, body, ctx, jsonld=None):
 <meta name="description" content="{e(desc)}">
 {canon}
 <meta property="og:title" content="{e(title)}"><meta property="og:description" content="{e(desc)}">
-<meta property="og:type" content="website">
+<meta property="og:type" content="website"><meta property="og:site_name" content="Supplement Facts Check">
+{social}
 <link rel="stylesheet" href="{rel}style.css">{ld}
 {ANALYTICS}
 </head><body>
-<header class="site"><div class="wrap"><a class="brand" href="{rel}index.html">Supplement Facts Check</a><nav>{nav}</nav></div></header>
+<header class="site"><div class="wrap"><a class="brand" href="{home}">Supplement Facts Check</a><nav>{nav}</nav></div></header>
 <main class="wrap">{body}</main>
 <footer><div class="wrap">
 <p>Methodology v{ctx['ver']}, locked {ctx['locked']}. All data is public domain under
@@ -328,6 +343,7 @@ def build():
     doses = read_csv("clinical-doses.csv")
     (OUT / "style.css").write_text(CSS.strip(), encoding="utf-8")
     (OUT / ".nojekyll").write_text("")
+    shutil.copy(ROOT / "site" / OG_IMAGE, OUT / OG_IMAGE)
 
     # integrity check: totals must equal the sum of the criteria
     for r in pilot:
@@ -437,9 +453,9 @@ what was done about it, in the <a href="conflict-of-interest.html">conflict-of-i
                              "name": f"{r['product']} ({r['brand']}): {r['total_score']}/6"}
                             for i, r in enumerate(pilot, 1)],
     }
-    title = "Supplement Facts Check: what gut-health supplement labels actually disclose"
-    desc = ("An independent, open-data audit scoring best-selling gut-health supplements on six yes-or-no questions "
-            "about dose disclosure. Rubric locked before scoring. All data public domain.")
+    title = "Supplement Facts Check: what gut-health labels disclose"
+    desc = ("Independent open-data audit scoring best-selling gut-health supplements on six yes-or-no "
+            "dose disclosure questions. Rubric locked before scoring.")
     page("index.html", title, desc, body, ctx,
          graph(website_node(), webpage_node("index.html", title, desc, main=f"{SITE_URL}/#dataset",
                                            modified=locked),
@@ -485,15 +501,15 @@ what the label discloses. It says nothing about whether the product works, and n
 <p><a class="btn" href="{RAW_URL}pilot-scores.csv">See this row in the dataset →</a></p>
 """
         path = f"products/{slug}.html"
-        title = f"{r['product']}: label disclosure score {r['total_score']}/6"
-        desc = (f"{r['product']} scored {r['total_score']} of 6 on dose and label disclosure. See the reasoning for "
-                f"each criterion and the dated label capture behind it.")
+        title = f"{r['product']}: label score {r['total_score']}/6"
+        desc = (f"{r['product']} scored {r['total_score']} of 6 on label disclosure. See the reasoning for "
+                f"each criterion and the dated label captures.")
         images = capture_nodes(r, srcs, caps)
         page(path, title, desc, body, ctx,
              graph(website_node(),
                    webpage_node(path, title, desc, main=page_url(path) + "#review",
                                 modified=r["capture_date"], image=images[0] if images else None),
-                   review_node(r, pre, why, path, images)))
+                   *review_node(r, pre, why, path, images)))
 
     # ------------------------------------------------------------ methodology
     body = f"""<p class="kicker" style="margin-top:40px">Version {ver} · locked {locked}</p>
