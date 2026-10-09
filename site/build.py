@@ -32,7 +32,13 @@ RAW_URL = REPO_URL + "/blob/main/"
 # are written, and every link on the site stays relative.
 SITE_URL = "https://supplementfactscheck.org"
 
-LICENSE_URL = "https://creativecommons.org/publicdomain/zero/1.0/"
+# Ahrefs Web Analytics (cookieless). Loaded in the <head> of every page.
+# Set AHREFS_KEY to "" to build the site with no analytics script.
+AHREFS_KEY = "35knwYMmqmBZ6XSpedl1oA"
+ANALYTICS = (f'<script src="https://analytics.ahrefs.com/analytics.js" data-key="{AHREFS_KEY}" async></script>'
+             if AHREFS_KEY else "")
+
+LICENSE_URL ="https://creativecommons.org/publicdomain/zero/1.0/"
 AUTHOR = {"@type": "Person", "name": "Ryan Pepple", "url": "https://github.com/RyanPepple"}
 
 CRITERIA = [
@@ -264,6 +270,7 @@ def page(path, title, desc, body, ctx, jsonld=None):
 <meta property="og:title" content="{e(title)}"><meta property="og:description" content="{e(desc)}">
 <meta property="og:type" content="website">
 <link rel="stylesheet" href="{rel}style.css">{ld}
+{ANALYTICS}
 </head><body>
 <header class="site"><div class="wrap"><a class="brand" href="{rel}index.html">Supplement Facts Check</a><nav>{nav}</nav></div></header>
 <main class="wrap">{body}</main>
