@@ -397,7 +397,16 @@ brand. CalmGut/SHUVEN products compete directly with several products
 scored in this report. The brand is named and linked here so a reader can
 see for themselves what the author sells; the link appears on this page
 only, and carries `rel="nofollow"` so it passes no ranking signal to a
-site the author controls. Mitigations:
+site the author controls.
+
+The author also runs Abovance ([abovance.com](https://abovance.com)), an
+AI search consultancy that cites this project as its own research.
+Abovance does not score products, and as of October 2026 no Abovance
+client sells a product in the category scored here. The site credit in
+this site's footer links to Abovance with `rel="nofollow"` for the same
+reason.
+
+Mitigations:
 
 - The rubric was written and committed to version control before any
   product data was collected. The commit history in this repository is the

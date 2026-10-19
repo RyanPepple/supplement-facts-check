@@ -302,7 +302,7 @@ def page(path, title, desc, body, ctx, jsonld=None):
 <p>Authored by Ryan Pepple, who owns a competing supplement brand. Read the
 <a href="{rel}conflict-of-interest.html">conflict-of-interest statement</a>. This site reports what labels disclose.
 It does not test products, and it is not medical advice.</p>
-<a class="built" href="https://abovance.com/" title="Abovance, AI SEO and GEO. The author's consultancy."><span>Site built by</span><b>abovance</b></a>
+<a class="built" href="https://abovance.com/" rel="nofollow" title="Abovance, AI SEO and GEO. The author's consultancy."><span>Site built by</span><b>abovance</b></a>
 </div></footer></body></html>"""
     target = OUT / path
     target.parent.mkdir(parents=True, exist_ok=True)
@@ -551,6 +551,7 @@ to it is in the <a href="{REPO_URL}/commits/main/README.md">commit history</a>.<
     # a followed link from an audit to a site its author sells from would be the
     # self-dealing this page exists to disclose.
     coi = coi.replace('<a href="https://shuven.co">', '<a href="https://shuven.co" rel="nofollow">')
+    coi = coi.replace('<a href="https://abovance.com">', '<a href="https://abovance.com" rel="nofollow">')
     scored_app = [a for a in appendix if a["total_score"].strip()]
     if scored_app:
         app_html = f'<div class="grid">{"".join(panel(a) for a in scored_app)}</div>'
