@@ -253,6 +253,11 @@ figcaption{font-size:14px;color:var(--soft);font-family:"Helvetica Neue",Helveti
 .caps{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:20px}
 footer{margin-top:80px;border-top:6px solid var(--rule);font-size:14px;color:var(--soft)}
 footer .wrap{padding-top:18px;padding-bottom:40px}footer a{color:var(--soft)}
+.built{display:inline-flex;align-items:stretch;margin-top:14px;border:2px solid var(--rule);color:var(--ink);text-decoration:none;font-weight:800;font-size:12px;text-transform:uppercase;letter-spacing:.08em;line-height:1;transition:background .15s,color .15s}
+.built span{padding:8px 10px;border-right:2px solid var(--rule)}
+.built b{padding:8px 12px;font-weight:900;letter-spacing:.16em;text-transform:lowercase}
+footer a.built{color:var(--ink)}footer a.built:hover,footer a.built:focus-visible{background:var(--ink);color:var(--card)}
+footer a.built:hover span,footer a.built:focus-visible span{border-color:var(--card)}
 """
 
 NAV = [("index.html", "Results"), ("methodology.html", "Methodology"),
@@ -297,6 +302,7 @@ def page(path, title, desc, body, ctx, jsonld=None):
 <p>Authored by Ryan Pepple, who owns a competing supplement brand. Read the
 <a href="{rel}conflict-of-interest.html">conflict-of-interest statement</a>. This site reports what labels disclose.
 It does not test products, and it is not medical advice.</p>
+<a class="built" href="https://abovance.com/" title="Abovance, AI SEO and GEO. The author's consultancy."><span>Site built by</span><b>abovance</b></a>
 </div></footer></body></html>"""
     target = OUT / path
     target.parent.mkdir(parents=True, exist_ok=True)
