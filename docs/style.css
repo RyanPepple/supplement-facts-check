@@ -10,8 +10,9 @@ a{color:var(--link);text-underline-offset:3px}a:hover{color:var(--accent)}
 header.site{border-bottom:6px solid var(--rule)}
 header.site .wrap{display:flex;flex-wrap:wrap;gap:8px 24px;align-items:baseline;justify-content:space-between;padding-top:18px;padding-bottom:12px}
 .brand{font-weight:900;font-size:22px;letter-spacing:-.02em;text-decoration:none}
-nav a{margin-right:18px;font-size:14px;font-weight:700;text-decoration:none;text-transform:uppercase;letter-spacing:.04em}
-nav a:last-child{margin-right:0}nav a[aria-current]{text-decoration:underline;text-decoration-thickness:2px}
+header.site nav{display:flex;flex-wrap:wrap;gap:6px 18px}
+nav a{font-size:14px;font-weight:700;text-decoration:none;text-transform:uppercase;letter-spacing:.04em}
+nav a[aria-current]{text-decoration:underline;text-decoration-thickness:2px}
 h1{font-size:clamp(34px,6vw,60px);line-height:1.02;letter-spacing:-.03em;font-weight:900;margin:48px 0 18px;text-wrap:balance}
 h2{font-size:28px;line-height:1.15;letter-spacing:-.02em;font-weight:900;margin:64px 0 8px;padding-top:14px;border-top:6px solid var(--rule)}
 h3{font-size:18px;font-weight:800;margin:28px 0 6px}
