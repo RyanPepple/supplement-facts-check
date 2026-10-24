@@ -258,6 +258,29 @@ footer .wrap{padding-top:18px;padding-bottom:40px}footer a{color:var(--soft)}
 .built b{padding:8px 12px;font-weight:900;letter-spacing:.16em;text-transform:lowercase}
 footer a.built{color:var(--ink)}footer a.built:hover,footer a.built:focus-visible{background:var(--ink);color:var(--card)}
 footer a.built:hover span,footer a.built:focus-visible span{border-color:var(--card)}
+.sr{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}
+.sc-ctrl{display:flex;flex-wrap:wrap;align-items:center;gap:10px 16px;margin:18px 0 0;font-family:"Helvetica Neue",Helvetica,Arial,sans-serif}
+.sc-ctrl input[type=search]{max-width:300px;flex:1 1 240px}
+.sc-chips{display:flex;flex-wrap:wrap;align-items:center;gap:6px}
+.sc-lab{font-size:12px;font-weight:800;text-transform:uppercase;letter-spacing:.05em;color:var(--soft)}
+.sc-chips button,#sc-reset{font:700 13px "Helvetica Neue",Helvetica,Arial,sans-serif;background:var(--card);color:var(--ink);border:2px solid var(--rule);padding:6px 10px;cursor:pointer;line-height:1}
+.sc-chips button[aria-pressed=true]{background:var(--ink);color:var(--card)}
+.sc-chips button:hover,#sc-reset:hover{color:var(--accent)}
+.sc-chips button[aria-pressed=true]:hover{color:var(--card)}
+#sc-reset{text-transform:uppercase;letter-spacing:.05em;font-size:12px}
+.sc-count{margin:0;font-size:13px;color:var(--soft)}
+table.sc th,table.sc td{padding:7px 8px}
+table.sc th.c,table.sc td.c{text-align:center;width:1%;white-space:nowrap}
+table.sc th button{font:inherit;color:inherit;background:none;border:0;padding:0;cursor:pointer;text-transform:inherit;letter-spacing:inherit;display:inline-flex;align-items:baseline;gap:4px}
+table.sc th button:hover{color:var(--accent)}
+table.sc th button abbr{text-decoration:none;border-bottom:1px dotted var(--soft)}
+table.sc th[aria-sort] button::after{content:"";font-size:10px;opacity:.55}
+table.sc th[aria-sort=ascending] button::after{content:"▲";opacity:1}
+table.sc th[aria-sort=descending] button::after{content:"▼";opacity:1}
+table.sc tbody th{font-weight:400;text-align:left;text-transform:none;letter-spacing:0;font-size:14px;border-bottom:1px solid var(--hair);vertical-align:top;white-space:normal}
+table.sc tbody th small{display:block;color:var(--soft);font-size:12.5px}
+table.sc td.c b{font-weight:800;font-size:15px}
+table.sc td.s{text-align:center;font-weight:900;font-size:15px;white-space:nowrap}
 """
 
 NAV = [("index.html", "Results"), ("methodology.html", "Methodology"),
@@ -324,6 +347,120 @@ def panel(row, rel="", link=True):
 <div class="f">Each criterion scores 1 or 0. No weighting, no partial credit.</div>
 {btn}
 </article>"""
+
+
+SCORECARD_JS = """<script>
+(function(){
+  var table = document.getElementById("sc");
+  var panel = document.getElementById("sc-controls");
+  if (!table || !panel) return;
+  var body = table.tBodies[0], rows = [].slice.call(body.rows);
+  var q = document.getElementById("sc-q"), count = document.getElementById("sc-count");
+  var chips = [].slice.call(panel.querySelectorAll("[data-crit]"));
+  var heads = [].slice.call(table.tHead.rows[0].cells);
+  panel.hidden = false;
+
+  function val(row, i) {
+    var cell = row.cells[i], n = cell.getAttribute("data-n");
+    return n === null ? cell.textContent.trim().toLowerCase() : parseFloat(n);
+  }
+  function cmp(a, b) { return a < b ? -1 : a > b ? 1 : 0; }
+  function sortBy(i, desc) {
+    rows.slice().sort(function (a, b) {
+      // Ties fall back to score, then product name, so the order is never arbitrary.
+      return (desc ? -1 : 1) * cmp(val(a, i), val(b, i))
+          || -cmp(val(a, 7), val(b, 7))
+          || cmp(val(a, 0), val(b, 0));
+    }).forEach(function (r) { body.appendChild(r); });
+    heads.forEach(function (th, j) {
+      th.setAttribute("aria-sort", j === i ? (desc ? "descending" : "ascending") : "none");
+    });
+  }
+  heads.forEach(function (th, i) {
+    var btn = th.querySelector("button");
+    if (!btn) return;
+    btn.addEventListener("click", function () {
+      // Numbers open high-to-low, text A-to-Z; clicking the active column flips it.
+      var active = th.getAttribute("aria-sort") !== "none";
+      var desc = active ? th.getAttribute("aria-sort") === "ascending" : i !== 0;
+      sortBy(i, desc);
+    });
+  });
+
+  function apply() {
+    var term = q.value.trim().toLowerCase();
+    var want = chips.filter(function (c) { return c.getAttribute("aria-pressed") === "true"; })
+                    .map(function (c) { return parseInt(c.getAttribute("data-crit"), 10); });
+    var shown = 0;
+    rows.forEach(function (r) {
+      var ok = (!term || r.cells[0].textContent.toLowerCase().indexOf(term) > -1)
+            && want.every(function (n) { return r.cells[n].getAttribute("data-n") === "1"; });
+      r.hidden = !ok;
+      if (ok) shown++;
+    });
+    count.textContent = shown === rows.length
+      ? "Showing all " + rows.length + " products"
+      : shown === 0
+        ? "No product meets every filter you have set."
+        : "Showing " + shown + " of " + rows.length + " products";
+  }
+  q.addEventListener("input", apply);
+  chips.forEach(function (c) {
+    c.addEventListener("click", function () {
+      c.setAttribute("aria-pressed", c.getAttribute("aria-pressed") === "true" ? "false" : "true");
+      apply();
+    });
+  });
+  document.getElementById("sc-reset").addEventListener("click", function () {
+    q.value = "";
+    chips.forEach(function (c) { c.setAttribute("aria-pressed", "false"); });
+    apply();
+  });
+})();
+</script>"""
+
+
+def scorecard(pilot):
+    """The whole pilot as one table: 18 products by 6 criteria, sortable and filterable.
+
+    Rendered pre-sorted by score, so the table is already useful with no JavaScript;
+    the sort buttons and the filters are revealed by the script that drives them.
+    """
+    rows = sorted(pilot, key=lambda r: (-int(r["total_score"]), r["product"].lower()))
+    trs = ""
+    for r in rows:
+        cells = ""
+        for key, label, _ in CRITERIA:
+            ok = r[key] == "1"
+            cells += (f'<td class="c" data-n="{"1" if ok else "0"}">'
+                      f'<b class="{"pass" if ok else "fail"}" aria-hidden="true">{"&#10003;" if ok else "&#10007;"}</b>'
+                      f'<span class="sr">{"Yes" if ok else "No"}: {e(label)}</span></td>')
+        trs += (f'<tr><th scope="row"><a href="products/{slugify(r["product"])}.html">{e(r["product"])}</a>'
+                f'<small>{e(r["brand"])}</small></th>{cells}'
+                f'<td class="s" data-n="{e(r["total_score"])}">{e(r["total_score"])}/6</td></tr>')
+    chips = "".join(f'<button type="button" data-crit="{i}" aria-pressed="false" '
+                    f'title="{e(label)}"><span aria-hidden="true">{i}</span>'
+                    f'<span class="sr">Show only products that pass criterion {i}: {e(label)}</span></button>'
+                    for i, (_, label, _) in enumerate(CRITERIA, 1))
+    heads = "".join(f'<th class="c" scope="col" aria-sort="none"><button type="button">'
+                    f'<abbr title="{e(label)}">{i}</abbr></button></th>'
+                    for i, (_, label, _) in enumerate(CRITERIA, 1))
+    return f"""<div class="sc-ctrl" id="sc-controls" hidden>
+<label class="sr" for="sc-q">Filter products by name or brand</label>
+<input type="search" id="sc-q" placeholder="Filter by product or brand">
+<div class="sc-chips" role="group" aria-label="Show only products that pass a criterion">
+<span class="sc-lab">Passes only</span>{chips}</div>
+<button type="button" id="sc-reset">Reset</button>
+<p class="sc-count" id="sc-count" aria-live="polite">Showing all {len(rows)} products</p>
+</div>
+<div class="tablewrap"><table class="sc" id="sc">
+<caption class="sr">Every scored product with its result on each of the six criteria and its total out of 6.
+Column headers sort the table; the numbered headers are criteria 1 to 6.</caption>
+<thead><tr><th scope="col" aria-sort="none"><button type="button">Product</button></th>{heads}
+<th class="c" scope="col" aria-sort="descending"><button type="button">Score</button></th></tr></thead>
+<tbody>{trs}</tbody></table></div>
+<p class="sc-count">Criteria, in column order: {"; ".join(f"{i}. {e(label)}" for i, (_, label, _) in enumerate(CRITERIA, 1))}.</p>
+{SCORECARD_JS}"""
 
 
 def md_section(readme, start, end=None):
@@ -409,6 +546,9 @@ with every inclusion decision. Read these as pilot results, not a ranking.</div>
 <h2>Pilot results</h2>
 <p class="lede" style="font-size:18px">Of {n} products scored, {no_blend} disclosed an exact amount for every active
 ingredient, and a public third-party certificate of analysis could not be located for {no_coa}. The highest score was {top} out of 6.</p>
+{scorecard(pilot)}
+
+<h3>Every scorecard in full</h3>
 <div class="grid">{''.join(panel(r) for r in pilot)}</div>
 
 <h2>The sample</h2>
