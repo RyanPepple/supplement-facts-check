@@ -260,8 +260,9 @@ footer a.built{color:var(--ink)}footer a.built:hover,footer a.built:focus-visibl
 footer a.built:hover span,footer a.built:focus-visible span{border-color:var(--card)}
 """
 
-NAV = [("index.html", "Results"), ("methodology.html", "Methodology"),
-       ("reference.html", "Dose reference"), ("conflict-of-interest.html", "Conflict of interest")]
+NAV = [("index.html", "Results"), ("findings.html", "Findings"),
+       ("methodology.html", "Methodology"), ("reference.html", "Dose reference"),
+       ("conflict-of-interest.html", "Conflict of interest")]
 
 
 def page(path, title, desc, body, ctx, jsonld=None):
@@ -334,6 +335,221 @@ def md_section(readme, start, end=None):
     return h.replace("<hr />", "")
 
 
+# ------------------------------------------------------------------ findings
+# One page per criterion, stating how many of the scored products met it and
+# listing every scored row as evidence. The headline sentence is composed from
+# the counts at build time, so a page can never state a figure the CSV does not
+# support: re-score a row and the wording changes with it.
+
+FINDINGS = {
+    "criterion_1_exact_dose_disclosed": {
+        "slug": "exact-doses-disclosed",
+        "met": "disclose an exact amount for every active ingredient",
+        "short": "disclose an exact amount for every active ingredient",
+        "missing": "the panel hides at least one active ingredient inside a proprietary blend",
+    },
+    "criterion_2_standardization_pct": {
+        "slug": "standardization-percentage-stated",
+        "met": "state the standardization percentage wherever potency depends on one",
+        "short": "state the standardization percentage",
+        "missing": "an ingredient whose potency depends on a percentage carries no percentage",
+    },
+    "criterion_3_chemical_form_named": {
+        "slug": "chemical-form-or-strain-named",
+        "met": "name the chemical form or probiotic strain of every active ingredient",
+        "short": "name every chemical form or probiotic strain",
+        "missing": "at least one organism or mineral is named without its strain or form",
+    },
+    "criterion_4_dose_within_trial_range": {
+        "slug": "dose-within-clinical-trial-range",
+        "met": "disclose a dose inside the range human trials used for the outcome claimed",
+        "short": "disclose a dose inside the clinical trial range",
+        "missing": "the disclosed dose falls outside the trial range, or no dose is disclosed to check",
+    },
+    "criterion_5_coa_publicly_accessible": {
+        "slug": "public-third-party-certificate-of-analysis",
+        "met": "publish a third-party certificate of analysis reachable with no email gate and no account",
+        "short": "publish a publicly accessible third-party certificate of analysis",
+        "missing": "a documented search found no publicly accessible third-party certificate",
+    },
+    "criterion_6_per_serving_amounts": {
+        "slug": "per-serving-amounts-complete",
+        "met": "state both the serving size and the servings per container",
+        "short": "state both serving size and servings per container",
+        "missing": "serving size or servings per container is absent from the panel",
+    },
+}
+
+
+def count_phrase(k, n, cap=False):
+    """'None', 'Just one', 'Only 3' or '12' — chosen from the count itself."""
+    if k == 0:
+        p = "none"
+    elif k == 1:
+        p = "just one"
+    elif k * 2 < n:
+        p = f"only {k}"
+    else:
+        p = str(k)
+    return p[:1].upper() + p[1:] if cap else p
+
+
+def agree(phrase, k):
+    """Conjugate a plural verb phrase for a count: 'disclose' -> 'discloses' when k is 1."""
+    if k != 1:
+        return phrase
+    verb, _, rest = phrase.partition(" ")
+    verb += "es" if verb.endswith(("s", "sh", "ch", "x", "z", "o")) else "s"
+    return (verb + " " + rest).strip()
+
+
+def findings_pages(pilot, ctx, ver, locked):
+    """Build findings.html and one page per criterion. Returns the hub's teaser HTML."""
+    n = len(pilot)
+    stats = []
+    for i, (key, label, desc) in enumerate(CRITERIA, 1):
+        f = FINDINGS[key]
+        met = [r for r in pilot if r[key] == "1"]
+        unmet = [r for r in pilot if r[key] != "1"]
+        stats.append((i, key, label, desc, f, met, unmet))
+
+    # starkest first: the fewest products meeting a criterion is the story
+    ranked = sorted(stats, key=lambda s: (len(s[5]), s[0]))
+
+    for i, key, label, desc, f, met, unmet in stats:
+        k = len(met)
+        headline = f"{count_phrase(k, n, cap=True)} of {n} best-selling gut supplements {agree(f['short'], k)}"
+        sentence = (f"{count_phrase(k, n, cap=True)} of the {n} best-selling gut-health supplements audited by "
+                    f"Supplement Facts Check {agree(f['met'], k)}.")
+        rows = ""
+        for r in sorted(pilot, key=lambda r: (r[key] == "1", -int(r["total_score"]), r["product"])):
+            _, why = split_notes(r["notes"])
+            ok = r[key] == "1"
+            rows += (f'<tr><td><a href="../products/{slugify(r["product"])}.html">{e(r["product"])}</a>'
+                     f'<br><small style="color:var(--soft)">{e(r["brand"])}</small></td>'
+                     f'<td class="n {"pass" if ok else "fail"}">{"1 ✓" if ok else "0 ✗"}</td>'
+                     f'<td class="n">{e(r["total_score"])}/6</td>'
+                     f'<td>{e(why.get(i, "No reasoning recorded."))}</td>'
+                     f'<td class="n muted">{e(r["capture_date"])}</td></tr>')
+        others = (f"The other {len(unmet)} do not: {f['missing']}." if met and unmet
+                  else (f"For all {n}, {f['missing']}." if not met
+                        else "Every product scored met this criterion."))
+        coa_caveat = ("""<div class="note"><b class="sans">What a 0 means here.</b> A 0 records that a documented
+search — product page, brand site, site-scoped search and the retail listing — did not find a publicly accessible
+third-party certificate on the date shown. That is a negative finding about public accessibility, not a claim that
+no certificate exists or that a product is contaminated.</div>""" if key == "criterion_5_coa_publicly_accessible" else "")
+        path = f"findings/{f['slug']}.html"
+        body = f"""
+<p class="kicker" style="margin-top:40px">Headline finding · criterion {i} of 6</p>
+<h1 style="margin-top:8px;font-size:clamp(30px,5vw,52px)">{e(headline)}</h1>
+<p class="lede">{e(sentence)} {e(others)}</p>
+<div class="note"><b class="sans">The sample.</b> {n} products scored so far from the top 30 of Amazon’s Best
+Sellers in Probiotic Nutritional Supplements, captured 09/26/2026. Every inclusion and exclusion decision is
+listed on the <a href="../">results page</a>. Read these as pilot results, not a ranking.</div>
+{coa_caveat}
+
+<h2>Criterion {i}: {e(label)}</h2>
+<p class="prose">{e(desc)} It scores 1 or 0, with no weighting and no partial credit, under methodology v{ver},
+locked {locked}. <a href="../methodology.html">Read the full methodology →</a></p>
+
+<h2>All {n} scored products</h2>
+<p class="lede" style="font-size:18px">Every row that went into the figure above, with the reasoning recorded
+for this criterion and the date the label was read. Each product links to its full scorecard and the dated
+label captures the score was read from.</p>
+<div class="tablewrap"><table>
+<tr><th>Product</th><th>Criterion {i}</th><th>Total</th><th>Reasoning recorded for this criterion</th><th>Label captured</th></tr>
+{rows}
+</table></div>
+<p><a class="btn" href="{RAW_URL}pilot-scores.csv">See these rows in the dataset →</a></p>
+
+<h2>Citing this finding</h2>
+<p class="prose">The sentence above is generated from the dataset at build time, so it cannot drift from the rows
+listed on this page. Quote it as:</p>
+<p class="note" style="max-width:46em">{e(sentence)} Supplement Facts Check, methodology v{ver},
+labels captured {min(r['capture_date'] for r in pilot)} to {max(r['capture_date'] for r in pilot)}.
+{SITE_URL}/{path}</p>
+<p class="prose">The underlying data is public domain under CC0 1.0 and needs no permission to reuse. The
+<a href="{REPO_URL}">repository</a> holds the scores, the rubric and the commit history of every ruling.
+Corrections are welcome as <a href="{REPO_URL}/issues">issues</a>.</p>
+<p><a class="btn" href="../findings.html">All headline findings →</a></p>
+"""
+        title = f"{headline} | Supplement Facts Check"
+        pdesc = (f"{sentence} Every scored product is listed with the reasoning recorded for criterion {i} "
+                 f"and the date its label was read.")
+        finding_ld = {
+            "@type": "Report", "@id": page_url(path) + "#finding",
+            "headline": headline, "name": title, "description": pdesc, "abstract": sentence,
+            "url": page_url(path), "inLanguage": "en", "datePublished": locked, "dateModified": locked,
+            "author": AUTHOR, "publisher": AUTHOR, "license": LICENSE_URL,
+            "about": {"@id": f"{SITE_URL}/#dataset"}, "isBasedOn": {"@id": f"{SITE_URL}/#dataset"},
+            "variableMeasured": {"@type": "PropertyValue", "name": label, "description": desc,
+                                 "value": f"{k} of {n}"},
+        }
+        list_ld = {
+            "@type": "ItemList", "@id": page_url(path) + "#rows",
+            "name": f"Criterion {i} result for every scored product", "numberOfItems": n,
+            "itemListElement": [{"@type": "ListItem", "position": j,
+                                 "url": page_url(f"products/{slugify(r['product'])}.html"),
+                                 "name": f"{r['product']} ({r['brand']}): criterion {i} scored {r[key]}"}
+                                for j, r in enumerate(pilot, 1)],
+        }
+        page(path, title, pdesc, body, ctx,
+             graph(website_node(),
+                   webpage_node(path, title, pdesc, main=page_url(path) + "#finding", modified=locked),
+                   finding_ld, list_ld))
+
+    cards = ""
+    for i, key, label, desc, f, met, unmet in ranked:
+        k = len(met)
+        cards += (f'<div><b>{count_phrase(k, n, cap=True)} of {n} {e(agree(f["short"], k))}</b>'
+                  f'<span>Criterion {i}: {e(label)}. '
+                  f'<a href="findings/{f["slug"]}.html">See all {n} rows →</a></span></div>')
+    hub_body = f"""
+<p class="kicker" style="margin-top:40px">Headline findings</p>
+<h1 style="margin-top:8px">What {n} best-selling gut supplement labels actually disclose</h1>
+<p class="lede">Six yes-or-no criteria, {n} products scored so far. Each finding below has its own page listing
+every scored row, the reasoning recorded against it and the date the label was read, so any figure here can be
+checked against the evidence it came from.</p>
+<div class="note"><b class="sans">Pilot stage.</b> The sample is the top 30 of Amazon’s Best Sellers in Probiotic
+Nutritional Supplements, captured 09/26/2026. Every inclusion and exclusion decision is on the
+<a href="./">results page</a>. These are pilot results, not a ranking, and no product was lab-tested.</div>
+<div class="crit">{cards}</div>
+<p style="margin-top:28px"><a class="btn" href="{RAW_URL}pilot-scores.csv">Download the scores as CSV →</a></p>
+"""
+    hub_title = f"Headline findings: what {n} gut supplement labels disclose | Supplement Facts Check"
+    hub_desc = (f"The {n}-product pilot in six figures, one page per criterion, each listing every scored row "
+                f"as evidence.")
+    hub_ld = {
+        "@type": "ItemList", "@id": page_url("findings.html") + "#findings",
+        "name": "Headline findings", "numberOfItems": len(ranked),
+        "itemListElement": [{"@type": "ListItem", "position": j,
+                             "url": page_url(f"findings/{f['slug']}.html"),
+                             "name": f"{count_phrase(len(met), n, cap=True)} of {n} {agree(f['short'], len(met))}"}
+                            for j, (i, key, label, desc, f, met, unmet) in enumerate(ranked, 1)],
+    }
+    page("findings.html", hub_title, hub_desc, hub_body, ctx,
+         graph(website_node(),
+               webpage_node("findings.html", hub_title, hub_desc,
+                            main=page_url("findings.html") + "#findings", modified=locked),
+               hub_ld))
+
+    top3 = "".join(
+        f'<div><b>{count_phrase(len(met), n, cap=True)} of {n} {e(agree(f["short"], len(met)))}</b>'
+        f'<span>Criterion {i}: {e(label)}. <a href="findings/{f["slug"]}.html">See all {n} rows →</a></span></div>'
+        for i, key, label, desc, f, met, unmet in ranked[:3])
+    llms = ["", "## Headline findings", ""] + [
+        f"- {count_phrase(len(met), n, cap=True)} of {n} {agree(f['short'], len(met))}"
+        f" (criterion {i}): {SITE_URL}/findings/{f['slug']}.html"
+        for i, key, label, desc, f, met, unmet in ranked]
+    return llms, f"""
+<h2>Headline findings</h2>
+<p class="lede" style="font-size:18px">The three starkest results from the {n} products scored so far. Each has its
+own page listing every scored row as evidence.</p>
+<div class="crit">{top3}</div>
+<p><a class="btn" href="findings.html">All headline findings →</a></p>
+"""
+
+
 def build():
     if OUT.exists():
         shutil.rmtree(OUT)
@@ -371,6 +587,9 @@ def build():
         name = p.stem + ".jpg"
         im.save(capdir / name, "JPEG", quality=82, optimize=True)
         caps[p.name] = (name, im.width, im.height)
+
+    # --------------------------------------------------------- findings
+    findings_llms, findings_teaser = findings_pages(pilot, ctx, ver, locked)
 
     # ------------------------------------------------------------ home
     n = len(pilot)
@@ -410,7 +629,7 @@ with every inclusion decision. Read these as pilot results, not a ranking.</div>
 <p class="lede" style="font-size:18px">Of {n} products scored, {no_blend} disclosed an exact amount for every active
 ingredient, and a public third-party certificate of analysis could not be located for {no_coa}. The highest score was {top} out of 6.</p>
 <div class="grid">{''.join(panel(r) for r in pilot)}</div>
-
+{findings_teaser}
 <h2>The sample</h2>
 <p class="lede" style="font-size:18px">All {len(sample)} products in the captured ranking, in rank order.
 {n_inc} pass the inclusion test, {n_exc} are excluded, {n_pend} are undecided. Exclusions stay visible: a sample
@@ -666,6 +885,7 @@ q.addEventListener('input',()=>{{const s=q.value.toLowerCase();rows.forEach(r=>r
              "Authored by Ryan Pepple, who owns a competing brand (CalmGut, operating as SHUVEN); author-owned "
              "products are scored separately and never ranked.", "", "## Pilot scores", ""]
     lines += [f"- {r['product']} ({r['brand']}): {r['total_score']}/6, label captured {r['capture_date']}" for r in pilot]
+    lines += findings_llms
     lines += ["", "## Known limitations", "",
               f"- {len(doses) - with_range} of {len(doses)} dose-reference rows have no range set; each records "
               "why, and criterion 4 cannot be scored from them.",
