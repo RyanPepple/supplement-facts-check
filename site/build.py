@@ -294,9 +294,33 @@ footer .wrap{padding-top:18px;padding-bottom:40px}footer a{color:var(--soft)}
 .built b{padding:8px 12px;font-weight:900;letter-spacing:.16em;text-transform:lowercase}
 footer a.built{color:var(--ink)}footer a.built:hover,footer a.built:focus-visible{background:var(--ink);color:var(--card)}
 footer a.built:hover span,footer a.built:focus-visible span{border-color:var(--card)}
+.sr{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}
+.sc-ctrl{display:flex;flex-wrap:wrap;align-items:center;gap:10px 16px;margin:18px 0 0;font-family:"Helvetica Neue",Helvetica,Arial,sans-serif}
+.sc-ctrl input[type=search]{max-width:300px;flex:1 1 240px}
+.sc-chips{display:flex;flex-wrap:wrap;align-items:center;gap:6px}
+.sc-lab{font-size:12px;font-weight:800;text-transform:uppercase;letter-spacing:.05em;color:var(--soft)}
+.sc-chips button,#sc-reset{font:700 13px "Helvetica Neue",Helvetica,Arial,sans-serif;background:var(--card);color:var(--ink);border:2px solid var(--rule);padding:6px 10px;cursor:pointer;line-height:1}
+.sc-chips button[aria-pressed=true]{background:var(--ink);color:var(--card)}
+.sc-chips button:hover,#sc-reset:hover{color:var(--accent)}
+.sc-chips button[aria-pressed=true]:hover{color:var(--card)}
+#sc-reset{text-transform:uppercase;letter-spacing:.05em;font-size:12px}
+.sc-count{margin:0;font-size:13px;color:var(--soft)}
+table.sc th,table.sc td{padding:7px 8px}
+table.sc th.c,table.sc td.c{text-align:center;width:1%;white-space:nowrap}
+table.sc th button{font:inherit;color:inherit;background:none;border:0;padding:0;cursor:pointer;text-transform:inherit;letter-spacing:inherit;display:inline-flex;align-items:baseline;gap:4px}
+table.sc th button:hover{color:var(--accent)}
+table.sc th button abbr{text-decoration:none;border-bottom:1px dotted var(--soft)}
+table.sc th[aria-sort] button::after{content:"";font-size:10px;opacity:.55}
+table.sc th[aria-sort=ascending] button::after{content:"▲";opacity:1}
+table.sc th[aria-sort=descending] button::after{content:"▼";opacity:1}
+table.sc tbody th{font-weight:400;text-align:left;text-transform:none;letter-spacing:0;font-size:14px;border-bottom:1px solid var(--hair);vertical-align:top;white-space:normal}
+table.sc tbody th small{display:block;color:var(--soft);font-size:12.5px}
+table.sc td.c b{font-weight:800;font-size:15px}
+table.sc td.s{text-align:center;font-weight:900;font-size:15px;white-space:nowrap}
 """
 
-NAV = [("index.html", "Results"), ("comparisons.html", "Comparisons"),
+NAV = [("index.html", "Results"), ("findings.html", "Findings"),
+       ("comparisons.html", "Comparisons"),
        ("methodology.html", "Methodology"), ("reference.html", "Dose reference"),
        ("conflict-of-interest.html", "Conflict of interest")]
 
@@ -482,12 +506,341 @@ and nothing here is medical advice or a recommendation to buy either one.</div>
     return path, title
 
 
+SCORECARD_JS = """<script>
+(function(){
+  var table = document.getElementById("sc");
+  var panel = document.getElementById("sc-controls");
+  if (!table || !panel) return;
+  var body = table.tBodies[0], rows = [].slice.call(body.rows);
+  var q = document.getElementById("sc-q"), count = document.getElementById("sc-count");
+  var chips = [].slice.call(panel.querySelectorAll("[data-crit]"));
+  var heads = [].slice.call(table.tHead.rows[0].cells);
+  panel.hidden = false;
+
+  function val(row, i) {
+    var cell = row.cells[i], n = cell.getAttribute("data-n");
+    return n === null ? cell.textContent.trim().toLowerCase() : parseFloat(n);
+  }
+  function cmp(a, b) { return a < b ? -1 : a > b ? 1 : 0; }
+  function sortBy(i, desc) {
+    rows.slice().sort(function (a, b) {
+      // Ties fall back to score, then product name, so the order is never arbitrary.
+      return (desc ? -1 : 1) * cmp(val(a, i), val(b, i))
+          || -cmp(val(a, 7), val(b, 7))
+          || cmp(val(a, 0), val(b, 0));
+    }).forEach(function (r) { body.appendChild(r); });
+    heads.forEach(function (th, j) {
+      th.setAttribute("aria-sort", j === i ? (desc ? "descending" : "ascending") : "none");
+    });
+  }
+  heads.forEach(function (th, i) {
+    var btn = th.querySelector("button");
+    if (!btn) return;
+    btn.addEventListener("click", function () {
+      // Numbers open high-to-low, text A-to-Z; clicking the active column flips it.
+      var active = th.getAttribute("aria-sort") !== "none";
+      var desc = active ? th.getAttribute("aria-sort") === "ascending" : i !== 0;
+      sortBy(i, desc);
+    });
+  });
+
+  function apply() {
+    var term = q.value.trim().toLowerCase();
+    var want = chips.filter(function (c) { return c.getAttribute("aria-pressed") === "true"; })
+                    .map(function (c) { return parseInt(c.getAttribute("data-crit"), 10); });
+    var shown = 0;
+    rows.forEach(function (r) {
+      var ok = (!term || r.cells[0].textContent.toLowerCase().indexOf(term) > -1)
+            && want.every(function (n) { return r.cells[n].getAttribute("data-n") === "1"; });
+      r.hidden = !ok;
+      if (ok) shown++;
+    });
+    count.textContent = shown === rows.length
+      ? "Showing all " + rows.length + " products"
+      : shown === 0
+        ? "No product meets every filter you have set."
+        : "Showing " + shown + " of " + rows.length + " products";
+  }
+  q.addEventListener("input", apply);
+  chips.forEach(function (c) {
+    c.addEventListener("click", function () {
+      c.setAttribute("aria-pressed", c.getAttribute("aria-pressed") === "true" ? "false" : "true");
+      apply();
+    });
+  });
+  document.getElementById("sc-reset").addEventListener("click", function () {
+    q.value = "";
+    chips.forEach(function (c) { c.setAttribute("aria-pressed", "false"); });
+    apply();
+  });
+})();
+</script>"""
+
+
+def scorecard(pilot):
+    """The whole pilot as one table: 18 products by 6 criteria, sortable and filterable.
+
+    Rendered pre-sorted by score, so the table is already useful with no JavaScript;
+    the sort buttons and the filters are revealed by the script that drives them.
+    """
+    rows = sorted(pilot, key=lambda r: (-int(r["total_score"]), r["product"].lower()))
+    trs = ""
+    for r in rows:
+        cells = ""
+        for key, label, _ in CRITERIA:
+            ok = r[key] == "1"
+            cells += (f'<td class="c" data-n="{"1" if ok else "0"}">'
+                      f'<b class="{"pass" if ok else "fail"}" aria-hidden="true">{"&#10003;" if ok else "&#10007;"}</b>'
+                      f'<span class="sr">{"Yes" if ok else "No"}: {e(label)}</span></td>')
+        trs += (f'<tr><th scope="row"><a href="products/{slugify(r["product"])}.html">{e(r["product"])}</a>'
+                f'<small>{e(r["brand"])}</small></th>{cells}'
+                f'<td class="s" data-n="{e(r["total_score"])}">{e(r["total_score"])}/6</td></tr>')
+    chips = "".join(f'<button type="button" data-crit="{i}" aria-pressed="false" '
+                    f'title="{e(label)}"><span aria-hidden="true">{i}</span>'
+                    f'<span class="sr">Show only products that pass criterion {i}: {e(label)}</span></button>'
+                    for i, (_, label, _) in enumerate(CRITERIA, 1))
+    heads = "".join(f'<th class="c" scope="col" aria-sort="none"><button type="button">'
+                    f'<abbr title="{e(label)}">{i}</abbr></button></th>'
+                    for i, (_, label, _) in enumerate(CRITERIA, 1))
+    return f"""<div class="sc-ctrl" id="sc-controls" hidden>
+<label class="sr" for="sc-q">Filter products by name or brand</label>
+<input type="search" id="sc-q" placeholder="Filter by product or brand">
+<div class="sc-chips" role="group" aria-label="Show only products that pass a criterion">
+<span class="sc-lab">Passes only</span>{chips}</div>
+<button type="button" id="sc-reset">Reset</button>
+<p class="sc-count" id="sc-count" aria-live="polite">Showing all {len(rows)} products</p>
+</div>
+<div class="tablewrap"><table class="sc" id="sc">
+<caption class="sr">Every scored product with its result on each of the six criteria and its total out of 6.
+Column headers sort the table; the numbered headers are criteria 1 to 6.</caption>
+<thead><tr><th scope="col" aria-sort="none"><button type="button">Product</button></th>{heads}
+<th class="c" scope="col" aria-sort="descending"><button type="button">Score</button></th></tr></thead>
+<tbody>{trs}</tbody></table></div>
+<p class="sc-count">Criteria, in column order: {"; ".join(f"{i}. {e(label)}" for i, (_, label, _) in enumerate(CRITERIA, 1))}.</p>
+{SCORECARD_JS}"""
+
+
 def md_section(readme, start, end=None):
     i = readme.index(start)
     j = readme.index(end, i) if end else len(readme)
     h = markdown.markdown(readme[i:j], extensions=["tables"])
     h = h.replace("<table>", '<div class="tablewrap"><table>').replace("</table>", "</table></div>")
     return h.replace("<hr />", "")
+
+
+# ------------------------------------------------------------------ findings
+# One page per criterion, stating how many of the scored products met it and
+# listing every scored row as evidence. The headline sentence is composed from
+# the counts at build time, so a page can never state a figure the CSV does not
+# support: re-score a row and the wording changes with it.
+
+FINDINGS = {
+    "criterion_1_exact_dose_disclosed": {
+        "slug": "exact-doses-disclosed",
+        "met": "disclose an exact amount for every active ingredient",
+        "short": "disclose an exact amount for every active ingredient",
+        "missing": "the panel hides at least one active ingredient inside a proprietary blend",
+    },
+    "criterion_2_standardization_pct": {
+        "slug": "standardization-percentage-stated",
+        "met": "state the standardization percentage wherever potency depends on one",
+        "short": "state the standardization percentage",
+        "missing": "an ingredient whose potency depends on a percentage carries no percentage",
+    },
+    "criterion_3_chemical_form_named": {
+        "slug": "chemical-form-or-strain-named",
+        "met": "name the chemical form or probiotic strain of every active ingredient",
+        "short": "name every chemical form or probiotic strain",
+        "missing": "at least one organism or mineral is named without its strain or form",
+    },
+    "criterion_4_dose_within_trial_range": {
+        "slug": "dose-within-clinical-trial-range",
+        "met": "disclose a dose inside the range human trials used for the outcome claimed",
+        "short": "disclose a dose inside the clinical trial range",
+        "missing": "the disclosed dose falls outside the trial range, or no dose is disclosed to check",
+    },
+    "criterion_5_coa_publicly_accessible": {
+        "slug": "public-third-party-certificate-of-analysis",
+        "met": "publish a third-party certificate of analysis reachable with no email gate and no account",
+        "short": "publish a publicly accessible third-party certificate of analysis",
+        "missing": "a documented search found no publicly accessible third-party certificate",
+    },
+    "criterion_6_per_serving_amounts": {
+        "slug": "per-serving-amounts-complete",
+        "met": "state both the serving size and the servings per container",
+        "short": "state both serving size and servings per container",
+        "missing": "serving size or servings per container is absent from the panel",
+    },
+}
+
+
+def count_phrase(k, n, cap=False):
+    """'None', 'Just one', 'Only 3' or '12' — chosen from the count itself."""
+    if k == 0:
+        p = "none"
+    elif k == 1:
+        p = "just one"
+    elif k * 2 < n:
+        p = f"only {k}"
+    else:
+        p = str(k)
+    return p[:1].upper() + p[1:] if cap else p
+
+
+def agree(phrase, k):
+    """Conjugate a plural verb phrase for a count: 'disclose' -> 'discloses' when k is 1."""
+    if k != 1:
+        return phrase
+    verb, _, rest = phrase.partition(" ")
+    verb += "es" if verb.endswith(("s", "sh", "ch", "x", "z", "o")) else "s"
+    return (verb + " " + rest).strip()
+
+
+def findings_pages(pilot, ctx, ver, locked):
+    """Build findings.html and one page per criterion. Returns the hub's teaser HTML."""
+    n = len(pilot)
+    stats = []
+    for i, (key, label, desc) in enumerate(CRITERIA, 1):
+        f = FINDINGS[key]
+        met = [r for r in pilot if r[key] == "1"]
+        unmet = [r for r in pilot if r[key] != "1"]
+        stats.append((i, key, label, desc, f, met, unmet))
+
+    # starkest first: the fewest products meeting a criterion is the story
+    ranked = sorted(stats, key=lambda s: (len(s[5]), s[0]))
+
+    for i, key, label, desc, f, met, unmet in stats:
+        k = len(met)
+        headline = f"{count_phrase(k, n, cap=True)} of {n} best-selling gut supplements {agree(f['short'], k)}"
+        sentence = (f"{count_phrase(k, n, cap=True)} of the {n} best-selling gut-health supplements audited by "
+                    f"Supplement Facts Check {agree(f['met'], k)}.")
+        rows = ""
+        for r in sorted(pilot, key=lambda r: (r[key] == "1", -int(r["total_score"]), r["product"])):
+            _, why = split_notes(r["notes"])
+            ok = r[key] == "1"
+            rows += (f'<tr><td><a href="../products/{slugify(r["product"])}.html">{e(r["product"])}</a>'
+                     f'<br><small style="color:var(--soft)">{e(r["brand"])}</small></td>'
+                     f'<td class="n {"pass" if ok else "fail"}">{"1 ✓" if ok else "0 ✗"}</td>'
+                     f'<td class="n">{e(r["total_score"])}/6</td>'
+                     f'<td>{e(why.get(i, "No reasoning recorded."))}</td>'
+                     f'<td class="n muted">{e(r["capture_date"])}</td></tr>')
+        others = (f"The other {len(unmet)} do not: {f['missing']}." if met and unmet
+                  else (f"For all {n}, {f['missing']}." if not met
+                        else "Every product scored met this criterion."))
+        coa_caveat = ("""<div class="note"><b class="sans">What a 0 means here.</b> A 0 records that a documented
+search — product page, brand site, site-scoped search and the retail listing — did not find a publicly accessible
+third-party certificate on the date shown. That is a negative finding about public accessibility, not a claim that
+no certificate exists or that a product is contaminated.</div>""" if key == "criterion_5_coa_publicly_accessible" else "")
+        path = f"findings/{f['slug']}.html"
+        body = f"""
+<p class="kicker" style="margin-top:40px">Headline finding · criterion {i} of 6</p>
+<h1 style="margin-top:8px;font-size:clamp(30px,5vw,52px)">{e(headline)}</h1>
+<p class="lede">{e(sentence)} {e(others)}</p>
+<div class="note"><b class="sans">The sample.</b> {n} products scored so far from the top 30 of Amazon’s Best
+Sellers in Probiotic Nutritional Supplements, captured 09/26/2026. Every inclusion and exclusion decision is
+listed on the <a href="../">results page</a>. Read these as pilot results, not a ranking.</div>
+{coa_caveat}
+
+<h2>Criterion {i}: {e(label)}</h2>
+<p class="prose">{e(desc)} It scores 1 or 0, with no weighting and no partial credit, under methodology v{ver},
+locked {locked}. <a href="../methodology.html">Read the full methodology →</a></p>
+
+<h2>All {n} scored products</h2>
+<p class="lede" style="font-size:18px">Every row that went into the figure above, with the reasoning recorded
+for this criterion and the date the label was read. Each product links to its full scorecard and the dated
+label captures the score was read from.</p>
+<div class="tablewrap"><table>
+<tr><th>Product</th><th>Criterion {i}</th><th>Total</th><th>Reasoning recorded for this criterion</th><th>Label captured</th></tr>
+{rows}
+</table></div>
+<p><a class="btn" href="{RAW_URL}pilot-scores.csv">See these rows in the dataset →</a></p>
+
+<h2>Citing this finding</h2>
+<p class="prose">The sentence above is generated from the dataset at build time, so it cannot drift from the rows
+listed on this page. Quote it as:</p>
+<p class="note" style="max-width:46em">{e(sentence)} Supplement Facts Check, methodology v{ver},
+labels captured {min(r['capture_date'] for r in pilot)} to {max(r['capture_date'] for r in pilot)}.
+{SITE_URL}/{path}</p>
+<p class="prose">The underlying data is public domain under CC0 1.0 and needs no permission to reuse. The
+<a href="{REPO_URL}">repository</a> holds the scores, the rubric and the commit history of every ruling.
+Corrections are welcome as <a href="{REPO_URL}/issues">issues</a>.</p>
+<p><a class="btn" href="../findings.html">All headline findings →</a></p>
+"""
+        title = f"{headline} | Supplement Facts Check"
+        pdesc = (f"{sentence} Every scored product is listed with the reasoning recorded for criterion {i} "
+                 f"and the date its label was read.")
+        finding_ld = {
+            "@type": "Report", "@id": page_url(path) + "#finding",
+            "headline": headline, "name": title, "description": pdesc, "abstract": sentence,
+            "url": page_url(path), "inLanguage": "en", "datePublished": locked, "dateModified": locked,
+            "author": AUTHOR, "publisher": AUTHOR, "license": LICENSE_URL,
+            "about": {"@id": f"{SITE_URL}/#dataset"}, "isBasedOn": {"@id": f"{SITE_URL}/#dataset"},
+            "variableMeasured": {"@type": "PropertyValue", "name": label, "description": desc,
+                                 "value": f"{k} of {n}"},
+        }
+        list_ld = {
+            "@type": "ItemList", "@id": page_url(path) + "#rows",
+            "name": f"Criterion {i} result for every scored product", "numberOfItems": n,
+            "itemListElement": [{"@type": "ListItem", "position": j,
+                                 "url": page_url(f"products/{slugify(r['product'])}.html"),
+                                 "name": f"{r['product']} ({r['brand']}): criterion {i} scored {r[key]}"}
+                                for j, r in enumerate(pilot, 1)],
+        }
+        page(path, title, pdesc, body, ctx,
+             graph(website_node(),
+                   webpage_node(path, title, pdesc, main=page_url(path) + "#finding", modified=locked),
+                   finding_ld, list_ld))
+
+    cards = ""
+    for i, key, label, desc, f, met, unmet in ranked:
+        k = len(met)
+        cards += (f'<div><b>{count_phrase(k, n, cap=True)} of {n} {e(agree(f["short"], k))}</b>'
+                  f'<span>Criterion {i}: {e(label)}. '
+                  f'<a href="findings/{f["slug"]}.html">See all {n} rows →</a></span></div>')
+    hub_body = f"""
+<p class="kicker" style="margin-top:40px">Headline findings</p>
+<h1 style="margin-top:8px">What {n} best-selling gut supplement labels actually disclose</h1>
+<p class="lede">Six yes-or-no criteria, {n} products scored so far. Each finding below has its own page listing
+every scored row, the reasoning recorded against it and the date the label was read, so any figure here can be
+checked against the evidence it came from.</p>
+<div class="note"><b class="sans">Pilot stage.</b> The sample is the top 30 of Amazon’s Best Sellers in Probiotic
+Nutritional Supplements, captured 09/26/2026. Every inclusion and exclusion decision is on the
+<a href="./">results page</a>. These are pilot results, not a ranking, and no product was lab-tested.</div>
+<div class="crit">{cards}</div>
+<p style="margin-top:28px"><a class="btn" href="{RAW_URL}pilot-scores.csv">Download the scores as CSV →</a></p>
+"""
+    hub_title = f"Headline findings: what {n} gut supplement labels disclose | Supplement Facts Check"
+    hub_desc = (f"The {n}-product pilot in six figures, one page per criterion, each listing every scored row "
+                f"as evidence.")
+    hub_ld = {
+        "@type": "ItemList", "@id": page_url("findings.html") + "#findings",
+        "name": "Headline findings", "numberOfItems": len(ranked),
+        "itemListElement": [{"@type": "ListItem", "position": j,
+                             "url": page_url(f"findings/{f['slug']}.html"),
+                             "name": f"{count_phrase(len(met), n, cap=True)} of {n} {agree(f['short'], len(met))}"}
+                            for j, (i, key, label, desc, f, met, unmet) in enumerate(ranked, 1)],
+    }
+    page("findings.html", hub_title, hub_desc, hub_body, ctx,
+         graph(website_node(),
+               webpage_node("findings.html", hub_title, hub_desc,
+                            main=page_url("findings.html") + "#findings", modified=locked),
+               hub_ld))
+
+    top3 = "".join(
+        f'<div><b>{count_phrase(len(met), n, cap=True)} of {n} {e(agree(f["short"], len(met)))}</b>'
+        f'<span>Criterion {i}: {e(label)}. <a href="findings/{f["slug"]}.html">See all {n} rows →</a></span></div>'
+        for i, key, label, desc, f, met, unmet in ranked[:3])
+    llms = ["", "## Headline findings", ""] + [
+        f"- {count_phrase(len(met), n, cap=True)} of {n} {agree(f['short'], len(met))}"
+        f" (criterion {i}): {SITE_URL}/findings/{f['slug']}.html"
+        for i, key, label, desc, f, met, unmet in ranked]
+    return llms, f"""
+<h2>Headline findings</h2>
+<p class="lede" style="font-size:18px">The three starkest results from the {n} products scored so far. Each has its
+own page listing every scored row as evidence.</p>
+<div class="crit">{top3}</div>
+<p><a class="btn" href="findings.html">All headline findings →</a></p>
+"""
 
 
 def build():
@@ -528,11 +881,17 @@ def build():
         im.save(capdir / name, "JPEG", quality=82, optimize=True)
         caps[p.name] = (name, im.width, im.height)
 
+    # --------------------------------------------------------- findings
+    findings_llms, findings_teaser = findings_pages(pilot, ctx, ver, locked)
+
     # ------------------------------------------------------------ home
     n = len(pilot)
     no_blend = sum(r[CRITERIA[0][0]] == "1" for r in pilot)
     no_coa = sum(r[CRITERIA[4][0]] == "0" for r in pilot)
+    in_range = sum(r[CRITERIA[3][0]] == "1" for r in pilot)
     top = max(int(r["total_score"]) for r in pilot)
+    scored_line = (f"All {n_inc} eligible products are scored." if n == n_inc
+                   else f"{n} of {n_inc} eligible products are scored so far.")
     _rank_src = "amazon-probiotics-bestsellers-top30-2026-09-26.png"
     if _rank_src in caps:
         _n, _w, _h = caps[_rank_src]
@@ -558,15 +917,19 @@ def build():
 <p class="lede">Supplement Facts Check scores best-selling gut-health supplements on six yes-or-no questions about
 what their labels disclose: the exact doses, the specific forms, and whether any of it can be verified. The rubric
 was committed in public before any product data was collected, and every ruling made since is in the commit history.</p>
-<div class="note"><b class="sans">Pilot stage.</b> {n} of {n_inc} eligible products are scored so far. The full sample is
+<div class="note"><b class="sans">Pilot stage.</b> {scored_line} The full sample is
 the top 30 of Amazon’s Best Sellers in Probiotic Nutritional Supplements as captured on 09/26/2026, listed in full below
 with every inclusion decision. Read these as pilot results, not a ranking.</div>
 
 <h2>Pilot results</h2>
 <p class="lede" style="font-size:18px">Of {n} products scored, {no_blend} disclosed an exact amount for every active
-ingredient, and a public third-party certificate of analysis could not be located for {no_coa}. The highest score was {top} out of 6.</p>
-<div class="grid">{''.join(panel(r) for r in pilot)}</div>
+ingredient, a dose inside a published trial range could be confirmed for {in_range}, and a public third-party
+certificate of analysis could not be located for {no_coa}. The highest score was {top} out of 6.</p>
+{scorecard(pilot)}
 
+<h3>Every scorecard in full</h3>
+<div class="grid">{''.join(panel(r) for r in pilot)}</div>
+{findings_teaser}
 <h2>The sample</h2>
 <p class="lede" style="font-size:18px">All {len(sample)} products in the captured ranking, in rank order.
 {n_inc} pass the inclusion test, {n_exc} are excluded, {n_pend} are undecided. Exclusions stay visible: a sample
@@ -878,7 +1241,7 @@ q.addEventListener('input',()=>{{const s=q.value.toLowerCase();rows.forEach(r=>r
              "> An independent, open-data audit of dose disclosure on gut-health supplement labels. Six binary "
              f"criteria, 0-6 scale. Methodology v{ver}, locked {locked}. Sample: the top 30 of Amazon's Best Sellers in "
              f"Probiotic Nutritional Supplements captured 09/26/2026; {n_inc} pass the inclusion test, {n_exc} are excluded "
-             f"as not gut-health-first, {n_pend} undecided. {n} scored so far. "
+             f"as not gut-health-first, {n_pend} undecided. {scored_line} "
              "Authored by Ryan Pepple, who owns a competing brand (CalmGut, operating as SHUVEN); author-owned "
              "products are scored separately and never ranked.", "", "## Pilot scores", ""]
     lines += [f"- {r['product']} ({r['brand']}): {r['total_score']}/6, label captured {r['capture_date']}" for r in pilot]
@@ -887,6 +1250,7 @@ q.addEventListener('input',()=>{{const s=q.value.toLowerCase();rows.forEach(r=>r
               "A higher score means the label discloses more, not that the product works better."]
     lines += [f"- {a['product']} ({a['total_score']}/6) vs {b['product']} ({b['total_score']}/6): "
               f"{SITE_URL}/{path}" for (path, _), a, b in cmp_pages]
+    lines += findings_llms
     lines += ["", "## Known limitations", "",
               f"- {len(doses) - with_range} of {len(doses)} dose-reference rows have no range set; each records "
               "why, and criterion 4 cannot be scored from them.",

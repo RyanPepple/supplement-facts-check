@@ -1,6 +1,6 @@
 # Supplement Facts Check
 
-> An independent, open-data audit of dose disclosure on gut-health supplement labels. Six binary criteria, 0-6 scale. Methodology v1.13, locked 2026-09-27. Sample: the top 30 of Amazon's Best Sellers in Probiotic Nutritional Supplements captured 09/26/2026; 18 pass the inclusion test, 12 are excluded as not gut-health-first, 0 undecided. 18 scored so far. Authored by Ryan Pepple, who owns a competing brand (CalmGut, operating as SHUVEN); author-owned products are scored separately and never ranked.
+> An independent, open-data audit of dose disclosure on gut-health supplement labels. Six binary criteria, 0-6 scale. Methodology v1.13, locked 2026-09-27. Sample: the top 30 of Amazon's Best Sellers in Probiotic Nutritional Supplements captured 09/26/2026; 18 pass the inclusion test, 12 are excluded as not gut-health-first, 0 undecided. All 18 eligible products are scored. Authored by Ryan Pepple, who owns a competing brand (CalmGut, operating as SHUVEN); author-owned products are scored separately and never ranked.
 
 ## Pilot scores
 
@@ -41,6 +41,15 @@ Head-to-head pages, each comparing two scored labels on the same six criteria. A
 - Culturelle Daily Chewable Probiotics for Kids (3/6) vs MaryRuth Organics Kids Probiotics (4/6): https://supplementfactscheck.org/compare/culturelle-daily-chewable-probiotics-for-kids-vs-maryruth-organics-kids-probiotics.html
 - Culturelle Daily Chewable Probiotics for Kids (3/6) vs Garden of Life Dr. Formulated Kids+ Probiotics (1/6): https://supplementfactscheck.org/compare/culturelle-daily-chewable-probiotics-for-kids-vs-garden-of-life-dr-formulated-kids-probiotics.html
 - Lemme Debloat Digestive & Gut Health Gummies (2/6) vs Digestive Advantage Probiotic Gummies (4/6): https://supplementfactscheck.org/compare/lemme-debloat-digestive-gut-health-gummies-vs-digestive-advantage-probiotic-gummies.html
+
+## Headline findings
+
+- None of 18 publish a publicly accessible third-party certificate of analysis (criterion 5): https://supplementfactscheck.org/findings/public-third-party-certificate-of-analysis.html
+- Just one of 18 discloses a dose inside the clinical trial range (criterion 4): https://supplementfactscheck.org/findings/dose-within-clinical-trial-range.html
+- Only 7 of 18 disclose an exact amount for every active ingredient (criterion 1): https://supplementfactscheck.org/findings/exact-doses-disclosed.html
+- 12 of 18 state the standardization percentage (criterion 2): https://supplementfactscheck.org/findings/standardization-percentage-stated.html
+- 12 of 18 name every chemical form or probiotic strain (criterion 3): https://supplementfactscheck.org/findings/chemical-form-or-strain-named.html
+- 12 of 18 state both serving size and servings per container (criterion 6): https://supplementfactscheck.org/findings/per-serving-amounts-complete.html
 
 ## Known limitations
 
