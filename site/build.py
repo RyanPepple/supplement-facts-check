@@ -94,6 +94,19 @@ COMPARISONS = [
     ("Lemme Debloat Digestive & Gut Health Gummies", "Digestive Advantage Probiotic Gummies"),
 ]
 
+# Pairs where one side is scored from outside the captured ranking, under the
+# v1.14 ruling: an off-sample row may back a comparison, because a comparison is
+# a statement about two labels rather than about a sample, but it is never
+# ranked or averaged. Kept in a separate list so that the ranked pairs above
+# cannot quietly acquire an off-sample member. The off-sample product is written
+# second: the pair exists because of the sampled one.
+OFFSAMPLE_COMPARISONS = [
+    # the direct-to-consumer head-to-head: rank 4 of the sample against the
+    # brand it is most often weighed against, which sells direct and so cannot
+    # appear in an Amazon category ranking at all.
+    ("Seed DS-01 Daily Synbiotic", "Ritual Synbiotic+"),
+]
+
 e = html.escape
 
 
@@ -396,9 +409,14 @@ def criterion_rows(a, b):
     return differ, agree
 
 
-def compare_page(a, b, others, ctx, ver):
+def compare_page(a, b, others, ctx, ver, offsample_names=()):
     """Build one head-to-head page for a scored pair."""
     path = compare_path(a, b)
+    # Which file each row came from, so the page links the row a reader can check
+    # and says plainly when one side is scored from outside the captured ranking.
+    src_a = "offsample-scores.csv" if a["product"] in offsample_names else "pilot-scores.csv"
+    src_b = "offsample-scores.csv" if b["product"] in offsample_names else "pilot-scores.csv"
+    off = [r for r in (a, b) if r["product"] in offsample_names]
     pre_a, why_a = split_notes(a["notes"])
     pre_b, why_b = split_notes(b["notes"])
     differ, agree = criterion_rows(a, b)
@@ -437,6 +455,7 @@ scored under methodology v{ver} from dated screenshots of the two live labels
 ({e(a['product'])} captured {e(a['capture_date'])}, {e(b['product'])} captured {e(b['capture_date'])}).
 A higher score means the label tells you more, not that the product works better. Neither product was lab-tested,
 and nothing here is medical advice or a recommendation to buy either one.</div>
+{f'<div class="note"><b class="sans">One side is outside the sample.</b> {e(off[0]["product"])} is not in the captured Amazon ranking the pilot was drawn from — it is scored on the identical six criteria under the v{ver} off-sample ruling, from a separate file, and is counted in no ranking or mean on this site. The comparison stands on the two labels, not on the sample.</div>' if off else ''}
 
 <h2>Side by side</h2>
 <div class="tablewrap"><table>
@@ -456,7 +475,8 @@ and nothing here is medical advice or a recommendation to buy either one.</div>
 <h2>Other comparisons</h2>
 <ul class="prose">{links}</ul>
 <p><a class="btn" href="../comparisons.html">All comparisons →</a> &nbsp;
-<a class="btn" href="{RAW_URL}pilot-scores.csv">Both rows in the dataset →</a></p>
+<a class="btn" href="{RAW_URL}{src_a}">{'Both rows' if src_a == src_b else a['product'] + "’s row"} in the dataset →</a>
+{f'&nbsp; <a class="btn" href="{RAW_URL}{src_b}">{e(b["product"])}’s row in the dataset →</a>' if src_a != src_b else ''}</p>
 """
     title = f"{a['product']} vs {b['product']}: label disclosure compared"
     desc = (f"{a['product']} scored {a['total_score']}/6 and {b['product']} scored {b['total_score']}/6 on label "
@@ -482,6 +502,15 @@ and nothing here is medical advice or a recommendation to buy either one.</div>
     return path, title
 
 
+def trim(text, limit=260):
+    """First sentences of a note, up to a length: the hub shows the reason, the
+    dataset row it links to holds all of it."""
+    if len(text) <= limit:
+        return text
+    cut = text[:limit].rsplit(". ", 1)[0]
+    return cut + "." if cut else text[:limit].rstrip() + "…"
+
+
 def md_section(readme, start, end=None):
     i = readme.index(start)
     j = readme.index(end, i) if end else len(readme)
@@ -503,6 +532,11 @@ def build():
     n_exc = sum(1 for r in sample if r["included"].strip() == "0")
     n_pend = sum(1 for r in sample if r["included"].strip() == "pending")
     appendix = read_csv("appendix-scores.csv")
+    # Scored under the identical rubric but outside the captured ranking (v1.14).
+    # Read as its own list and never folded into `pilot`: every count, mean and
+    # highest-score figure on the site is computed over the ranked file alone.
+    offsample = read_csv("offsample-scores.csv")
+    offsample_scored = [r for r in offsample if r["total_score"].strip()]
     doses = read_csv("clinical-doses.csv")
     (OUT / "style.css").write_text(CSS.strip(), encoding="utf-8")
     # static icons live in site/assets and are copied to the site root (docs/ is wiped on every build)
@@ -512,7 +546,7 @@ def build():
     shutil.copy(ROOT / "site" / OG_IMAGE, OUT / OG_IMAGE)
 
     # integrity check: totals must equal the sum of the criteria
-    for r in pilot:
+    for r in pilot + offsample_scored:
         s = sum(int(r[k]) for k, _, _ in CRITERIA)
         assert s == int(r["total_score"]), f"{r['product']}: criteria sum {s} != total {r['total_score']}"
 
@@ -628,7 +662,12 @@ what was done about it, in the <a href="conflict-of-interest.html">conflict-of-i
                dataset_ld, results_ld))
 
     # ------------------------------------------------------------ products
-    for r in pilot:
+    # Off-sample rows get a product page on the same terms as a ranked row: the
+    # page is a statement about one label. Each page names the file its row came
+    # from, so a reader can see which set it belongs to.
+    for r, src_file in ([(x, "pilot-scores.csv") for x in pilot]
+                        + [(x, "offsample-scores.csv") for x in offsample_scored]):
+        off = src_file != "pilot-scores.csv"
         pre, why = split_notes(r["notes"])
         slug = slugify(r["product"])
         rows = ""
@@ -651,10 +690,11 @@ what was done about it, in the <a href="conflict-of-interest.html">conflict-of-i
                      f'<figcaption>{view}, captured {e(when)}{later}. '
                      f'<a href="{RAW_URL}captures/{src}">Original file</a></figcaption></figure>')
         body = f"""
-<p class="kicker" style="margin-top:40px">Pilot scorecard</p>
+<p class="kicker" style="margin-top:40px">{"Off-sample scorecard" if off else "Pilot scorecard"}</p>
 <h1 style="margin-top:8px;font-size:clamp(30px,5vw,48px)">{e(r['product'])}</h1>
 <p class="lede">{e(r['brand'])} scored <b>{e(r['total_score'])} out of 6</b> for label disclosure under methodology
 v{ver}, read from the label as captured on {e(r['capture_date'])}.</p>
+{'<div class="note"><b class="sans">Outside the sample.</b> This product is not in the captured Amazon ranking the pilot was drawn from, so its row is kept in a separate file and is counted in no ranking, mean or “products scored” figure on this site. It is scored on the identical six criteria, by the same rules, from the same dated-capture evidence.</div>' if off else ''}
 <div style="max-width:440px">{panel(r, '../', link=False)}</div>
 <h2>Why it scored this way</h2>
 {f'<p><i>{e(pre)}</i></p>' if pre else ''}
@@ -664,7 +704,7 @@ v{ver}, read from the label as captured on {e(r['capture_date'])}.</p>
 what the label discloses. It says nothing about whether the product works, and nothing here was lab-tested.</p>
 {'' if 'Product listing' in figs else '<div class="note"><b class="sans">Incomplete evidence.</b> No product-listing capture is on file for this product yet. Under the methodology, a scored row without both captures is incomplete.</div>'}
 <div class="caps">{figs or '<p>No captures on file.</p>'}</div>
-<p><a class="btn" href="{RAW_URL}pilot-scores.csv">See this row in the dataset →</a></p>
+<p><a class="btn" href="{RAW_URL}{src_file}">See this row in the dataset →</a></p>
 """
         path = f"products/{slug}.html"
         title = f"{r['product']}: label score {r['total_score']}/6"
@@ -687,6 +727,25 @@ what the label discloses. It says nothing about whether the product works, and n
             assert name in by_name, f"comparison names unscored product: {name!r}"
         pairs.append((by_name[name_a], by_name[name_b]))
 
+    # Off-sample pairs. The sampled side must be scored, same as any other pair.
+    # The off-sample side must exist in offsample-scores.csv -- a name that is in
+    # neither file is a typo and stops the build -- but it may be a row that is
+    # present and not yet scored, which is the ordinary state of a product whose
+    # label capture is still outstanding. Those pairs are not generated, and they
+    # are not dropped silently either: they are listed as pending on the hub with
+    # the reason from the row itself, so the gap is visible rather than inferred.
+    off_by_name = {r["product"]: r for r in offsample}
+    pending = []
+    for name_a, name_b in OFFSAMPLE_COMPARISONS:
+        assert name_a in by_name, f"comparison names unscored product: {name_a!r}"
+        assert name_b in off_by_name, f"comparison names unknown product: {name_b!r}"
+        b = off_by_name[name_b]
+        if b["total_score"].strip():
+            pairs.append((by_name[name_a], b))
+        else:
+            pending.append((by_name[name_a], b))
+
+    off_names = {r["product"] for r in offsample}
     cmp_pages = []
     for a, b in pairs:
         # Pairs sharing a product with this one are the useful next click, so
@@ -694,7 +753,7 @@ what the label discloses. It says nothing about whether the product works, and n
         rest = [(x, y) for x, y in pairs if (x, y) != (a, b)]
         shared = [pr for pr in rest if a in pr or b in pr]
         others = shared + [pr for pr in rest if pr not in shared]
-        cmp_pages.append((compare_page(a, b, others, ctx, ver), a, b))
+        cmp_pages.append((compare_page(a, b, others, ctx, ver, off_names), a, b))
 
     cmp_rows = "".join(
         f'<tr><td><a href="{e(path)}">{e(a["product"])} vs {e(b["product"])}</a></td>'
@@ -709,16 +768,21 @@ criteria. Every figure on them is read from the same two rows as the two product
 disagree with the pages it compares.</p>
 <div class="note"><b class="sans">What a comparison does not say.</b> A higher score means the label discloses more,
 not that the product is better or that it works. Nothing here was lab-tested, and no product on this site is
-recommended over another. Only products scored in the pilot can be compared, so a pair a shopper might want is
-missing whenever one of the two is not yet scored.</div>
+recommended over another. A pair can only be built where both labels are scored, so a comparison a shopper might
+want is missing whenever one of the two has no score yet; the ones already declared are listed under Pending.</div>
 <div class="tablewrap"><table>
 <tr><th>Comparison</th><th>Score</th><th>Score</th><th>Criteria they differ on</th></tr>
 {cmp_rows}
 </table></div>
+{f'''<h2>Pending</h2>
+<p class="lede" style="font-size:18px">{len(pending)} declared comparison{"s" if len(pending) != 1 else ""} cannot be built yet, because one side has no score. They are listed here rather than left out, with the reason recorded in the dataset row.</p>
+<ul class="prose">''' + "".join(f"<li><b>{e(x['product'])} vs {e(y['product'])}</b> — {e(trim(split_notes(y['notes'])[0] or 'Not yet scored.'))} <a href='{RAW_URL}offsample-scores.csv'>The row in full →</a></li>" for x, y in pending) + '</ul>' if pending else ''}
 <p class="prose">Pairs are taken from the ranking the sample was drawn from: products near each other in the
 top 30, the two highest scorers, the drugstore shelf neighbours, two of one brand’s own formulas, the two
-children’s products and the two gummies. The full sample, including the {n_exc} excluded products, is on the
-<a href="./">results page</a>.</p>
+children’s products and the two gummies. A pair may also put a sampled product against one scored from outside the
+ranking under the v{ver} off-sample ruling, where that is the comparison a shopper is actually making; such a product
+is scored on the identical criteria and counted in no ranking or mean. The full sample, including the {n_exc} excluded
+products, is on the <a href="./">results page</a>.</p>
 <p><a class="btn" href="methodology.html">How the six criteria are applied →</a></p>
 """
     title = "Probiotic label comparisons | Supplement Facts Check"
@@ -882,6 +946,12 @@ q.addEventListener('input',()=>{{const s=q.value.toLowerCase();rows.forEach(r=>r
              "Authored by Ryan Pepple, who owns a competing brand (CalmGut, operating as SHUVEN); author-owned "
              "products are scored separately and never ranked.", "", "## Pilot scores", ""]
     lines += [f"- {r['product']} ({r['brand']}): {r['total_score']}/6, label captured {r['capture_date']}" for r in pilot]
+    if offsample_scored:
+        lines += ["", "## Scored outside the sample", "",
+                  "Scored on the identical six criteria under the off-sample ruling, kept in a separate file, "
+                  "and counted in no ranking, mean or products-scored figure on this site."]
+        lines += [f"- {r['product']} ({r['brand']}): {r['total_score']}/6, label captured {r['capture_date']}"
+                  for r in offsample_scored]
     lines += ["", "## Comparisons", "",
               "Head-to-head pages, each comparing two scored labels on the same six criteria. "
               "A higher score means the label discloses more, not that the product works better."]
