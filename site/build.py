@@ -108,11 +108,11 @@ def read_csv(name):
 
 def split_notes(notes):
     """Split a notes cell into {criterion number: reasoning}, plus any preamble."""
-    marks = list(re.finditer(r"(?:(?<=^)|(?<=\. ))C([1-6]) ([01])(?=[: ])", notes))
+    marks = list(re.finditer(r"(?:(?<=^)|(?<=\. ))C([1-6]) ([01])(?=[:,. ])", notes))
     out, pre = {}, notes[: marks[0].start()].strip() if marks else notes
     for i, m in enumerate(marks):
         end = marks[i + 1].start() if i + 1 < len(marks) else len(notes)
-        text = notes[m.end():end].lstrip(": ").strip()
+        text = notes[m.end():end].lstrip(":,. ").strip()
         text = re.sub(r"\s*Panel: captures/\S+(\s+Listing: captures/\S+)?\s*$", "", text)
         out[int(m.group(1))] = text[:1].upper() + text[1:]
     return pre, out
@@ -1396,6 +1396,10 @@ q.addEventListener('input',()=>{{const s=q.value.toLowerCase();rows.forEach(r=>r
             f'<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">{sm}</urlset>')
         (OUT / "robots.txt").write_text(f"User-agent: *\nAllow: /\nSitemap: {SITE_URL}/sitemap.xml\n")
         (OUT / "CNAME").write_text(SITE_URL.split("//", 1)[1] + "\n")
+    gaps = [f"{r['product']} C{i}" for r in pilot
+            for i in range(1, len(CRITERIA) + 1) if not split_notes(r["notes"])[1].get(i)]
+    if gaps:
+        print("Warning: no reasoning recorded for " + "; ".join(gaps))
     print(f"Built {len(list(OUT.rglob('*.html')))} pages into {OUT.relative_to(ROOT)}/ (methodology v{ver})")
 
 
