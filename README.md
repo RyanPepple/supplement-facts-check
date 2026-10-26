@@ -2,7 +2,7 @@
 
 An independent audit of dose disclosure on gut-health supplement labels.
 
-- **Status:** Rubric locked. Sample captured 09/26/2026; scoring under way.
+- **Status:** Rubric locked. Sample captured 09/26/2026; all 18 eligible products scored.
 - **Author:** Ryan Pepple
 - **Methodology version:** 1.14 — locked 2026-10-26. Ruling on products scored
   from outside the captured sample, which are kept in a physically separate file
