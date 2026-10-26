@@ -4,9 +4,9 @@ An independent audit of dose disclosure on gut-health supplement labels.
 
 - **Status:** Rubric locked. Sample captured 09/26/2026; all 18 eligible products scored.
 - **Author:** Ryan Pepple
-- **Methodology version:** 1.13 — locked 2026-09-27. Ruling on criterion 4 where a
-  probiotic count is declared at manufacture rather than through expiry; scoring
-  rubric unchanged since v1.7 (locked 2026-09-07).
+- **Methodology version:** 1.14 — locked 2026-10-26. Ruling on products scored
+  from outside the captured sample, which are kept in a physically separate file
+  and never ranked; scoring rubric unchanged since v1.7 (locked 2026-09-07).
 
 ---
 
@@ -362,6 +362,37 @@ in it, at ranks 1, 4 and 15, and all pass the inclusion test, so their scores ca
 forward unchanged. Their label capture dates remain 09/07/2026, recorded separately
 per product.
 
+**Ruling on products scored from outside the captured sample (v1.14,
+2026-10-26).** A product that is not in the captured ranking can be scored under
+the identical rubric, and some are worth scoring: a reader choosing between a
+best seller and a direct-to-consumer brand that never appears in an Amazon
+category is choosing between two labels, and this audit can read both. What such
+a product cannot do is enter `pilot-scores.csv`.
+
+The reason is that the ranked file is the scored subset of a sample fixed at
+capture, and every count, mean and "highest score" computed over it is a
+statement about that sample. Admitting a product selected on any other basis —
+reader demand, a brand's prominence, the author's interest — would make those
+figures describe a set assembled after the fact while still being presented as
+results from a fixed ranking. The selection rule and the aggregate have to match
+or the aggregate means nothing.
+
+Off-sample rows therefore live in `offsample-scores.csv`, sharing the ranked
+file's header: the same physical separation the conflict-of-interest appendix
+uses, for the same reason, so that no total computed over the ranked data can
+include one without a deliberate choice to combine two files. An off-sample row
+may back a product page and a head-to-head comparison, because each of those is
+a statement about one or two specific labels rather than about a sample. It may
+never be counted in a ranking, a mean, a "products scored" figure, or the
+highest-score claim. Each row records why the product was added, and every other
+rule — live-label verification, dated captures, the criterion rulings above —
+applies to it unchanged.
+
+Ritual Synbiotic+ is the first such row. It is scored because Seed DS-01, at
+rank 4 of the captured sample, is the comparison a gut-health shopper reaches
+for most often, and Ritual is the product on the other side of it; Ritual sells
+direct and so cannot appear in an Amazon category ranking at all.
+
 ### Data sources
 
 Primary: the NIH Office of Dietary Supplements
@@ -431,6 +462,7 @@ Mitigations:
 | `clinical-doses.csv` | Reference table: ingredient, form, trial dose range, unit, outcome measured, PubMed ID |
 | `pilot-scores.csv` | Pilot scoring worksheet: one row per ranked product, scored per criterion |
 | `captures/` | Label captures backing every scored row: Supplement Facts panel and product listing per product |
+| `offsample-scores.csv` | Same rubric, same columns, for products scored from outside the captured ranking — kept out of the ranked file so no ranking, mean or count can include them by accident |
 | `appendix-scores.csv` | Same rubric, same columns, for products in which the author has a commercial interest — kept out of the ranked file so they cannot be aggregated into it by accident |
 | `site/build.py` | Generates the public website from the files above. Every figure on the site is read from the CSVs and this README at build time; nothing is typed into a page by hand |
 | `docs/` | The generated website, served by GitHub Pages. Do not edit by hand; run `python3 site/build.py` |
@@ -455,13 +487,22 @@ public domain. No attribution required, though it is appreciated.
 ## Suggested citation
 
 Pepple, R. (2026). *Supplement Facts Check: an audit of dose disclosure on
-gut-health supplement labels.* Version 1.11.
+gut-health supplement labels.* Version 1.14.
 https://github.com/RyanPepple/supplement-facts-check
 
 ---
 
 ## Revision history
 
+- **v1.14 — 2026-10-26.** Ruling on products scored from outside the captured sample:
+  scored under the identical rubric, kept in `offsample-scores.csv`, never ranked or
+  averaged. Ritual Synbiotic+ added on that basis. Scoring rubric unchanged from v1.7.
+- **v1.13 — 2026-09-27.** Ruling on criterion 4 where a probiotic count is declared at
+  manufacture rather than through the best-by date: the through-expiry figure governs,
+  and an at-manufacture-only count scores 0. Scoring rubric unchanged from v1.7.
+- **v1.12 — 2026-09-26.** Ruling on probiotic ingredients declared in milligrams rather
+  than CFU: the unit mismatch does not arise and criterion 4 is scored normally.
+  Scoring rubric unchanged from v1.7.
 - **v1.11 — 2026-09-26.** Ruling on criterion 4 for probiotic-only formulas: scores 0,
   because the dose cannot be checked against any trial range. Affects every product
   whose only actives are probiotics. Scoring rubric unchanged from v1.7.
