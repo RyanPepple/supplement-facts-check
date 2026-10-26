@@ -43,6 +43,16 @@ OG_IMAGE = "og-image.png"
 
 LICENSE_URL = "https://creativecommons.org/publicdomain/zero/1.0/"
 AUTHOR = {"@type": "Person", "name": "Ryan Pepple", "url": "https://github.com/RyanPepple"}
+# The project as an Organization: publisher of every page, with its logo and the
+# one profile it controls (the public repository) as sameAs on the item itself.
+ORG = {"@type": "Organization", "@id": "https://supplementfactscheck.org/#organization",
+       "name": "Supplement Facts Check", "url": "https://supplementfactscheck.org/",
+       "logo": {"@type": "ImageObject", "url": "https://supplementfactscheck.org/favicon-192.png",
+                "width": 192, "height": 192},
+       "description": "An independent, one-person open-data audit of dose disclosure on gut-health "
+                      "supplement labels.",
+       "founder": AUTHOR,
+       "sameAs": ["https://github.com/RyanPepple/supplement-facts-check"]}
 
 CRITERIA = [
     ("criterion_1_exact_dose_disclosed", "Exact amount for every active ingredient",
@@ -173,7 +183,7 @@ def graph(*nodes):
 def website_node():
     return {"@type": "WebSite", "@id": f"{SITE_URL}/#website", "url": f"{SITE_URL}/",
             "name": "Supplement Facts Check", "inLanguage": "en",
-            "author": AUTHOR, "publisher": AUTHOR, "license": LICENSE_URL}
+            "author": AUTHOR, "publisher": ORG, "license": LICENSE_URL}
 
 
 def webpage_node(path, title, desc, main=None, modified=None, image=None):
@@ -233,7 +243,7 @@ def review_node(r, pre, why, path, images):
         "positiveNotes": {"@type": "ItemList", "itemListElement": [n for n, ok in notes if ok]},
         "negativeNotes": {"@type": "ItemList", "itemListElement": [n for n, ok in notes if not ok]},
         "reviewBody": (pre + " " + body).strip(),
-        "author": AUTHOR, "publisher": AUTHOR, "license": LICENSE_URL,
+        "author": AUTHOR, "publisher": ORG, "license": LICENSE_URL,
         "datePublished": r["capture_date"],
         "isBasedOn": {"@id": f"{SITE_URL}/#dataset"},
     }
@@ -518,7 +528,6 @@ and nothing here is medical advice or a recommendation to buy either one.</div>
         "@type": "ItemList", "@id": page_url(path) + "#comparison",
         "name": f"{a['product']} and {b['product']}: label disclosure scores",
         "description": desc, "numberOfItems": 2, "itemListOrder": "https://schema.org/ItemListUnordered",
-        "about": {"@id": f"{SITE_URL}/#dataset"},
         "itemListElement": [
             {"@type": "ListItem", "position": i,
              "url": page_url(f"products/{slugify(r['product'])}.html"),
@@ -910,10 +919,11 @@ Corrections are welcome as <a href="{REPO_URL}/issues">issues</a>.</p>
             "@type": "Report", "@id": page_url(path) + "#finding",
             "headline": headline, "name": title, "description": pdesc, "abstract": sentence,
             "url": page_url(path), "inLanguage": "en", "datePublished": locked, "dateModified": locked,
-            "author": AUTHOR, "publisher": AUTHOR, "license": LICENSE_URL,
-            "about": {"@id": f"{SITE_URL}/#dataset"}, "isBasedOn": {"@id": f"{SITE_URL}/#dataset"},
-            "variableMeasured": {"@type": "PropertyValue", "name": label, "description": desc,
-                                 "value": f"{k} of {n}"},
+            "author": AUTHOR, "publisher": ORG, "license": LICENSE_URL,
+            "isBasedOn": {"@id": f"{SITE_URL}/#dataset"},
+            "about": [{"@id": f"{SITE_URL}/#dataset"},
+                      {"@type": "PropertyValue", "name": label, "description": desc,
+                       "value": f"{k} of {n}"}],
         }
         list_ld = {
             "@type": "ItemList", "@id": page_url(path) + "#rows",
@@ -1112,7 +1122,7 @@ what was done about it, in the <a href="conflict-of-interest.html">conflict-of-i
         "name": "Supplement Facts Check",
         "description": "An independent audit of dose disclosure on gut-health supplement labels, scoring products "
                        "on six binary criteria. Includes a reference table of clinical trial dose ranges with PubMed IDs.",
-        "license": LICENSE_URL, "creator": AUTHOR, "publisher": AUTHOR,
+        "license": LICENSE_URL, "creator": AUTHOR, "publisher": ORG,
         "version": ver, "isAccessibleForFree": True, "url": SITE_URL, "sameAs": REPO_URL,
         "dateModified": locked, "inLanguage": "en",
         "measurementTechnique": "Manual reading of the Supplement Facts panel and product listing from a dated "
@@ -1139,7 +1149,7 @@ what was done about it, in the <a href="conflict-of-interest.html">conflict-of-i
     page("index.html", title, desc, body, ctx,
          graph(website_node(), webpage_node("index.html", title, desc, main=f"{SITE_URL}/#dataset",
                                            modified=locked),
-               dataset_ld, results_ld))
+               ORG, dataset_ld, results_ld))
 
     # ------------------------------------------------------------ products
     # Off-sample rows get a product page on the same terms as a ranked row: the
@@ -1283,7 +1293,7 @@ products, is on the <a href="./">results page</a>.</p>
     hub_ld = {
         "@type": "ItemList", "@id": page_url("comparisons.html") + "#comparisons",
         "name": "Label disclosure comparisons", "numberOfItems": len(cmp_pages),
-        "description": desc, "about": {"@id": f"{SITE_URL}/#dataset"},
+        "description": desc,
         "itemListElement": [{"@type": "ListItem", "position": i, "url": page_url(path), "name": t}
                             for i, ((path, t), _, _) in enumerate(cmp_pages, 1)],
     }
@@ -1303,10 +1313,10 @@ to it is in the <a href="{REPO_URL}/commits/main/README.md">commit history</a>.<
     desc = ("The six-criterion rubric, how each criterion is applied, how the sample was chosen, and what was "
             "deliberately left out.")
     method_ld = {
-        "@type": "TechArticle", "@id": page_url("methodology.html") + "#article",
+        "@type": "Article", "@id": page_url("methodology.html") + "#article",
         "headline": f"Supplement Facts Check methodology v{ver}", "name": title, "description": desc,
         "version": ver, "datePublished": locked, "dateModified": locked,
-        "author": AUTHOR, "publisher": AUTHOR, "license": LICENSE_URL,
+        "author": AUTHOR, "publisher": ORG, "license": LICENSE_URL,
         "url": page_url("methodology.html"), "inLanguage": "en",
         "about": {"@id": f"{SITE_URL}/#dataset"},
         "sameAs": f"{REPO_URL}/blob/main/README.md",
@@ -1354,8 +1364,18 @@ to it is in the <a href="{REPO_URL}/commits/main/README.md">commit history</a>.<
                                      "The rubric was committed to public version control before any product data "
                                      "was collected.",
         "mentions": [{"@type": "Brand", "name": "CalmGut", "alternateName": "SHUVEN"}],
+        "mainEntity": {"@id": page_url("conflict-of-interest.html") + "#article"},
     }
-    page("conflict-of-interest.html", title, desc, body, ctx, graph(website_node(), coi_ld))
+    coi_article = {
+        "@type": "Article", "@id": page_url("conflict-of-interest.html") + "#article",
+        "headline": "Conflict of interest statement", "name": title, "description": desc,
+        "datePublished": locked, "dateModified": locked,
+        "author": AUTHOR, "publisher": ORG, "license": LICENSE_URL,
+        "url": page_url("conflict-of-interest.html"), "inLanguage": "en",
+        "mainEntityOfPage": {"@id": page_url("conflict-of-interest.html") + "#page"},
+        "about": {"@id": f"{SITE_URL}/#dataset"},
+    }
+    page("conflict-of-interest.html", title, desc, body, ctx, graph(website_node(), coi_ld, coi_article))
 
     # ------------------------------------------------------------ reference
     trs = ""
@@ -1407,7 +1427,7 @@ q.addEventListener('input',()=>{{const s=q.value.toLowerCase();rows.forEach(r=>r
         "@type": "Dataset", "@id": page_url("reference.html") + "#dose-reference",
         "name": "Clinical dose reference table", "description": desc,
         "url": page_url("reference.html"), "license": LICENSE_URL,
-        "creator": AUTHOR, "publisher": AUTHOR, "isAccessibleForFree": True,
+        "creator": AUTHOR, "publisher": ORG, "isAccessibleForFree": True,
         "dateModified": locked, "inLanguage": "en", "isPartOf": {"@id": f"{SITE_URL}/#dataset"},
         "variableMeasured": [{"@type": "PropertyValue", "name": v} for v in
                              ("ingredient", "form", "daily dose range", "outcome measured", "PubMed ID")],
