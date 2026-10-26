@@ -287,6 +287,13 @@ input[type=search]{font:16px "Helvetica Neue",Helvetica,Arial,sans-serif;width:1
 figure{margin:20px 0;max-width:520px}figure img{max-width:100%;height:auto;border:2px solid var(--rule);background:#fff}
 figcaption{font-size:14px;color:var(--soft);font-family:"Helvetica Neue",Helvetica,Arial,sans-serif}
 .caps{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:20px}
+.rel{display:grid;grid-template-columns:repeat(auto-fit,minmax(290px,1fr));gap:0 32px;margin-top:12px}
+.rel h3{font-size:16px;margin:20px 0 4px}
+.rel ul{list-style:none;padding:0;margin:0}
+.rel li{display:flex;justify-content:space-between;align-items:baseline;gap:12px;border-bottom:1px solid var(--hair);padding:9px 0;font-size:15.5px}
+.rel li b{font-weight:400;color:var(--soft);font-size:14px;white-space:nowrap}
+.relnav{font-size:15px;margin-top:26px;padding-top:14px;border-top:1px solid var(--hair)}
+.relnav span{color:var(--soft)}
 footer{margin-top:80px;border-top:6px solid var(--rule);font-size:14px;color:var(--soft)}
 footer .wrap{padding-top:18px;padding-bottom:40px}footer a{color:var(--soft)}
 .built{display:inline-flex;align-items:stretch;margin-top:14px;border:2px solid var(--rule);color:var(--ink);text-decoration:none;font-weight:800;font-size:12px;text-transform:uppercase;letter-spacing:.08em;line-height:1;transition:background .15s,color .15s}
@@ -504,6 +511,91 @@ and nothing here is medical advice or a recommendation to buy either one.</div>
                webpage_node(path, title, desc, main=page_url(path) + "#comparison", modified=modified),
                cmp_ld))
     return path, title
+
+
+# Every scorecard links on to the rest of the sample, so no product page is a
+# dead end. The groups are read off the data rather than hand-picked: brand and
+# score come from the row, the format group comes from words in the product's
+# own name, and "previous/next" follows the captured ranking.
+FORMAT_GROUPS = [
+    (r"\bkids\b|\bkids\+|\bchildren\b", "Also for children"),
+    (r"\bgumm(y|ies)\b", "Also sold as gummies"),
+    (r"\bchewable\b", "Also chewable"),
+    (r"\bwomen'?s?\b", "Also marketed to women"),
+    (r"\bmen'?s?\b", "Also marketed to men"),
+]
+
+
+def rel_list(rows, rel):
+    """A list of links to other product pages, each with its score."""
+    return "".join(
+        f'<li><a href="{rel}products/{slugify(o["product"])}.html">{e(o["product"])}</a>'
+        f'<b>{e(o["total_score"])}/6</b></li>' for o in rows)
+
+
+def related(row, pilot, order, rel="../"):
+    """The cross-link section at the foot of a product page."""
+    me = slugify(row["product"])
+    others = [o for o in pilot if slugify(o["product"]) != me]
+    groups = []
+
+    same_brand = [o for o in others if o["brand"] == row["brand"]]
+    if same_brand:
+        groups.append((f"Also from {e(row['brand'])}", same_brand))
+
+    for pattern, heading in FORMAT_GROUPS:
+        if re.search(pattern, row["product"], re.I):
+            peers = [o for o in others if re.search(pattern, o["product"], re.I)]
+            if peers:
+                groups.append((heading, peers))
+
+    same_score = [o for o in others if o["total_score"] == row["total_score"]]
+    if same_score:
+        groups.append((f"Also scored {e(row['total_score'])}/6", same_score))
+
+    by_score = sorted(others, key=lambda o: int(o["total_score"]))
+    ends = [o for o in (by_score[-1], by_score[0]) if o] if by_score else []
+    seen, extremes = set(), []
+    for o in ends:
+        if slugify(o["product"]) not in seen:
+            seen.add(slugify(o["product"]))
+            extremes.append(o)
+    if extremes:
+        groups.append(("Elsewhere in the pilot", extremes))
+
+    # A product with a brand, format and score all to itself would otherwise get
+    # a thin section, so fall back to the scores either side of its own.
+    linked = {slugify(o["product"]) for _, rows in groups for o in rows}
+    if len(linked) < 3:
+        near = [o for o in others
+                if abs(int(o["total_score"]) - int(row["total_score"])) == 1
+                and slugify(o["product"]) not in linked]
+        if near:
+            groups.append(("Scored a point either side", near))
+
+    # de-duplicate within a group only: the same product can legitimately appear
+    # under two headings, because each heading answers a different question.
+    cards = "".join(f'<section><h3>{h}</h3><ul>{rel_list(rows, rel)}</ul></section>'
+                    for h, rows in groups if rows)
+
+    by_slug = {slugify(o["product"]): o for o in pilot}
+    i = order.index(me)
+    prev_row = by_slug[order[i - 1]] if i > 0 else None
+    next_row = by_slug[order[i + 1]] if i + 1 < len(order) else None
+
+    def link(o, prefix, suffix):
+        return (f'<a href="{rel}products/{slugify(o["product"])}.html">{prefix}{e(o["product"])}{suffix}</a>'
+                if o else "")
+    nav = " · ".join(x for x in (
+        link(prev_row, "← ", ""),
+        f'<a href="{rel or "./"}">All {len(pilot)} scorecards</a>',
+        link(next_row, "", " →")) if x)
+
+    return f"""<h2>Compare with other products</h2>
+<p class="prose">Groups are read from the dataset, not curated: the brand and the score come from this product's own
+row, and the format group comes from words in its own name. A product can appear under more than one heading.</p>
+<div class="rel">{cards}</div>
+<p class="relnav"><span>In rank order in the captured sample:</span> {nav}</p>"""
 
 
 SCORECARD_JS = """<script>
@@ -904,8 +996,17 @@ def build():
         rank_fig = ""
     _mark = {"1": '<span class="pass">included</span>', "0": '<span class="fail">excluded</span>',
               "pending": "undecided"}
+    # a scored row in the sample table links to its scorecard: the table is the
+    # site's fullest list of products, so it should also be a way into them.
+    scored_slugs = {slugify(r["product"]) for r in pilot}
+
+    def sample_name(r):
+        sl = slugify(r["product"])
+        return (f'<a href="products/{sl}.html">{e(r["product"])}</a>'
+                if sl in scored_slugs else e(r["product"]))
+
     sample_rows = "".join(
-        f'<tr><td class="n">{r["rank"]}</td><td>{e(r["product"])}<br><small style="color:var(--soft)">{e(r["brand"])}</small></td>'
+        f'<tr><td class="n">{r["rank"]}</td><td>{sample_name(r)}<br><small style="color:var(--soft)">{e(r["brand"])}</small></td>'
         f'<td>{_mark.get(r["included"].strip(), "")}</td>'
         f'<td class="muted">{"scored " + r["scored_in"].split(".")[0].replace("pilot-scores", "") if r["scored_in"].strip() else ("not scored yet" if r["included"].strip() == "1" else "")}</td></tr>'
         for r in sample)
@@ -991,6 +1092,11 @@ what was done about it, in the <a href="conflict-of-interest.html">conflict-of-i
                dataset_ld, results_ld))
 
     # ------------------------------------------------------------ products
+    # Scorecards are walked in the order of the captured ranking, so "previous"
+    # and "next" on a product page mean the same thing as the sample table.
+    sample_rank = {slugify(x["product"]): int(x["rank"]) for x in sample}
+    order = sorted((slugify(r["product"]) for r in pilot),
+                   key=lambda sl: (sample_rank.get(sl, 10 ** 6), sl))
     for r in pilot:
         pre, why = split_notes(r["notes"])
         slug = slugify(r["product"])
@@ -1028,6 +1134,7 @@ what the label discloses. It says nothing about whether the product works, and n
 {'' if 'Product listing' in figs else '<div class="note"><b class="sans">Incomplete evidence.</b> No product-listing capture is on file for this product yet. Under the methodology, a scored row without both captures is incomplete.</div>'}
 <div class="caps">{figs or '<p>No captures on file.</p>'}</div>
 <p><a class="btn" href="{RAW_URL}pilot-scores.csv">See this row in the dataset →</a></p>
+{related(r, pilot, order)}
 """
         path = f"products/{slug}.html"
         title = f"{r['product']}: label score {r['total_score']}/6"
