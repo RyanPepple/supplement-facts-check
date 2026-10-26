@@ -2,7 +2,7 @@
 
 An independent audit of dose disclosure on gut-health supplement labels.
 
-- **Status:** Rubric locked. Sample captured 09/26/2026; scoring under way.
+- **Status:** Rubric locked. Sample captured 09/26/2026; all 18 eligible products scored.
 - **Author:** Ryan Pepple
 - **Methodology version:** 1.13 — locked 2026-09-27. Ruling on criterion 4 where a
   probiotic count is declared at manufacture rather than through expiry; scoring

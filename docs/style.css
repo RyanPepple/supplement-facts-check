@@ -10,8 +10,9 @@ a{color:var(--link);text-underline-offset:3px}a:hover{color:var(--accent)}
 header.site{border-bottom:6px solid var(--rule)}
 header.site .wrap{display:flex;flex-wrap:wrap;gap:8px 24px;align-items:baseline;justify-content:space-between;padding-top:18px;padding-bottom:12px}
 .brand{font-weight:900;font-size:22px;letter-spacing:-.02em;text-decoration:none}
-nav a{margin-right:18px;font-size:14px;font-weight:700;text-decoration:none;text-transform:uppercase;letter-spacing:.04em}
-nav a:last-child{margin-right:0}nav a[aria-current]{text-decoration:underline;text-decoration-thickness:2px}
+header.site nav{display:flex;flex-wrap:wrap;gap:6px 18px}
+nav a{font-size:14px;font-weight:700;text-decoration:none;text-transform:uppercase;letter-spacing:.04em}
+nav a[aria-current]{text-decoration:underline;text-decoration-thickness:2px}
 h1{font-size:clamp(34px,6vw,60px);line-height:1.02;letter-spacing:-.03em;font-weight:900;margin:48px 0 18px;text-wrap:balance}
 h2{font-size:28px;line-height:1.15;letter-spacing:-.02em;font-weight:900;margin:64px 0 8px;padding-top:14px;border-top:6px solid var(--rule)}
 h3{font-size:18px;font-weight:800;margin:28px 0 6px}
@@ -51,6 +52,13 @@ input[type=search]{font:16px "Helvetica Neue",Helvetica,Arial,sans-serif;width:1
 figure{margin:20px 0;max-width:520px}figure img{max-width:100%;height:auto;border:2px solid var(--rule);background:#fff}
 figcaption{font-size:14px;color:var(--soft);font-family:"Helvetica Neue",Helvetica,Arial,sans-serif}
 .caps{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:20px}
+.rel{display:grid;grid-template-columns:repeat(auto-fit,minmax(290px,1fr));gap:0 32px;margin-top:12px}
+.rel h3{font-size:16px;margin:20px 0 4px}
+.rel ul{list-style:none;padding:0;margin:0}
+.rel li{display:flex;justify-content:space-between;align-items:baseline;gap:12px;border-bottom:1px solid var(--hair);padding:9px 0;font-size:15.5px}
+.rel li b{font-weight:400;color:var(--soft);font-size:14px;white-space:nowrap}
+.relnav{font-size:15px;margin-top:26px;padding-top:14px;border-top:1px solid var(--hair)}
+.relnav span{color:var(--soft)}
 footer{margin-top:80px;border-top:6px solid var(--rule);font-size:14px;color:var(--soft)}
 footer .wrap{padding-top:18px;padding-bottom:40px}footer a{color:var(--soft)}
 .built{display:inline-flex;align-items:stretch;margin-top:14px;border:2px solid var(--rule);color:var(--ink);text-decoration:none;font-weight:800;font-size:12px;text-transform:uppercase;letter-spacing:.08em;line-height:1;transition:background .15s,color .15s}
