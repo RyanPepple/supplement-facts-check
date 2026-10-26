@@ -49,7 +49,7 @@ ORG = {"@type": "Organization", "@id": "https://supplementfactscheck.org/#organi
        "name": "Supplement Facts Check", "url": "https://supplementfactscheck.org/",
        "logo": {"@type": "ImageObject", "url": "https://supplementfactscheck.org/favicon-192.png",
                 "width": 192, "height": 192},
-       "description": "An independent, one-person open-data audit of dose disclosure on gut-health "
+       "description": "A one-person open-data audit of dose disclosure on gut-health "
                       "supplement labels.",
        "founder": AUTHOR,
        "sameAs": ["https://github.com/RyanPepple/supplement-facts-check"]}
@@ -1073,7 +1073,7 @@ def build():
     sample_rows = sample_rows.replace("scored  ", "scored")
     crit = "".join(f"<div><b>{i}. {e(l)}</b><span>{e(d)}</span></div>" for i, (_, l, d) in enumerate(CRITERIA, 1))
     body = f"""
-<p class="kicker" style="margin-top:40px">An independent audit of gut-health supplement labels</p>
+<p class="kicker" style="margin-top:40px">A public audit of gut-health supplement labels</p>
 <h1 style="margin-top:8px">Most gut supplements make the same claims. Few tell you what is in the bottle.</h1>
 <p class="lede">Supplement Facts Check scores best-selling gut-health supplements on six yes-or-no questions about
 what their labels disclose: the exact doses, the specific forms, and whether any of it can be verified. The rubric
@@ -1120,7 +1120,7 @@ what was done about it, in the <a href="conflict-of-interest.html">conflict-of-i
     dataset_ld = {
         "@type": "Dataset", "@id": f"{SITE_URL}/#dataset",
         "name": "Supplement Facts Check",
-        "description": "An independent audit of dose disclosure on gut-health supplement labels, scoring products "
+        "description": "An open-data audit of dose disclosure on gut-health supplement labels, scoring products "
                        "on six binary criteria. Includes a reference table of clinical trial dose ranges with PubMed IDs.",
         "license": LICENSE_URL, "creator": AUTHOR, "publisher": ORG,
         "version": ver, "isAccessibleForFree": True, "url": SITE_URL, "sameAs": REPO_URL,
@@ -1144,7 +1144,7 @@ what was done about it, in the <a href="conflict-of-interest.html">conflict-of-i
                             for i, r in enumerate(pilot, 1)],
     }
     title = "Supplement Facts Check: what gut-health labels disclose"
-    desc = ("Independent open-data audit scoring best-selling gut-health supplements on six yes-or-no "
+    desc = ("Open-data audit scoring best-selling gut-health supplements on six yes-or-no "
             "dose disclosure questions. Rubric locked before scoring.")
     page("index.html", title, desc, body, ctx,
          graph(website_node(), webpage_node("index.html", title, desc, main=f"{SITE_URL}/#dataset",
@@ -1451,7 +1451,7 @@ q.addEventListener('input',()=>{{const s=q.value.toLowerCase();rows.forEach(r=>r
 
     # ------------------------------------------------------------ llms.txt, sitemap
     lines = ["# Supplement Facts Check", "",
-             "> An independent, open-data audit of dose disclosure on gut-health supplement labels. Six binary "
+             "> An open-data audit of dose disclosure on gut-health supplement labels. Six binary "
              f"criteria, 0-6 scale. Methodology v{ver}, locked {locked}. Sample: the top 30 of Amazon's Best Sellers in "
              f"Probiotic Nutritional Supplements captured 09/26/2026; {n_inc} pass the inclusion test, {n_exc} are excluded "
              f"as not gut-health-first, {n_pend} undecided. {scored_line} "

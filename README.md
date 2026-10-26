@@ -1,6 +1,6 @@
 # Supplement Facts Check
 
-An independent audit of dose disclosure on gut-health supplement labels.
+A public, open-data audit of dose disclosure on gut-health supplement labels.
 
 - **Status:** Rubric locked. Sample captured 09/26/2026; all 18 eligible products scored.
 - **Author:** Ryan Pepple
@@ -436,6 +436,10 @@ Abovance does not score products, and as of October 2026 no Abovance
 client sells a product in the category scored here. The site credit in
 this site's footer links to Abovance with `rel="nofollow"` for the same
 reason.
+
+The author also co-owns Liv Pure, a storefront selling research-use-only
+peptides. Liv Pure sells no dietary supplements, and none of its products
+are in this audit's sample or appendix.
 
 Mitigations:
 
