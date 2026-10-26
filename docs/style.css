@@ -52,6 +52,13 @@ input[type=search]{font:16px "Helvetica Neue",Helvetica,Arial,sans-serif;width:1
 figure{margin:20px 0;max-width:520px}figure img{max-width:100%;height:auto;border:2px solid var(--rule);background:#fff}
 figcaption{font-size:14px;color:var(--soft);font-family:"Helvetica Neue",Helvetica,Arial,sans-serif}
 .caps{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:20px}
+.rel{display:grid;grid-template-columns:repeat(auto-fit,minmax(290px,1fr));gap:0 32px;margin-top:12px}
+.rel h3{font-size:16px;margin:20px 0 4px}
+.rel ul{list-style:none;padding:0;margin:0}
+.rel li{display:flex;justify-content:space-between;align-items:baseline;gap:12px;border-bottom:1px solid var(--hair);padding:9px 0;font-size:15.5px}
+.rel li b{font-weight:400;color:var(--soft);font-size:14px;white-space:nowrap}
+.relnav{font-size:15px;margin-top:26px;padding-top:14px;border-top:1px solid var(--hair)}
+.relnav span{color:var(--soft)}
 footer{margin-top:80px;border-top:6px solid var(--rule);font-size:14px;color:var(--soft)}
 footer .wrap{padding-top:18px;padding-bottom:40px}footer a{color:var(--soft)}
 .built{display:inline-flex;align-items:stretch;margin-top:14px;border:2px solid var(--rule);color:var(--ink);text-decoration:none;font-weight:800;font-size:12px;text-transform:uppercase;letter-spacing:.08em;line-height:1;transition:background .15s,color .15s}
