@@ -59,6 +59,41 @@ CRITERIA = [
      "Serving size and servings per container are both on the panel."),
 ]
 
+# ----------------------------------------------------------- comparison pairs
+# Head-to-head pages for the pairs a shopper is actually choosing between.
+# Both members of a pair must be scored in pilot-scores.csv: a comparison page
+# is generated from the same rows as the two product pages, so a pair cannot be
+# added without the data to fill it, and the build fails if a name does not match.
+# Pairs are picked from the captured ranking itself -- adjacency in the top 30 is
+# the only demand signal in the dataset -- plus the obvious same-segment pairs
+# (two kids' products, two gummies, two of one brand's own formulas). Each pair
+# is written with the better-ranked product first, so the URL is predictable.
+COMPARISONS = [
+    # the top of the ranking, against each other
+    ("Physician's CHOICE Probiotics 60 Billion CFU", "Seed DS-01 Daily Synbiotic"),
+    ("Physician's CHOICE Probiotics 60 Billion CFU", "Culturelle Pro Strength Probiotics"),
+    ("Seed DS-01 Daily Synbiotic", "Culturelle Pro Strength Probiotics"),
+    ("Seed DS-01 Daily Synbiotic", "Align Probiotic Pro Formula"),
+    ("Culturelle Pro Strength Probiotics", "Align Probiotic Pro Formula"),
+    # the two highest disclosure scores in the pilot
+    ("Florastor Probiotic", "Align Probiotic Pro Formula"),
+    ("Culturelle Pro Strength Probiotics", "Florastor Probiotic"),
+    # direct-to-consumer brands bought on advertising rather than shelf presence
+    ("Seed DS-01 Daily Synbiotic", "BIOMA Probiotics"),
+    # bought on the CFU count printed on the front of the box
+    ("Physician's CHOICE Probiotics 60 Billion CFU", "NewRhythm Probiotics 50 Billion CFU"),
+    # drugstore shelf neighbours
+    ("Nature's Bounty Probiotic Acidophilus", "NOW Supplements Probiotic-10"),
+    ("Align Probiotic Pro Formula", "Phillips' Colon Health Daily Probiotic"),
+    # which of one brand's own two formulas
+    ("Align Probiotic Pro Formula", "Align Probiotic Bloating Relief + Food Digestion"),
+    # for a child
+    ("Culturelle Daily Chewable Probiotics for Kids", "MaryRuth Organics Kids Probiotics"),
+    ("Culturelle Daily Chewable Probiotics for Kids", "Garden of Life Dr. Formulated Kids+ Probiotics"),
+    # gummies
+    ("Lemme Debloat Digestive & Gut Health Gummies", "Digestive Advantage Probiotic Gummies"),
+]
+
 e = html.escape
 
 
@@ -210,8 +245,9 @@ a{color:var(--link);text-underline-offset:3px}a:hover{color:var(--accent)}
 header.site{border-bottom:6px solid var(--rule)}
 header.site .wrap{display:flex;flex-wrap:wrap;gap:8px 24px;align-items:baseline;justify-content:space-between;padding-top:18px;padding-bottom:12px}
 .brand{font-weight:900;font-size:22px;letter-spacing:-.02em;text-decoration:none}
-nav a{margin-right:18px;font-size:14px;font-weight:700;text-decoration:none;text-transform:uppercase;letter-spacing:.04em}
-nav a:last-child{margin-right:0}nav a[aria-current]{text-decoration:underline;text-decoration-thickness:2px}
+header.site nav{display:flex;flex-wrap:wrap;gap:6px 18px}
+nav a{font-size:14px;font-weight:700;text-decoration:none;text-transform:uppercase;letter-spacing:.04em}
+nav a[aria-current]{text-decoration:underline;text-decoration-thickness:2px}
 h1{font-size:clamp(34px,6vw,60px);line-height:1.02;letter-spacing:-.03em;font-weight:900;margin:48px 0 18px;text-wrap:balance}
 h2{font-size:28px;line-height:1.15;letter-spacing:-.02em;font-weight:900;margin:64px 0 8px;padding-top:14px;border-top:6px solid var(--rule)}
 h3{font-size:18px;font-weight:800;margin:28px 0 6px}
@@ -291,6 +327,7 @@ table.sc td.s{text-align:center;font-weight:900;font-size:15px;white-space:nowra
 """
 
 NAV = [("index.html", "Results"), ("findings.html", "Findings"),
+       ("comparisons.html", "Comparisons"),
        ("methodology.html", "Methodology"), ("reference.html", "Dose reference"),
        ("conflict-of-interest.html", "Conflict of interest")]
 
@@ -355,6 +392,125 @@ def panel(row, rel="", link=True):
 <div class="f">Each criterion scores 1 or 0. No weighting, no partial credit.</div>
 {btn}
 </article>"""
+
+
+# ------------------------------------------------------------- comparisons
+# A comparison page holds nothing of its own. Both columns, the verdict line and
+# the per-criterion reasoning are read from the same two rows that render the two
+# product pages, so a comparison cannot disagree with the pages it compares.
+
+
+def compare_path(a, b):
+    """URL for a pair: the two product-page slugs, joined by -vs-."""
+    return f"compare/{slugify(a['product'])}-vs-{slugify(b['product'])}.html"
+
+
+def compare_verdict(a, b, differ):
+    """The one-line finding, derived from the two scores rather than written."""
+    sa, sb = int(a["total_score"]), int(b["total_score"])
+    if sa == sb:
+        if differ:
+            return (f"Both score {sa} out of 6, but not for the same reasons: they disclose different things, "
+                    f"and differ on {len(differ)} of the six criteria.")
+        return (f"Both score {sa} out of 6, and on the identical criteria. On label disclosure there is "
+                f"nothing to choose between them.")
+    hi, lo = (a, b) if sa > sb else (b, a)
+    return (f"{hi['product']} discloses more: {max(sa, sb)} out of 6 against {min(sa, sb)}. "
+            f"That is a statement about {lo['product']}'s label, not about the product.")
+
+
+def criterion_rows(a, b):
+    """Split the six criteria into the ones the pair differs on and the rest."""
+    differ, agree = [], []
+    for i, (key, label, desc) in enumerate(CRITERIA, 1):
+        (differ if a[key] != b[key] else agree).append((i, key, label, desc))
+    return differ, agree
+
+
+def compare_page(a, b, others, ctx, ver):
+    """Build one head-to-head page for a scored pair."""
+    path = compare_path(a, b)
+    pre_a, why_a = split_notes(a["notes"])
+    pre_b, why_b = split_notes(b["notes"])
+    differ, agree = criterion_rows(a, b)
+
+    def mark(row, key):
+        return ('<b class="pass">1 ✓</b>' if row[key] == "1" else '<b class="fail">0 ✗</b>')
+
+    trs = "".join(
+        f'<tr><td>{i}. {e(label)}<br><small style="color:var(--soft)">{e(desc)}</small></td>'
+        f'<td class="n">{mark(a, key)}</td><td class="n">{mark(b, key)}</td>'
+        f'<td class="muted">{"differ" if a[key] != b[key] else "same"}</td></tr>'
+        for i, (key, label, desc) in enumerate(CRITERIA, 1))
+    trs += (f'<tr><th>Disclosure score</th><th class="n">{e(a["total_score"])}/6</th>'
+            f'<th class="n">{e(b["total_score"])}/6</th><th></th></tr>')
+
+    def blocks(rows):
+        out = ""
+        for i, key, label, _ in rows:
+            m = f'{e(a[key])} / {e(b[key])}'
+            cls = "pass" if a[key] == b[key] == "1" else ("fail" if a[key] == b[key] == "0" else "")
+            out += (f'<div class="why"><div class="m {cls}">{m}</div><div><b>{i}. {e(label)}</b>'
+                    f'<p><b>{e(a["product"])}:</b> {e(why_a.get(i, "No reasoning recorded."))}</p>'
+                    f'<p><b>{e(b["product"])}:</b> {e(why_b.get(i, "No reasoning recorded."))}</p></div></div>')
+        return out
+
+    links = "".join(
+        f'<li><a href="{Path(compare_path(x, y)).name}">{e(x["product"])} vs {e(y["product"])}</a> '
+        f'<span style="color:var(--soft)">({e(x["total_score"])}/6 vs {e(y["total_score"])}/6)</span></li>'
+        for x, y in others)
+    body = f"""
+<p class="kicker" style="margin-top:40px">Head to head</p>
+<h1 style="margin-top:8px;font-size:clamp(28px,4.6vw,44px)">{e(a['product'])} vs {e(b['product'])}</h1>
+<p class="lede">{e(compare_verdict(a, b, differ))}</p>
+<div class="note"><b class="sans">What this compares.</b> Six yes-or-no questions about what each label discloses,
+scored under methodology v{ver} from dated screenshots of the two live labels
+({e(a['product'])} captured {e(a['capture_date'])}, {e(b['product'])} captured {e(b['capture_date'])}).
+A higher score means the label tells you more, not that the product works better. Neither product was lab-tested,
+and nothing here is medical advice or a recommendation to buy either one.</div>
+
+<h2>Side by side</h2>
+<div class="tablewrap"><table>
+<tr><th>Criterion</th><th>{e(a['product'])}</th><th>{e(b['product'])}</th><th>Agreement</th></tr>
+{trs}
+</table></div>
+
+<h2>Where they differ</h2>
+{f'<p class="lede" style="font-size:18px">The pair splits on {len(differ)} of the six criteria. The reasoning below is the same text that appears on each product page.</p>{blocks(differ)}' if differ else '<p class="prose">They do not differ on any criterion: both labels scored identically on all six. The reasoning for each is under “Where they agree” below.</p>'}
+
+<h2>Where they agree</h2>
+{f'<p class="lede" style="font-size:18px">Both labels were scored the same way on the remaining {len(agree)}.</p>{blocks(agree)}' if agree else '<p class="prose">Nothing: the two labels were scored differently on every one of the six criteria.</p>'}
+
+<h2>The two scorecards</h2>
+<div class="grid">{panel(a, '../')}{panel(b, '../')}</div>
+
+<h2>Other comparisons</h2>
+<ul class="prose">{links}</ul>
+<p><a class="btn" href="../comparisons.html">All comparisons →</a> &nbsp;
+<a class="btn" href="{RAW_URL}pilot-scores.csv">Both rows in the dataset →</a></p>
+"""
+    title = f"{a['product']} vs {b['product']}: label disclosure compared"
+    desc = (f"{a['product']} scored {a['total_score']}/6 and {b['product']} scored {b['total_score']}/6 on label "
+            f"disclosure. The six criteria side by side, with the reasoning for each.")
+    # The comparison itself in machine-readable form: the two scores and the
+    # pages they are argued on, so a reader does not have to parse the table.
+    cmp_ld = {
+        "@type": "ItemList", "@id": page_url(path) + "#comparison",
+        "name": f"{a['product']} and {b['product']}: label disclosure scores",
+        "description": desc, "numberOfItems": 2, "itemListOrder": "https://schema.org/ItemListUnordered",
+        "about": {"@id": f"{SITE_URL}/#dataset"},
+        "itemListElement": [
+            {"@type": "ListItem", "position": i,
+             "url": page_url(f"products/{slugify(r['product'])}.html"),
+             "name": f"{r['product']} ({r['brand']}): {r['total_score']}/6"}
+            for i, r in enumerate((a, b), 1)],
+    }
+    modified = max(a["capture_date"], b["capture_date"])
+    page(path, title, desc, body, ctx,
+         graph(website_node(),
+               webpage_node(path, title, desc, main=page_url(path) + "#comparison", modified=modified),
+               cmp_ld))
+    return path, title
 
 
 # Every scorecard links on to the rest of the sample, so no product page is a
@@ -991,6 +1147,66 @@ what the label discloses. It says nothing about whether the product works, and n
                                 modified=r["capture_date"], image=images[0] if images else None),
                    *review_node(r, pre, why, path, images)))
 
+    # ------------------------------------------------------------ comparisons
+    by_name = {r["product"]: r for r in pilot}
+    pairs = []
+    for name_a, name_b in COMPARISONS:
+        # A pair naming a product that is not scored is a bug in the list above,
+        # not a page to skip quietly: the build stops rather than ship a gap.
+        for name in (name_a, name_b):
+            assert name in by_name, f"comparison names unscored product: {name!r}"
+        pairs.append((by_name[name_a], by_name[name_b]))
+
+    cmp_pages = []
+    for a, b in pairs:
+        # Pairs sharing a product with this one are the useful next click, so
+        # they lead the in-page list; the rest follow in the order declared.
+        rest = [(x, y) for x, y in pairs if (x, y) != (a, b)]
+        shared = [pr for pr in rest if a in pr or b in pr]
+        others = shared + [pr for pr in rest if pr not in shared]
+        cmp_pages.append((compare_page(a, b, others, ctx, ver), a, b))
+
+    cmp_rows = "".join(
+        f'<tr><td><a href="{e(path)}">{e(a["product"])} vs {e(b["product"])}</a></td>'
+        f'<td class="n">{e(a["total_score"])}/6</td><td class="n">{e(b["total_score"])}/6</td>'
+        f'<td class="muted">{len(criterion_rows(a, b)[0])} of 6</td></tr>'
+        for (path, _), a, b in cmp_pages)
+    body = f"""
+<p class="kicker" style="margin-top:40px">Head to head</p>
+<h1 style="margin-top:8px">Comparisons</h1>
+<p class="lede">{len(cmp_pages)} head-to-head pages, each one putting two scored labels side by side on the same six
+criteria. Every figure on them is read from the same two rows as the two product pages, so a comparison cannot
+disagree with the pages it compares.</p>
+<div class="note"><b class="sans">What a comparison does not say.</b> A higher score means the label discloses more,
+not that the product is better or that it works. Nothing here was lab-tested, and no product on this site is
+recommended over another. Only products scored in the pilot can be compared, so a pair a shopper might want is
+missing whenever one of the two is not yet scored.</div>
+<div class="tablewrap"><table>
+<tr><th>Comparison</th><th>Score</th><th>Score</th><th>Criteria they differ on</th></tr>
+{cmp_rows}
+</table></div>
+<p class="prose">Pairs are taken from the ranking the sample was drawn from: products near each other in the
+top 30, the two highest scorers, the drugstore shelf neighbours, two of one brand’s own formulas, the two
+children’s products and the two gummies. The full sample, including the {n_exc} excluded products, is on the
+<a href="./">results page</a>.</p>
+<p><a class="btn" href="methodology.html">How the six criteria are applied →</a></p>
+"""
+    title = "Probiotic label comparisons | Supplement Facts Check"
+    desc = (f"{len(cmp_pages)} head-to-head comparisons of best-selling probiotic labels, scored on the same six "
+            f"dose-disclosure criteria, with the reasoning for every ruling.")
+    hub_ld = {
+        "@type": "ItemList", "@id": page_url("comparisons.html") + "#comparisons",
+        "name": "Label disclosure comparisons", "numberOfItems": len(cmp_pages),
+        "description": desc, "about": {"@id": f"{SITE_URL}/#dataset"},
+        "itemListElement": [{"@type": "ListItem", "position": i, "url": page_url(path), "name": t}
+                            for i, ((path, t), _, _) in enumerate(cmp_pages, 1)],
+    }
+    page("comparisons.html", title, desc, body, ctx,
+         graph(website_node(),
+               webpage_node("comparisons.html", title, desc,
+                            main=page_url("comparisons.html") + "#comparisons", modified=locked),
+               hub_ld))
+
     # ------------------------------------------------------------ methodology
     body = f"""<p class="kicker" style="margin-top:40px">Version {ver} · locked {locked}</p>
 <h1 style="margin-top:8px">Methodology</h1>
@@ -1136,6 +1352,11 @@ q.addEventListener('input',()=>{{const s=q.value.toLowerCase();rows.forEach(r=>r
              "Authored by Ryan Pepple, who owns a competing brand (CalmGut, operating as SHUVEN); author-owned "
              "products are scored separately and never ranked.", "", "## Pilot scores", ""]
     lines += [f"- {r['product']} ({r['brand']}): {r['total_score']}/6, label captured {r['capture_date']}" for r in pilot]
+    lines += ["", "## Comparisons", "",
+              "Head-to-head pages, each comparing two scored labels on the same six criteria. "
+              "A higher score means the label discloses more, not that the product works better."]
+    lines += [f"- {a['product']} ({a['total_score']}/6) vs {b['product']} ({b['total_score']}/6): "
+              f"{SITE_URL}/{path}" for (path, _), a, b in cmp_pages]
     lines += findings_llms
     lines += ["", "## Known limitations", "",
               f"- {len(doses) - with_range} of {len(doses)} dose-reference rows have no range set; each records "
