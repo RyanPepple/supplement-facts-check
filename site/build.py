@@ -533,25 +533,38 @@ def rel_list(rows, rel):
         f'<b>{e(o["total_score"])}/6</b></li>' for o in rows)
 
 
-def related(row, pilot, order, rel="../"):
+def related(row, pilot, order, pairs, rel="../"):
     """The cross-link section at the foot of a product page."""
     me = slugify(row["product"])
     others = [o for o in pilot if slugify(o["product"]) != me]
     groups = []
 
+    # The head-to-head pages lead, being the most specific next click. They are
+    # listed without a score beside them: a score belongs to one label, and two
+    # of them side by side in a bare list would read as a verdict between the
+    # products, which is what the framing line below exists to prevent.
+    head_to_head = ""
+    for x, y in pairs:
+        if row not in (x, y):
+            continue
+        other = y if x is row else x
+        head_to_head += (f'<li><a href="{rel}{compare_path(x, y)}">vs {e(other["product"])}</a></li>')
+    if head_to_head:
+        groups.append(("Head to head", head_to_head))
+
     same_brand = [o for o in others if o["brand"] == row["brand"]]
     if same_brand:
-        groups.append((f"Also from {e(row['brand'])}", same_brand))
+        groups.append((f"Also from {e(row['brand'])}", rel_list(same_brand, rel)))
 
     for pattern, heading in FORMAT_GROUPS:
         if re.search(pattern, row["product"], re.I):
             peers = [o for o in others if re.search(pattern, o["product"], re.I)]
             if peers:
-                groups.append((heading, peers))
+                groups.append((heading, rel_list(peers, rel)))
 
     same_score = [o for o in others if o["total_score"] == row["total_score"]]
     if same_score:
-        groups.append((f"Also scored {e(row['total_score'])}/6", same_score))
+        groups.append((f"Also scored {e(row['total_score'])}/6", rel_list(same_score, rel)))
 
     by_score = sorted(others, key=lambda o: int(o["total_score"]))
     ends = [o for o in (by_score[-1], by_score[0]) if o] if by_score else []
@@ -561,22 +574,22 @@ def related(row, pilot, order, rel="../"):
             seen.add(slugify(o["product"]))
             extremes.append(o)
     if extremes:
-        groups.append(("Elsewhere in the pilot", extremes))
+        groups.append(("Elsewhere in the pilot", rel_list(extremes, rel)))
 
     # A product with a brand, format and score all to itself would otherwise get
     # a thin section, so fall back to the scores either side of its own.
-    linked = {slugify(o["product"]) for _, rows in groups for o in rows}
+    linked = set(re.findall(r'products/([^"]+)\.html', "".join(h for _, h in groups)))
     if len(linked) < 3:
         near = [o for o in others
                 if abs(int(o["total_score"]) - int(row["total_score"])) == 1
                 and slugify(o["product"]) not in linked]
         if near:
-            groups.append(("Scored a point either side", near))
+            groups.append(("Scored a point either side", rel_list(near, rel)))
 
     # de-duplicate within a group only: the same product can legitimately appear
     # under two headings, because each heading answers a different question.
-    cards = "".join(f'<section><h3>{h}</h3><ul>{rel_list(rows, rel)}</ul></section>'
-                    for h, rows in groups if rows)
+    cards = "".join(f'<section><h3>{h}</h3><ul>{items}</ul></section>'
+                    for h, items in groups if items)
 
     by_slug = {slugify(o["product"]): o for o in pilot}
     i = order.index(me)
@@ -591,9 +604,13 @@ def related(row, pilot, order, rel="../"):
         f'<a href="{rel or "./"}">All {len(pilot)} scorecards</a>',
         link(next_row, "", " →")) if x)
 
+    note = ("""A head-to-head page sets the two labels side by side on the same six criteria. A higher score
+means the label discloses more, not that the product is better."""
+            if head_to_head else "")
     return f"""<h2>Compare with other products</h2>
 <p class="prose">Groups are read from the dataset, not curated: the brand and the score come from this product's own
-row, and the format group comes from words in its own name. A product can appear under more than one heading.</p>
+row, and the format group comes from words in its own name. A product can appear under more than one heading.
+{note}</p>
 <div class="rel">{cards}</div>
 <p class="relnav"><span>In rank order in the captured sample:</span> {nav}</p>"""
 
@@ -1094,6 +1111,17 @@ what was done about it, in the <a href="conflict-of-interest.html">conflict-of-i
     # ------------------------------------------------------------ products
     # Scorecards are walked in the order of the captured ranking, so "previous"
     # and "next" on a product page mean the same thing as the sample table.
+    # Pairs are resolved before the product pages are written, because each
+    # product page links to the head-to-head pages it appears in.
+    by_name = {r["product"]: r for r in pilot}
+    pairs = []
+    for name_a, name_b in COMPARISONS:
+        # A pair naming a product that is not scored is a bug in the list above,
+        # not a page to skip quietly: the build stops rather than ship a gap.
+        for name in (name_a, name_b):
+            assert name in by_name, f"comparison names unscored product: {name!r}"
+        pairs.append((by_name[name_a], by_name[name_b]))
+
     sample_rank = {slugify(x["product"]): int(x["rank"]) for x in sample}
     order = sorted((slugify(r["product"]) for r in pilot),
                    key=lambda sl: (sample_rank.get(sl, 10 ** 6), sl))
@@ -1134,7 +1162,7 @@ what the label discloses. It says nothing about whether the product works, and n
 {'' if 'Product listing' in figs else '<div class="note"><b class="sans">Incomplete evidence.</b> No product-listing capture is on file for this product yet. Under the methodology, a scored row without both captures is incomplete.</div>'}
 <div class="caps">{figs or '<p>No captures on file.</p>'}</div>
 <p><a class="btn" href="{RAW_URL}pilot-scores.csv">See this row in the dataset →</a></p>
-{related(r, pilot, order)}
+{related(r, pilot, order, pairs)}
 """
         path = f"products/{slug}.html"
         title = f"{r['product']}: label score {r['total_score']}/6"
@@ -1148,15 +1176,6 @@ what the label discloses. It says nothing about whether the product works, and n
                    *review_node(r, pre, why, path, images)))
 
     # ------------------------------------------------------------ comparisons
-    by_name = {r["product"]: r for r in pilot}
-    pairs = []
-    for name_a, name_b in COMPARISONS:
-        # A pair naming a product that is not scored is a bug in the list above,
-        # not a page to skip quietly: the build stops rather than ship a gap.
-        for name in (name_a, name_b):
-            assert name in by_name, f"comparison names unscored product: {name!r}"
-        pairs.append((by_name[name_a], by_name[name_b]))
-
     cmp_pages = []
     for a, b in pairs:
         # Pairs sharing a product with this one are the useful next click, so
