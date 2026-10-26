@@ -732,7 +732,10 @@ def build():
     n = len(pilot)
     no_blend = sum(r[CRITERIA[0][0]] == "1" for r in pilot)
     no_coa = sum(r[CRITERIA[4][0]] == "0" for r in pilot)
+    in_range = sum(r[CRITERIA[3][0]] == "1" for r in pilot)
     top = max(int(r["total_score"]) for r in pilot)
+    scored_line = (f"All {n_inc} eligible products are scored." if n == n_inc
+                   else f"{n} of {n_inc} eligible products are scored so far.")
     _rank_src = "amazon-probiotics-bestsellers-top30-2026-09-26.png"
     if _rank_src in caps:
         _n, _w, _h = caps[_rank_src]
@@ -758,13 +761,14 @@ def build():
 <p class="lede">Supplement Facts Check scores best-selling gut-health supplements on six yes-or-no questions about
 what their labels disclose: the exact doses, the specific forms, and whether any of it can be verified. The rubric
 was committed in public before any product data was collected, and every ruling made since is in the commit history.</p>
-<div class="note"><b class="sans">Pilot stage.</b> {n} of {n_inc} eligible products are scored so far. The full sample is
+<div class="note"><b class="sans">Pilot stage.</b> {scored_line} The full sample is
 the top 30 of Amazon’s Best Sellers in Probiotic Nutritional Supplements as captured on 09/26/2026, listed in full below
 with every inclusion decision. Read these as pilot results, not a ranking.</div>
 
 <h2>Pilot results</h2>
 <p class="lede" style="font-size:18px">Of {n} products scored, {no_blend} disclosed an exact amount for every active
-ingredient, and a public third-party certificate of analysis could not be located for {no_coa}. The highest score was {top} out of 6.</p>
+ingredient, a dose inside a published trial range could be confirmed for {in_range}, and a public third-party
+certificate of analysis could not be located for {no_coa}. The highest score was {top} out of 6.</p>
 {scorecard(pilot)}
 
 <h3>Every scorecard in full</h3>
@@ -1021,7 +1025,7 @@ q.addEventListener('input',()=>{{const s=q.value.toLowerCase();rows.forEach(r=>r
              "> An independent, open-data audit of dose disclosure on gut-health supplement labels. Six binary "
              f"criteria, 0-6 scale. Methodology v{ver}, locked {locked}. Sample: the top 30 of Amazon's Best Sellers in "
              f"Probiotic Nutritional Supplements captured 09/26/2026; {n_inc} pass the inclusion test, {n_exc} are excluded "
-             f"as not gut-health-first, {n_pend} undecided. {n} scored so far. "
+             f"as not gut-health-first, {n_pend} undecided. {scored_line} "
              "Authored by Ryan Pepple, who owns a competing brand (CalmGut, operating as SHUVEN); author-owned "
              "products are scored separately and never ranked.", "", "## Pilot scores", ""]
     lines += [f"- {r['product']} ({r['brand']}): {r['total_score']}/6, label captured {r['capture_date']}" for r in pilot]
