@@ -34,6 +34,16 @@ evidence that only the 09/05/2026 ranking capture or a fresh screenshot can supp
 6. **Domain.** supplementfactscheck.org (Cloudflare DNS). `SITE_URL` is set in `site/build.py`; the build writes canonical tags, `sitemap.xml`, `robots.txt` and `CNAME`.
 7. **Publishing.** Repo Settings -> Pages -> Deploy from a branch -> `main`, `/docs`.
 
+   Status of 6 and 7 as of 2026-10-24: almost certainly both done, but NOT
+   verified, so they are left open rather than closed on inference. The evidence
+   they are live: an Ahrefs Web Analytics script was installed (f091ab7), a round
+   of Ahrefs Site Audit findings was fixed (45d4929), and a favicon was added
+   (edaa9fe) — a Site Audit cannot run against an unpublished site. Why it is not
+   confirmed: this sandbox resolves no external hostname at all (github.io fails
+   the same way supplementfactscheck.org does), and the GitHub Pages API is
+   blocked by the session proxy, so neither DNS nor deployment state can be read
+   from here. Close both once the live URL has been opened in a browser.
+
 8. ~~Inclusion decisions undecided~~ Resolved 2026-09-26. All 30 rows now carry a
    decision: 18 included, 12 excluded, 0 undecided. Ranks 7 and 18 ruled under v1.9;
    ranks 20 and 25 ruled under v1.10 with listing captures committed for both.
