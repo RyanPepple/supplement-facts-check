@@ -1,6 +1,6 @@
 # Supplement Facts Check
 
-A public, open-data audit of dose disclosure on gut-health supplement labels.
+An open-data audit of dose disclosure on gut-health supplement labels.
 
 - **Status:** Rubric locked. Sample captured 09/26/2026; all 18 eligible products scored.
 - **Author:** Ryan Pepple

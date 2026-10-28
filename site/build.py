@@ -1073,7 +1073,7 @@ def build():
     sample_rows = sample_rows.replace("scored  ", "scored")
     crit = "".join(f"<div><b>{i}. {e(l)}</b><span>{e(d)}</span></div>" for i, (_, l, d) in enumerate(CRITERIA, 1))
     body = f"""
-<p class="kicker" style="margin-top:40px">A public audit of gut-health supplement labels</p>
+<p class="kicker" style="margin-top:40px">An open-data audit of gut-health supplement labels</p>
 <h1 style="margin-top:8px">Most gut supplements make the same claims. Few tell you what is in the bottle.</h1>
 <p class="lede">Supplement Facts Check scores best-selling gut-health supplements on six yes-or-no questions about
 what their labels disclose: the exact doses, the specific forms, and whether any of it can be verified. The rubric
