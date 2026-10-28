@@ -3,6 +3,9 @@
 Recorded 2026-09-21. Nothing below was filled in by guesswork: each item needs
 evidence that only the 09/05/2026 ranking capture or a fresh screenshot can supply.
 
+**All nine items are closed as of 2026-10-28.** The list is kept for the record
+of how each one was settled, not as outstanding work.
+
 1. ~~`sample.csv` rank column is blank~~ Resolved 2026-09-26. The 09/05/2026
    capture was never taken; searched the repository, both clones, Desktop,
    Downloads, Pictures (including the Photos originals) and the Trash, and no such
@@ -31,18 +34,18 @@ evidence that only the 09/05/2026 ranking capture or a fresh screenshot can supp
    are now published on reference.html under "Known limitations", against the
    row they affect, and in llms.txt. The row stays in the table so the judgment
    can be checked. Nothing further is available from the source.
-6. **Domain.** supplementfactscheck.org (Cloudflare DNS). `SITE_URL` is set in `site/build.py`; the build writes canonical tags, `sitemap.xml`, `robots.txt` and `CNAME`.
-7. **Publishing.** Repo Settings -> Pages -> Deploy from a branch -> `main`, `/docs`.
+6. ~~**Domain.**~~ Resolved 2026-10-28. supplementfactscheck.org (Cloudflare DNS)
+   serves over HTTPS, and `www` redirects to the apex. `SITE_URL` is set in
+   `site/build.py`; the build writes canonical tags, `sitemap.xml`, `robots.txt`
+   and `CNAME`.
+7. ~~**Publishing.**~~ Resolved 2026-10-28. GitHub Pages serves the site from
+   `main`, `/docs`.
 
-   Status of 6 and 7 as of 2026-10-24: almost certainly both done, but NOT
-   verified, so they are left open rather than closed on inference. The evidence
-   they are live: an Ahrefs Web Analytics script was installed (f091ab7), a round
-   of Ahrefs Site Audit findings was fixed (45d4929), and a favicon was added
-   (edaa9fe) — a Site Audit cannot run against an unpublished site. Why it is not
-   confirmed: this sandbox resolves no external hostname at all (github.io fails
-   the same way supplementfactscheck.org does), and the GitHub Pages API is
-   blocked by the session proxy, so neither DNS nor deployment state can be read
-   from here. Close both once the live URL has been opened in a browser.
+   Verified 2026-10-28 from a machine with ordinary external DNS, which is what
+   the earlier sandbox lacked. `/`, `/sitemap.xml`, `/robots.txt` and
+   `/conflict-of-interest.html` each return 200, and the responses carry
+   `server: GitHub.com`. That is the live check these two items were held open
+   for, so both are now closed.
 
 8. ~~Inclusion decisions undecided~~ Resolved 2026-09-26. All 30 rows now carry a
    decision: 18 included, 12 excluded, 0 undecided. Ranks 7 and 18 ruled under v1.9;
