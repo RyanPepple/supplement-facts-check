@@ -2,12 +2,13 @@
 
 An open-data audit of dose disclosure on gut-health supplement labels.
 
-- **Status:** Rubric locked. Sample captured 09/26/2026; all 18 eligible products scored.
+- **Status:** Rubric locked. Probiotic sample captured 09/26/2026; all 18 eligible products scored.
+  Fiber sample captured 11/19/2026; 23 formulas scored in `fiber-scores.csv`, reported separately.
 - **Author:** Ryan Pepple
-- **Methodology version:** 1.16 — locked 2026-11-19. Scores follow the current
-  label: a product whose label changes is re-scored on the new one (v1.16). Keeps the
-  v1.15 criterion 2 ruling and the v1.14 off-sample rule; scoring rubric unchanged
-  since v1.7 (locked 2026-09-07).
+- **Methodology version:** 1.17, locked 2026-11-19. Adds the fiber-category rulings
+  (duplicate formulas, fiber amounts). Keeps v1.16 (scores follow the current label), the
+  v1.15 criterion 2 ruling and the v1.14 off-sample rule; scoring rubric unchanged since
+  v1.7 (locked 2026-09-07).
 
 ---
 
@@ -27,7 +28,7 @@ can reproduce, check, or dispute the results.
 
 ---
 
-## Methodology v1.16
+## Methodology v1.17
 
 ### Scoring rubric
 
@@ -443,6 +444,59 @@ rank 4 of the captured sample, is the comparison a gut-health shopper reaches
 for most often, and Ritual is the product on the other side of it; Ritual sells
 direct and so cannot appear in an Amazon category ranking at all.
 
+**Second category: fiber supplements (in progress, 2026-11-19).** The top 30
+products in Amazon Best Sellers in Fiber Supplements, captured on 11/19/2026, are
+listed in `fiber-sample.csv`; the capture is committed at
+`captures/amazon-fiber-bestsellers-top38-2026-11-19.png`. The same first-listed
+claim test applies, with regularity or digestive health as the gut-health claim.
+Fiber results are reported on their own and are never combined with the probiotic
+sample in any total, mean or ranking, because the two lists come from different
+categories and were captured on different dates.
+
+**Ruling on duplicate formulas (2026-11-19).** A best-seller list often ranks the
+same formula several times: different sizes, counts or flavors of one product.
+Each distinct formula is scored once, at the rank of its highest-placed listing.
+A later listing whose label panel matches it ingredient for ingredient and amount
+for amount is recorded in the sample file as a duplicate, with the rank of the
+listing it duplicates, and is not scored again or counted a second time in any
+total. A listing whose panel differs in any ingredient or amount (a sugar-free
+version, an added ingredient) is a separate formula and is scored on its own.
+Scoring duplicates separately would let one product's label count several times
+in a category average just because it sells in several sizes.
+
+**Ruling on fiber amounts (v1.17, 2026-11-19).** Most fiber labels print no ingredient
+weight. They state "Dietary Fiber 6 g" on the panel and name the fiber in the ingredient
+list. Five rules govern how the fiber sample is read:
+
+1. *One fiber source.* Where a single fiber ingredient supplies all the fiber, the
+   dietary fiber line is read as that ingredient's disclosed amount for criteria 1 and 4.
+   Pectin, agar and gelatin listed in a gummy after the declared fiber are read as gelling
+   agents, not actives.
+2. *Several fiber sources, no split.* Where two or more fiber ingredients share one fiber
+   line with no per-ingredient amount, the amounts are undisclosed: criterion 1 scores 0,
+   as it would for a blend total, and any of those fibers with a reference range scores 0
+   on criterion 4, as the prebiotic blends in the probiotic sample did.
+3. *Daily dose.* The dose compared is the daily amount the label directs for the gut
+   outcome it claims. Where directions allow a range ("up to 3 times daily"), the largest
+   directed amount is used, under the benefit-of-the-doubt rule. Directions given for a
+   different outcome, such as appetite control, are not used.
+4. *Nothing checkable.* Where every active in a product is excluded from criterion 4
+   because no qualifying trial exists, criterion 4 scores 0. This extends the v1.11
+   reasoning beyond probiotics: the exclusion removes the comparison, it does not award the
+   point. No probiotic-sample score changes, because only Florastor holds the point there
+   and it has a range.
+5. *No panel.* A listing whose Supplement Facts panel cannot be located on the retail
+   listing or the brand site is recorded in the sample file as not scored, with the search,
+   rather than scored on what it omits.
+
+The objection to rule 1 is recorded openly. Fiber grams are not ingredient weight:
+psyllium husk is roughly 85 to 90 percent fiber, and psyllium trials dose husk weight, so
+reading the fiber line understates a psyllium product's dose by about a tenth. Three rows
+fall just under the 10 g/d psyllium floor on this reading and would sit inside it on husk
+weight; each is flagged in its notes. The answer is that the panels do not state husk
+weight, and the audit scores what the label states. A brand can close the gap by printing it,
+as Konsyl's single-ingredient serving effectively does.
+
 ### Data sources
 
 Primary: the NIH Office of Dietary Supplements
@@ -550,6 +604,11 @@ https://github.com/RyanPepple/supplement-facts-check
 
 ## Revision history
 
+- **v1.17, 2026-11-19.** Fiber category: duplicate-formula ruling and fiber-amount ruling
+  (single-source fiber line read as the dose; unsplit multi-fiber totals score 0 on
+  criteria 1 and 4; directed daily dose for the claimed outcome; all-excluded actives
+  score 0 on criterion 4; no-panel listings not scored). 23 fiber formulas scored in
+  `fiber-scores.csv`. No probiotic score changes.
 - **v1.16, 2026-11-19.** Ruling on label changes: scores follow the current label.
   Digestive Advantage re-scored on its 2026-11-19 panel; 4/6 unchanged.
 - **v1.15, 2026-11-19.** Ruling on named compounds versus extract weights under

@@ -1,6 +1,6 @@
 # Supplement Facts Check
 
-> An open-data audit of dose disclosure on gut-health supplement labels. Six binary criteria, 0-6 scale. Methodology v1.16, locked 2026-11-19. Sample: the top 30 of Amazon's Best Sellers in Probiotic Nutritional Supplements captured 09/26/2026; 18 pass the inclusion test, 12 are excluded as not gut-health-first, 0 undecided. All 18 eligible products are scored. Authored by Ryan Pepple, who owns a competing brand (CalmGut, operating as SHUVEN); author-owned products are scored separately and never ranked.
+> An open-data audit of dose disclosure on gut-health supplement labels. Six binary criteria, 0-6 scale. Methodology v1.17, locked 2026-11-19. Sample: the top 30 of Amazon's Best Sellers in Probiotic Nutritional Supplements captured 09/26/2026; 18 pass the inclusion test, 12 are excluded as not gut-health-first, 0 undecided. All 18 eligible products are scored. Authored by Ryan Pepple, who owns a competing brand (CalmGut, operating as SHUVEN); author-owned products are scored separately and never ranked.
 
 ## Pilot scores
 
@@ -61,9 +61,36 @@ Head-to-head pages, each comparing two scored labels on the same six criteria. A
 - 12 of 18 state both serving size and servings per container (criterion 6): https://supplementfactscheck.org/findings/per-serving-amounts-complete.html
 - 14 of 18 leave out no standardization percentage that potency depends on (criterion 2): https://supplementfactscheck.org/findings/standardization-percentage-stated.html
 
+## Fiber supplements (separate sample)
+
+Top 30 of Amazon Best Sellers in Fiber Supplements captured 11/19/2026; 23 formulas scored, reported separately from the probiotic sample: https://supplementfactscheck.org/fiber/
+- Metamucil Fiber Gummies, No Sugar Added Orange (Metamucil): 3/6, label captured 2026-11-19
+- Metamucil 4-in-1 Psyllium Fiber, Sugar-Free Orange (Metamucil): 5/6, label captured 2026-11-19
+- Amazon Basics Fiber 4g Gummy (Amazon Basics): 4/6, label captured 2026-11-19
+- MiraFIBER Vegan Formula Gummies (MiraFIBER): 4/6, label captured 2026-11-19
+- vitafusion FiberWell Sugar Free Fiber Gummies (vitafusion): 4/6, label captured 2026-11-19
+- Physician's CHOICE Fiber Gummies (GLP-1 Support) (Physician's Choice): 4/6, label captured 2026-11-19
+- Benefiber Prebiotic Fiber Powder, Unflavored (Benefiber): 4/6, label captured 2026-11-19
+- Benefiber Daily Prebiotic Fiber Gummies (Benefiber): 3/6, label captured 2026-11-19
+- Metamucil Fiber Gummies with Probiotics (Metamucil): 3/6, label captured 2026-11-19
+- OLLY Fiber Gummy Rings (OLLY): 5/6, label captured 2026-11-19
+- Metamucil 4-in-1 Psyllium Fiber, Real Sugar Orange (Metamucil): 4/6, label captured 2026-11-19
+- Metamucil Clear Fiber Blend, Unflavored (Metamucil): 3/6, label captured 2026-11-19
+- Metamucil Psyllium Husk Fiber Capsules, 300 ct (Metamucil): 3/6, label captured 2026-11-19
+- Pure for Men Stay Ready Fiber Supplement (Pure for Men): 2/6, label captured 2026-11-19
+- BelliWelli Daily Fiber + Probiotics (BelliWelli): 3/6, label captured 2026-11-19
+- L'il Critters Kids Fiber Gummies (L'il Critters): 4/6, label captured 2026-11-19
+- Kirkland Signature Fiber Capsules (psyllium) (Kirkland Signature): 4/6, label captured 2026-11-19
+- Konsyl Daily Psyllium Fiber Powder (Konsyl): 5/6, label captured 2026-11-19
+- Benefiber Chewable Prebiotic Fiber Tablets (Benefiber): 3/6, label captured 2026-11-19
+- Thorne FiberMend (Thorne): 4/6, label captured 2026-11-19
+- GOBIOTIX Prebiotic Fiber Boost (GOBIOTIX): 5/6, label captured 2026-11-19
+- Tomorrow's Nutrition Sunfiber (Tomorrow's Nutrition): 4/6, label captured 2026-11-19
+- Vitamatic Extra Strength Prebiotic 7g Fiber Gummies (Vitamatic): 4/6, label captured 2026-11-19
+
 ## Known limitations
 
-- 18 of 38 dose-reference rows have no range set; each records why, and criterion 4 cannot be scored from them.
+- 24 of 55 dose-reference rows have no range set; each records why, and criterion 4 cannot be scored from them.
 - Criterion 5 records a certificate of analysis as not publicly accessible when a documented search failed to find one. That is a negative finding, not a claim that none exists.
 - Scores describe what a label discloses on the capture date. Nothing here was lab-tested, and no claim is made about whether a product works.
 - Source problem, L-glutamine (free-form), PMID 39397201: UNRESOLVED: the subgroup statistic is printed as WMD -0.01 with 95% CI -0.10 to -0.08 (n=5 studies), an interval that excludes its own point estimate; full text gives no way to determine the correct figures. SEPARATE INCONSISTENCY: Table 1 defines duration subgroups as ≥4 weeks / <4 weeks, but the Discussion/Conclusion instead describe the significant effect as occurring in interventions "less than 2 weeks" -- a cutoff absent from the paper's own methodology. Flag this if this row is ever used for a duration-based judgment, not just dose.
