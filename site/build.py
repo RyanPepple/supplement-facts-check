@@ -1320,7 +1320,7 @@ in any figure on the <a href="../index.html">probiotic results</a>.</p>
 
 <h2>What the labels show</h2>
 <div class="why"><div class="m fail">!</div><div><b>{len(in_range)} of {n} state a daily dose that lands in a
-trial-backed range.</b><p>{e(", ".join(r["product"] for r in in_range))}. Most gummies deliver 4 to 5 g of fiber a
+trial-backed range.</b><p>{e(", ".join(r["product"] for r in in_range))}. Most gummies deliver 4 to 8 g of fiber a
 day, where the inulin and polydextrose trials that found an effect used 8 to 12 g.</p></div></div>
 <div class="why"><div class="m fail">!</div><div><b>{passes[k5]} of {n} publish a certificate of analysis.</b><p>Several
 carry NSF, USP or Informed Choice certification, which the product pages note. A certification listing is not a
@@ -1330,7 +1330,7 @@ every active.</b><p>Most fiber products have one fiber, and the fiber line state
 more fibers under one total.</p></div></div>
 <p class="prose">Highest score: {top}/6. Score spread: {", ".join(f"{c} at {s}/6" for s, c in sorted(dist.items(), reverse=True))}.
 Read the <a href="../methodology.html">fiber rulings in the methodology</a> for how fiber labels are read, including
-the objection that fiber grams understate psyllium husk weight, which affects three psyllium rows flagged on their
+the objection that fiber grams understate psyllium husk weight, which decides two close calls flagged on their
 pages.</p>
 
 <h2>All {n} scored formulas, in rank order</h2>

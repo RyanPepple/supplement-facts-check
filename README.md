@@ -444,10 +444,10 @@ rank 4 of the captured sample, is the comparison a gut-health shopper reaches
 for most often, and Ritual is the product on the other side of it; Ritual sells
 direct and so cannot appear in an Amazon category ranking at all.
 
-**Second category: fiber supplements (in progress, 2026-11-19).** The top 30
+**Second category: fiber supplements (scored 2026-11-19).** The top 30
 products in Amazon Best Sellers in Fiber Supplements, captured on 11/19/2026, are
-listed in `fiber-sample.csv`; the capture is committed at
-`captures/amazon-fiber-bestsellers-top38-2026-11-19.png`. The same first-listed
+listed in `fiber-sample.csv`; the capture, which shows the top 38, is committed at
+`captures/amazon-fiber-bestsellers-top38-2026-11-19.png`, and only the first 30 are used. The same first-listed
 claim test applies, with regularity or digestive health as the gut-health claim.
 Fiber results are reported on their own and are never combined with the probiotic
 sample in any total, mean or ranking, because the two lists come from different
@@ -477,9 +477,12 @@ list. Five rules govern how the fiber sample is read:
    as it would for a blend total, and any of those fibers with a reference range scores 0
    on criterion 4, as the prebiotic blends in the probiotic sample did.
 3. *Daily dose.* The dose compared is the daily amount the label directs for the gut
-   outcome it claims. Where directions allow a range ("up to 3 times daily"), the largest
-   directed amount is used, under the benefit-of-the-doubt rule. Directions given for a
-   different outcome, such as appetite control, are not used.
+   outcome it claims. Where directions allow a range ("2 to 3 gummies", "up to 3 times
+   daily"), the product scores 1 if any directed daily amount falls inside the reference
+   range, under the benefit-of-the-doubt rule; this matters because several reference
+   rows are single doses, which a larger amount can overshoot. Directions given for a
+   different outcome, such as appetite control, are not used. Where directions are read
+   from listing text rather than the captured panel, the row says so.
 4. *Nothing checkable.* Where every active in a product is excluded from criterion 4
    because no qualifying trial exists, criterion 4 scores 0. This extends the v1.11
    reasoning beyond probiotics: the exclusion removes the comparison, it does not award the
@@ -491,9 +494,11 @@ list. Five rules govern how the fiber sample is read:
 
 The objection to rule 1 is recorded openly. Fiber grams are not ingredient weight:
 psyllium husk is roughly 85 to 90 percent fiber, and psyllium trials dose husk weight, so
-reading the fiber line understates a psyllium product's dose by about a tenth. Three rows
-fall just under the 10 g/d psyllium floor on this reading and would sit inside it on husk
-weight; each is flagged in its notes. The answer is that the panels do not state husk
+reading the fiber line understates a psyllium product's dose by about a tenth. Two rows,
+the Metamucil 4-in-1 powders (sugar-free and real sugar), reach 9 g/d of fiber, just under
+the 10 g/d psyllium floor, and would sit at about 10.2 g/d on the husk weight P&G states for
+its OTC version; both are flagged in their notes. The two psyllium capsule rows reach 8 g/d
+of fiber and stay below the floor on either reading. The answer is that the panels do not state husk
 weight, and the audit scores what the label states. A brand can close the gap by printing it,
 as Konsyl's single-ingredient serving effectively does.
 
@@ -608,7 +613,10 @@ https://github.com/RyanPepple/supplement-facts-check
   (single-source fiber line read as the dose; unsplit multi-fiber totals score 0 on
   criteria 1 and 4; directed daily dose for the claimed outcome; all-excluded actives
   score 0 on criterion 4; no-panel listings not scored). 23 fiber formulas scored in
-  `fiber-scores.csv`. No probiotic score changes.
+  `fiber-scores.csv`. No probiotic score changes. After independent review the same day: Metamucil 4-in-1
+  Sugar-Free criterion 4 corrected 1 to 0 (its gut-outcome directions are 1 spoonful),
+  Metamucil Fiber Gummies with Probiotics criterion 3 corrected 1 to 0 (LactoSpore printed
+  without MTCC 5856), and rule 3 restated so any directed amount inside a range scores 1.
 - **v1.16, 2026-11-19.** Ruling on label changes: scores follow the current label.
   Digestive Advantage re-scored on its 2026-11-19 panel; 4/6 unchanged.
 - **v1.15, 2026-11-19.** Ruling on named compounds versus extract weights under
