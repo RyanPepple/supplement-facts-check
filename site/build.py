@@ -20,7 +20,7 @@ import shutil
 from pathlib import Path
 
 import markdown
-from PIL import Image
+from PIL import Image, ImageDraw, ImageFont
 
 ROOT = Path(__file__).resolve().parent.parent
 OUT = ROOT / "docs"
@@ -40,9 +40,25 @@ ANALYTICS = (f'<script src="https://analytics.ahrefs.com/analytics.js" data-key=
 
 # Share image for Open Graph / X cards. Source file lives in site/, copied to docs/ at build.
 OG_IMAGE = "og-image.png"
+# Per-product share cards are drawn at build time with this bundled font, so the
+# build gives the same image on any machine. License: site/fonts/LICENSE-DejaVu.txt
+FONT_DIR = Path(__file__).resolve().parent / "fonts"
+
+# Supplement Facts panels transcribed to text, one entry per scored product. The
+# panel capture stays the evidence; the text exists so a reader (and a search
+# engine) can read the label without opening an image. LABELS_DATE is when the
+# transcription was made, and it moves a product page's dateModified forward.
+LABELS_FILE = "label-ingredients.json"
+LABELS_DATE = "2026-11-19"
+
+# Who the author is, stated once, on the About page, and pointed at from every
+# page's structured data instead of a bare code-hosting profile.
+LINKEDIN_URL = "https://www.linkedin.com/in/ryan-pepple"
 
 LICENSE_URL = "https://creativecommons.org/publicdomain/zero/1.0/"
-AUTHOR = {"@type": "Person", "name": "Ryan Pepple", "url": "https://github.com/RyanPepple"}
+AUTHOR = {"@type": "Person", "@id": "https://supplementfactscheck.org/about.html#author",
+          "name": "Ryan Pepple", "url": "https://supplementfactscheck.org/about.html",
+          "sameAs": ["https://github.com/RyanPepple", LINKEDIN_URL]}
 # The project as an Organization: publisher of every page, with its logo and the
 # one profile it controls (the public repository) as sameAs on the item itself.
 ORG = {"@type": "Organization", "@id": "https://supplementfactscheck.org/#organization",
@@ -352,10 +368,14 @@ table.sc td.s{text-align:center;font-weight:900;font-size:15px;white-space:nowra
 NAV = [("index.html", "Results"), ("findings.html", "Findings"),
        ("comparisons.html", "Comparisons"),
        ("methodology.html", "Methodology"), ("reference.html", "Dose reference"),
-       ("conflict-of-interest.html", "Conflict of interest")]
+       ("conflict-of-interest.html", "Conflict of interest"), ("about.html", "About")]
+
+# path -> the date the page's content last changed, read off the dateModified of
+# its own WebPage node, so sitemap.xml can carry a lastmod that means something.
+LASTMOD = {}
 
 
-def page(path, title, desc, body, ctx, jsonld=None):
+def page(path, title, desc, body, ctx, jsonld=None, og=None):
     depth = path.count("/")
     rel = "../" * depth
     cur = ' aria-current="page"'
@@ -365,12 +385,16 @@ def page(path, title, desc, body, ctx, jsonld=None):
     canon = f'<link rel="canonical" href="{SITE_URL}/{"" if path == "index.html" else path}">' if SITE_URL else ""
     # "</" is split so a string in the data can never close the script element early
     blob = json.dumps(jsonld).replace("</", "<\\/") if jsonld else ""
+    for node in (jsonld or {}).get("@graph", []):
+        if node.get("@type") in ("WebPage", "AboutPage", "CollectionPage") and node.get("dateModified"):
+            LASTMOD[path] = node["dateModified"]
+    og_src, og_w, og_h = og or (OG_IMAGE, 1200, 630)
     ld = f'<script type="application/ld+json">{blob}</script>' if jsonld else ""
     social = (f'<meta property="og:url" content="{page_url(path)}">'
-              f'<meta property="og:image" content="{SITE_URL}/{OG_IMAGE}">'
-              f'<meta property="og:image:width" content="1200"><meta property="og:image:height" content="630">'
+              f'<meta property="og:image" content="{SITE_URL}/{og_src}">'
+              f'<meta property="og:image:width" content="{og_w}"><meta property="og:image:height" content="{og_h}">'
               f'<meta name="twitter:card" content="summary_large_image">'
-              f'<meta name="twitter:image" content="{SITE_URL}/{OG_IMAGE}">') if SITE_URL else ""
+              f'<meta name="twitter:image" content="{SITE_URL}/{og_src}">') if SITE_URL else ""
     doc = f"""<!doctype html>
 <html lang="en"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
@@ -392,7 +416,8 @@ def page(path, title, desc, body, ctx, jsonld=None):
 <a href="{REPO_URL}">public repository</a>, where the full commit history is the record.</p>
 <p>Authored by Ryan Pepple, who owns a competing supplement brand. Read the
 <a href="{rel}conflict-of-interest.html">conflict-of-interest statement</a>. This site reports what labels disclose.
-It does not test products, and it is not medical advice.</p>
+It does not test products, and it is not medical advice. <a href="{rel}about.html">About the author and how to
+report an error</a>.</p>
 <a class="built" href="https://abovance.com/" rel="nofollow" title="Abovance, AI SEO and GEO. The author's consultancy."><span>Site built by</span><b>abovance</b></a>
 </div></footer></body></html>"""
     target = OUT / path
@@ -415,6 +440,172 @@ def panel(row, rel="", link=True):
 <div class="f">Each criterion scores 1 or 0. No weighting, no partial credit.</div>
 {btn}
 </article>"""
+
+
+# ------------------------------------------------------- label as text
+# Rows that are nutrition facts rather than the product's actives. They stay in
+# the table, because the table is the panel, but they are left out of the
+# one-sentence ingredient summary a reader or a search engine sees first.
+NUTRITION_ROWS = re.compile(r"^(calories|total fat|sodium|total carbohydrate|total sugars|incl|includes|sugar alcohol)\b",
+                            re.I)
+
+
+def capture_img(rel, name, w, h, alt):
+    """A capture as <picture>: WebP for browsers that take it, the JPEG for the rest."""
+    stem = name.rsplit(".", 1)[0]
+    return (f'<picture><source type="image/webp" srcset="{rel}captures/{stem}.webp">'
+            f'<img loading="lazy" decoding="async" src="{rel}captures/{name}" width="{w}" height="{h}" '
+            f'alt="{e(alt)}"></picture>')
+
+
+def active_rows(label):
+    return [x for x in label.get("rows", []) if not NUTRITION_ROWS.match(x["name"])]
+
+
+def ingredient_summary(r, label):
+    """'X (100 mg), Y (90 mg) ...' from the transcribed panel, or '' if there is no text."""
+    parts = []
+    for x in active_rows(label):
+        amt = f" ({x['amount']})" if x.get("amount") else ""
+        inner = f": {x['contains']}" if x.get("contains") else ""
+        parts.append(f"{x['name']}{amt}{inner}")
+    return "; ".join(parts)
+
+
+def ingredients_section(r, label, rel="../"):
+    """The Supplement Facts panel as an HTML table, with every gap in the capture stated."""
+    name = r["product"]
+    cap = label.get("panel_capture", "")
+    when = capture_date(cap) or r["capture_date"]
+    head = f'<h2 id="ingredients">{e(name)} ingredients</h2>'
+    if label.get("transcription_gap"):
+        return (head + f'<div class="note"><b class="sans">Not transcribed.</b> {e(label["transcription_gap"])} '
+                f'The score below was read from the label on {e(r["capture_date"])}; the reasoning for each '
+                f'criterion quotes the panel lines it relied on.</div>')
+    trs = ""
+    for x in label["rows"]:
+        sub = (f'<br><small style="color:var(--soft)">{e(x["contains"])}</small>' if x.get("contains") else "")
+        trs += (f'<tr><td>{e(x["name"])}{sub}</td><td class="n">{e(x.get("amount", ""))}</td>'
+                f'<td class="muted">{e(x.get("dv", ""))}</td></tr>')
+    extra = ""
+    for key, lab in (("total_line", "Total line on the panel"), ("panel_note", "Panel footnote"),
+                     ("dv_columns", "Daily Value columns")):
+        if label.get(key):
+            extra += f'<p class="prose" style="font-size:15px"><b class="sans">{lab}.</b> {e(label[key])}</p>'
+    return f"""{head}
+<p class="prose">Every line of the Supplement Facts panel, as printed on the label captured {e(when)}, typed out so
+it can be read without opening the image. Amounts are per serving. The <a href="#evidence">panel capture</a> is the
+record; where the capture cuts a line off, the table says so rather than filling it in.</p>
+<p class="prose sans" style="font-size:15px"><b>Serving size:</b> {e(label.get("serving_size", ""))} ·
+<b>Servings per container:</b> {e(label.get("servings_per_container", ""))}</p>
+<div class="tablewrap"><table>
+<tr><th>Ingredient</th><th>Per serving</th><th>%DV</th></tr>
+{trs}
+</table></div>
+{extra}
+<p class="prose" style="font-size:15px"><b class="sans">Other ingredients.</b> {e(label.get("other_ingredients", ""))}</p>"""
+
+
+def label_faq(r, why, label):
+    """Questions searchers ask about one product, each answered from this product's own row.
+
+    Every answer is assembled from the transcribed panel and the recorded
+    reasoning, so it can say nothing the scorecard above it does not.
+    """
+    name, out = r["product"], []
+    summary = ingredient_summary(r, label) if label and not label.get("transcription_gap") else ""
+    if summary:
+        when = capture_date(label.get("panel_capture", "")) or r["capture_date"]
+        out.append((f"What are the ingredients in {name}?",
+                    f"Per the Supplement Facts panel captured {when}, one serving "
+                    f"({label.get('serving_size', '')}) lists: {summary}. "
+                    f"Other ingredients: {label.get('other_ingredients', '')}"))
+    c1, c4, c5 = (r[CRITERIA[i][0]] == "1" for i in (0, 3, 4))
+    out.append((f"Does the {name} label give an exact amount for every ingredient?",
+                ("Yes. Every active ingredient carries its own amount, so it scored 1 on criterion 1. " if c1 else
+                 "No. At least one active ingredient is listed without its own amount, for example inside a "
+                 "blend total, so it scored 0 on criterion 1. ")
+                + why.get(1, "")))
+    out.append((f"Is {name} third-party tested?",
+                "This audit checks one thing here: whether a third-party certificate of analysis (COA) for the "
+                "product can be reached by the public, with no email gate and no account. "
+                + ("One was found, so it scored 1 on criterion 5. " if c5 else
+                   "None was located, so it scored 0 on criterion 5. That records what a documented search "
+                   "found, not a claim that the product was never tested. ")
+                + why.get(5, "")))
+    out.append((f"Are the doses in {name} backed by clinical trials?",
+                ("The label discloses a dose inside the range human trials used, so it scored 1 on criterion 4. "
+                 if c4 else "It scored 0 on criterion 4: no disclosed dose could be matched to the range human "
+                            "trials used. ")
+                + why.get(4, "")))
+    return [(q, a.strip()) for q, a in out]
+
+
+def faq_html(items):
+    return "<h2>Questions about this label</h2>" + "".join(
+        f'<div class="why" style="grid-template-columns:1fr"><div><b>{e(q)}</b><p>{e(a)}</p></div></div>'
+        for q, a in items)
+
+
+def faq_node(path, items):
+    return {"@type": "FAQPage", "@id": page_url(path) + "#faq",
+            "isPartOf": {"@id": page_url(path) + "#page"},
+            "mainEntity": [{"@type": "Question", "name": q,
+                            "acceptedAnswer": {"@type": "Answer", "text": a}} for q, a in items]}
+
+
+# ------------------------------------------------------------- share cards
+def _fit(draw, text, font_path, size, width, min_size=40):
+    while size > min_size:
+        f = ImageFont.truetype(str(font_path), size)
+        if draw.textlength(text, font=f) <= width:
+            return f
+        size -= 4
+    return ImageFont.truetype(str(font_path), min_size)
+
+
+def _wrap(draw, text, font, width, max_lines=2):
+    words, lines, line = text.split(), [], ""
+    for w in words:
+        trial = (line + " " + w).strip()
+        if draw.textlength(trial, font=font) <= width or not line:
+            line = trial
+        else:
+            lines.append(line)
+            line = w
+    lines.append(line)
+    if len(lines) > max_lines:
+        lines = lines[:max_lines]
+        lines[-1] = lines[-1].rstrip(".,;") + "…"
+    return lines
+
+
+def share_card(r, path_out):
+    """1200x630 share image for one scorecard, in the same style as the site card."""
+    paper, ink, soft, accent = (247, 245, 239), (20, 19, 15), (87, 83, 74), (165, 50, 31)
+    bold, reg = FONT_DIR / "DejaVuSerif-Bold.ttf", FONT_DIR / "DejaVuSerif.ttf"
+    im = Image.new("RGB", (1200, 630), paper)
+    d = ImageDraw.Draw(im)
+    d.rectangle([70, 70, 1130, 76], fill=ink)
+    d.text((70, 104), "Label disclosure score", font=ImageFont.truetype(str(reg), 34), fill=soft)
+    name_font = ImageFont.truetype(str(bold), 58)
+    y = 160
+    for line in _wrap(d, r["product"], name_font, 700, max_lines=3):
+        d.text((70, y), line, font=name_font, fill=ink)
+        y += 70
+    score_font = ImageFont.truetype(str(bold), 210)
+    score = f"{r['total_score']}/6"
+    sw = d.textlength(score, font=score_font)
+    d.text((1130 - sw, 120), score, font=score_font, fill=accent if int(r["total_score"]) <= 3 else ink)
+    d.text((70, 430), "Six yes-or-no questions about what the label discloses.",
+           font=ImageFont.truetype(str(reg), 32), fill=soft)
+    d.rectangle([70, 518, 1130, 520], fill=ink)
+    small = ImageFont.truetype(str(reg), 30)
+    d.text((70, 538), "supplementfactscheck.org", font=small, fill=ink)
+    tail = f"Label captured {r['capture_date']}"
+    d.text((1130 - d.textlength(tail, font=small), 538), tail, font=small, fill=accent)
+    path_out.parent.mkdir(parents=True, exist_ok=True)
+    im.save(path_out, "PNG", optimize=True)
 
 
 # ------------------------------------------------------------- comparisons
@@ -877,11 +1068,19 @@ def findings_pages(pilot, ctx, ver, locked):
 search — product page, brand site, site-scoped search and the retail listing — did not find a publicly accessible
 third-party certificate on the date shown. That is a negative finding about public accessibility, not a claim that
 no certificate exists or that a product is contaminated.</div>""" if key == "criterion_5_coa_publicly_accessible" else "")
+        # The products that do meet it, named up front: "which brands do X" is the
+        # question most people arrive with, and the full table below is long.
+        met_line = ("" if not met else
+                    '<p class="prose sans" style="font-size:16px"><b>Products that meet it:</b> '
+                    + ", ".join(f'<a href="../products/{slugify(r["product"])}.html">{e(r["product"])}</a> '
+                                f'({e(r["brand"])})' for r in sorted(met, key=lambda r: r["product"]))
+                    + "</p>")
         path = f"findings/{f['slug']}.html"
         body = f"""
 <p class="kicker" style="margin-top:40px">Headline finding · criterion {i} of 6</p>
 <h1 style="margin-top:8px;font-size:clamp(30px,5vw,52px)">{e(headline)}</h1>
 <p class="lede">{e(sentence)} {e(others)}</p>
+{met_line}
 <div class="note"><b class="sans">The sample.</b> {n} products scored so far from the top 30 of Amazon’s Best
 Sellers in Probiotic Nutritional Supplements, captured 09/26/2026. Every inclusion and exclusion decision is
 listed on the <a href="../">results page</a>. Read these as pilot results, not a ranking.</div>
@@ -1009,6 +1208,11 @@ def build():
     offsample = read_csv("offsample-scores.csv")
     offsample_scored = [r for r in offsample if r["total_score"].strip()]
     doses = read_csv("clinical-doses.csv")
+    labels = json.loads((ROOT / LABELS_FILE).read_text(encoding="utf-8"))["products"]
+    # A scored product with no transcription entry is a gap to fix, not a page to
+    # ship without its ingredient table, so the build stops.
+    for r in pilot:
+        assert r["product"] in labels, f"{LABELS_FILE} has no entry for {r['product']!r}"
     (OUT / "style.css").write_text(CSS.strip(), encoding="utf-8")
     # static icons live in site/assets and are copied to the site root (docs/ is wiped on every build)
     for icon in sorted((ROOT / "site" / "assets").iterdir()):
@@ -1031,6 +1235,7 @@ def build():
             im = im.resize((1400, round(im.height * 1400 / im.width)))
         name = p.stem + ".jpg"
         im.save(capdir / name, "JPEG", quality=82, optimize=True)
+        im.save(capdir / (p.stem + ".webp"), "WEBP", quality=72, method=6)
         caps[p.name] = (name, im.width, im.height)
 
     # --------------------------------------------------------- findings
@@ -1203,7 +1408,8 @@ what was done about it, in the <a href="conflict-of-interest.html">conflict-of-i
         for i, (key, label, _) in enumerate(CRITERIA, 1):
             ok = r[key] == "1"
             rows += (f'<div class="why"><div class="m {"pass" if ok else "fail"}">{r[key]}</div><div>'
-                     f'<b>{i}. {e(label)}</b><p>{e(why.get(i, "No reasoning recorded."))}</p></div></div>')
+                     f'<b><a href="../findings/{FINDINGS[key]["slug"]}.html">{i}. {e(label)}</a></b>'
+                     f'<p>{e(why.get(i, "No reasoning recorded."))}</p></div></div>')
         srcs = [src for src in caps
                 if src in r["notes"] or src.startswith(slug_prefix(r, caps))]
         figs = ""
@@ -1214,21 +1420,25 @@ what was done about it, in the <a href="conflict-of-interest.html">conflict-of-i
             # re-capture pass adds files without restating when the score was read.
             when = capture_date(src) or r["capture_date"]
             later = " (later capture, after this score was read)" if when > r["capture_date"] else ""
-            figs += (f'<figure><a href="../captures/{name}"><img loading="lazy" src="../captures/{name}" width="{w}" '
-                     f'height="{h}" alt="{e(view)} of {e(r["product"])}, captured {e(when)}"></a>'
+            alt = f"{view} of {r['product']}, captured {when}"
+            figs += (f'<figure><a href="../captures/{name}">{capture_img("../", name, w, h, alt)}</a>'
                      f'<figcaption>{view}, captured {e(when)}{later}. '
                      f'<a href="{RAW_URL}captures/{src}">Original file</a></figcaption></figure>')
+        faq = label_faq(r, why, labels.get(r["product"])) if r["product"] in labels else []
         body = f"""
 <p class="kicker" style="margin-top:40px">{"Off-sample scorecard" if off else "Pilot scorecard"}</p>
-<h1 style="margin-top:8px;font-size:clamp(30px,5vw,48px)">{e(r['product'])}</h1>
+<h1 style="margin-top:8px;font-size:clamp(30px,5vw,48px)">{e(r['product'])}: ingredients and label score</h1>
 <p class="lede">{e(r['brand'])} scored <b>{e(r['total_score'])} out of 6</b> for label disclosure under methodology
-v{ver}, read from the label as captured on {e(r['capture_date'])}.</p>
+v{ver}, read from the label as captured on {e(r['capture_date'])}. The <a href="#ingredients">full ingredient
+list</a> from the Supplement Facts panel is below the score.</p>
 {'<div class="note"><b class="sans">Outside the sample.</b> This product is not in the captured Amazon ranking the pilot was drawn from, so its row is kept in a separate file and is counted in no ranking, mean or “products scored” figure on this site. It is scored on the identical six criteria, by the same rules, from the same dated-capture evidence.</div>' if off else ''}
 <div style="max-width:440px">{panel(r, '../', link=False)}</div>
+{ingredients_section(r, labels[r["product"]]) if r["product"] in labels else ""}
 <h2>Why it scored this way</h2>
 {f'<p><i>{e(pre)}</i></p>' if pre else ''}
 {rows}
-<h2>The evidence</h2>
+{faq_html(faq) if faq else ""}
+<h2 id="evidence">The evidence</h2>
 <p class="prose">Scores are read from the live label, captured by screenshot on the date shown. A score describes
 what the label discloses. It says nothing about whether the product works, and nothing here was lab-tested.</p>
 {'' if 'Product listing' in figs else '<div class="note"><b class="sans">Incomplete evidence.</b> No product-listing capture is on file for this product yet. Under the methodology, a scored row without both captures is incomplete.</div>'}
@@ -1237,15 +1447,25 @@ what the label discloses. It says nothing about whether the product works, and n
 {'' if off else related(r, pilot, order, pairs)}
 """
         path = f"products/{slug}.html"
-        title = f"{r['product']}: label score {r['total_score']}/6"
-        desc = (f"{r['product']} scored {r['total_score']} of 6 on label disclosure. See the reasoning for "
-                f"each criterion and the dated label captures.")
+        has_text = r["product"] in labels and not labels[r["product"]].get("transcription_gap")
+        title = (f"{r['product']} Ingredients and Label Score ({r['total_score']}/6)" if has_text
+                 else f"{r['product']}: label score {r['total_score']}/6")
+        desc = ((f"{r['product']} ingredients, typed out from the Supplement Facts panel, and its "
+                 f"{r['total_score']}/6 label disclosure score: doses, strains, blends and whether a "
+                 f"third-party certificate of analysis is public.") if has_text else
+                (f"{r['product']} scored {r['total_score']} of 6 on label disclosure. See the reasoning for "
+                 f"each criterion and the dated label captures."))
         images = capture_nodes(r, srcs, caps)
+        modified = max(r["capture_date"], LABELS_DATE) if r["product"] in labels else r["capture_date"]
+        card = f"og/{slug}.png"
+        share_card(r, OUT / card)
         page(path, title, desc, body, ctx,
              graph(website_node(),
                    webpage_node(path, title, desc, main=page_url(path) + "#review",
-                                modified=r["capture_date"], image=images[0] if images else None),
-                   *review_node(r, pre, why, path, images)))
+                                modified=modified, image=images[0] if images else None),
+                   *review_node(r, pre, why, path, images),
+                   faq_node(path, faq) if faq else None),
+             og=(card, 1200, 630))
 
     # ------------------------------------------------------------ comparisons
     cmp_pages = []
@@ -1377,6 +1597,56 @@ to it is in the <a href="{REPO_URL}/commits/main/README.md">commit history</a>.<
     }
     page("conflict-of-interest.html", title, desc, body, ctx, graph(website_node(), coi_ld, coi_article))
 
+    # ------------------------------------------------------------ about
+    # Who wrote this, what the conflict is, and how to get a wrong figure fixed.
+    # Kept to facts the reader can check: the author's two businesses, the public
+    # repository, and the commit history as the corrections log.
+    title = "About Supplement Facts Check and its author"
+    desc = ("Who runs Supplement Facts Check, the competing interest the author discloses, how products are "
+            "scored, and how to report an error so it gets corrected in public.")
+    body = f"""<h1>About</h1>
+<div class="prose">
+<p class="lede">Supplement Facts Check is a one-person audit of what best-selling gut-health supplement labels
+disclose. It scores each label on six yes-or-no questions, publishes every score with the dated label captures it
+was read from, and puts all of it in the public domain.</p>
+
+<h2>Who runs it</h2>
+<p>Ryan Pepple. He owns CalmGut, a gut-brain axis supplement brand operating as SHUVEN, which competes with
+products scored here, and he runs Abovance, the consultancy that built this site. Because of the first, his own
+products are never ranked here: they are scored, when they have a live label, in a separate appendix by the same
+rubric. The full statement is on the <a href="conflict-of-interest.html">conflict-of-interest page</a>.</p>
+<p>Find him on <a href="{LINKEDIN_URL}" rel="me">LinkedIn</a> and on <a href="https://github.com/RyanPepple" rel="me">GitHub</a>,
+where this project lives.</p>
+
+<h2>How the scoring works</h2>
+<p>The six criteria were committed to public version control before any product was scored, so the rubric could not
+be tuned to a result. Each label is read from a screenshot of the live listing on a stated date. A score describes
+what the label discloses. Nothing is lab-tested, no claim is made about whether a product works, and nothing here is
+medical advice. The <a href="methodology.html">methodology</a> has every rule and every ruling.</p>
+
+<h2>Corrections</h2>
+<p>If a score, a transcribed ingredient line or a dose reference is wrong, open an
+<a href="{REPO_URL}/issues">issue on the repository</a> with the page and what the label shows. Brands are welcome to
+do the same, including to point to a certificate of analysis the search missed. A correction changes the data file,
+the site is rebuilt from it, and the change is visible in the
+<a href="{REPO_URL}/commits/main">public commit history</a>, which is this site's corrections log. Methodology
+changes are listed in the revision history of the <a href="{REPO_URL}/blob/main/README.md">README</a>.</p>
+
+<h2>Reusing the data</h2>
+<p>Every score, capture and reference row is public domain under CC0 1.0. No permission is needed. A link back is
+appreciated, and each <a href="findings.html">headline finding</a> has a sentence written to be quoted.</p>
+</div>"""
+    about_ld = {
+        "@type": "AboutPage", "@id": page_url("about.html") + "#page", "url": page_url("about.html"),
+        "name": title, "description": desc, "isPartOf": {"@id": f"{SITE_URL}/#website"},
+        "license": LICENSE_URL, "dateModified": LABELS_DATE,
+        "mainEntity": {"@id": AUTHOR["@id"]},
+    }
+    person = dict(AUTHOR, description="Owner of CalmGut (operating as SHUVEN), a supplement brand that competes "
+                                      "with products scored on this site, and of Abovance, the consultancy that "
+                                      "built it.")
+    page("about.html", title, desc, body, ctx, graph(website_node(), about_ld, person))
+
     # ------------------------------------------------------------ reference
     trs = ""
     for d in doses:
@@ -1484,7 +1754,8 @@ q.addEventListener('input',()=>{{const s=q.value.toLowerCase();rows.forEach(r=>r
     (OUT / "llms.txt").write_text("\n".join(lines), encoding="utf-8")
     if SITE_URL:
         urls = [p.relative_to(OUT).as_posix() for p in sorted(OUT.rglob("*.html"))]
-        sm = "".join(f"<url><loc>{SITE_URL}/{'' if u == 'index.html' else u}</loc></url>" for u in urls)
+        sm = "".join(f"<url><loc>{SITE_URL}/{'' if u == 'index.html' else u}</loc>"
+                     + (f"<lastmod>{LASTMOD[u]}</lastmod>" if u in LASTMOD else "") + "</url>" for u in urls)
         (OUT / "sitemap.xml").write_text(
             f'<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">{sm}</urlset>')
         (OUT / "robots.txt").write_text(f"User-agent: *\nAllow: /\nSitemap: {SITE_URL}/sitemap.xml\n")
