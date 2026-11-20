@@ -4,9 +4,10 @@ An open-data audit of dose disclosure on gut-health supplement labels.
 
 - **Status:** Rubric locked. Sample captured 09/26/2026; all 18 eligible products scored.
 - **Author:** Ryan Pepple
-- **Methodology version:** 1.14 — locked 2026-10-26. Ruling on products scored
-  from outside the captured sample, which are kept in a physically separate file
-  and never ranked; scoring rubric unchanged since v1.7 (locked 2026-09-07).
+- **Methodology version:** 1.15 — locked 2026-11-19. Clarifies when an ingredient
+  sold at graded purities needs a stated percentage (criterion 2), restates the
+  probiotic CFU rule to match rulings v1.11 to v1.13, and keeps the v1.14 off-sample
+  rule; scoring rubric unchanged since v1.7 (locked 2026-09-07).
 
 ---
 
@@ -26,7 +27,7 @@ can reproduce, check, or dispute the results.
 
 ---
 
-## Methodology v1.14
+## Methodology v1.15
 
 ### Scoring rubric
 
@@ -59,6 +60,32 @@ expressed in the active compound. The percentage is therefore
 potency-determining and its absence scores 0. The test is functional: if the
 disclosed figure cannot be converted into the unit the evidence uses, the
 standardization is missing.
+
+**Ruling on named compounds versus extract weights (v1.15, 2026-11-19).** The
+functional test turns on what the label declares, not on how the ingredient is sold.
+Where the label names the compound itself with an amount, as in "Xylooligosaccharides
+(XOS) 80 mg", "Inulin (Chicory Root Extract) 200 mg" or "Prebiotic FOS
+(Fructo-oligosaccharides) 50 mg", the amount is read as the compound and can be compared
+to a range expressed in that compound, so no percentage is required and the point
+stands. Where the label declares a source material by weight, as in "Xylooligosaccharide
+from Corn Cob Extract 100 mg", the active content of that weight is unknown and the
+point is lost. Rank 13, Lemme Debloat, forced this: it had been scored 0 alongside
+BIOMA, while Culturelle Pro Strength scored 1 for the same kind of declaration, and one
+rule cannot produce both. Lemme Debloat now scores 1 and BIOMA stays 0.
+
+The ruling also requires a reference range to exist before a missing percentage can be
+potency-determining. Garden of Life Dr Formulated Probiotics for Men had been scored 0
+because resistant starch is sold at graded content, but the reference table holds no
+resistant starch row, so there is no unit to convert into. It now scores 1,
+provisionally: if a resistant starch range is added, its undisclosed starch weight
+inside a blend total fails the test and the 0 returns, for it and for any other product
+in the same position.
+
+The objection is recorded openly. A brand naming "XOS" may be declaring the weight of
+a commercial XOS ingredient that is itself 35 to 95 percent pure, and the label cannot
+show which. That is true, and it applies equally to every named compound in the sample.
+The audit scores what the label states, and a label that states the compound has made a
+claim a certificate of analysis can check.
 
 Unlike the probiotic exclusion under criterion 4, this is not a
 unit-mismatch problem; the requirement simply does not apply. The
@@ -158,15 +185,21 @@ formula rather than the ingredient; without the second, by funding the only
 study. Both would let the audited party set the standard it is audited
 against.
 
-**Probiotics.** Clinical trials of probiotic strains report dosing
-predominantly in milligrams of preparation rather than colony-forming
-units, while product labels almost universally report CFU. These units are
-not reliably interconvertible, as CFU per milligram varies by manufacturer
-and by viability at manufacture versus expiry. A probiotic ingredient
-declared in CFU is therefore excluded from criterion 4 and assessed on
-criteria 1, 2, 3, 5 and 6 only. The exclusion exists because of the unit
-mismatch and reaches only as far as the mismatch does, which the v1.12
-ruling below makes explicit.
+**Probiotics.** A probiotic dose is compared to a trial dose only where both are
+stated in the same unit and the label's figure is one the brand commits to delivering.
+Trials report probiotic doses in CFU or in milligrams of preparation, and the two are
+not reliably interconvertible, since CFU per milligram varies by manufacturer and by
+viability at manufacture versus expiry. In practice that gives three cases, set out in
+the rulings below and restated here in v1.15 so this paragraph and the scores agree:
+a CFU count guaranteed through the best-by date is compared to trials dosing in CFU
+(v1.13); a CFU count with no through-expiry guarantee establishes no delivered dose and
+scores 0 on that ingredient (v1.13); a dose in milligrams is compared to trials dosing
+in milligrams (v1.12). A probiotic that fits none of these, such as a CFU-declared
+strain whose only trials dose in milligrams, or an organism inside a blend total, is
+excluded from criterion 4, and the v1.11 ruling governs a formula in which every active
+is excluded. Earlier text said every CFU-declared probiotic was excluded; the rulings
+had already narrowed that, and v1.15 brings the paragraph in line without changing any
+score.
 
 **Ruling on probiotic-only formulas (v1.11, 2026-09-26).** Where every active
 ingredient in a product is a probiotic, criterion 4 scores 0. The exclusion above
@@ -442,8 +475,9 @@ this site's footer links to Abovance with `rel="nofollow"` for the same
 reason.
 
 The author also co-owns Liv Pure, a storefront selling research-use-only
-peptides. Liv Pure sells no dietary supplements, and none of its products
-are in this audit's sample or appendix.
+peptides and related compounds, including capsule and liquid products. They are
+not labeled or sold as dietary supplements, and none of them is in this audit's
+sample, appendix or off-sample file.
 
 Mitigations:
 
@@ -503,6 +537,11 @@ https://github.com/RyanPepple/supplement-facts-check
 
 ## Revision history
 
+- **v1.15, 2026-11-19.** Ruling on named compounds versus extract weights under
+  criterion 2: Lemme Debloat 2 to 3; Garden of Life Dr Formulated Probiotics for Men
+  1 to 2, provisionally, pending any resistant starch reference range. Probiotic CFU
+  paragraph restated to match rulings v1.11 to v1.13 (no score change). Liv Pure
+  disclosure in the conflict-of-interest statement widened.
 - **Correction, 2026-11-19.** No score changes. Sjomina 2023 removed from the *S. boulardii* range (fails the positive-outcome rule); range now 500 to 600 mg/day. Puhlmann 2025 inulin range flagged as manufacturer-co-authored. Ten cropped panel captures and Ritual's re-captured in full. Methodology heading brought in line with the stated version.
 - **v1.14 — 2026-10-26.** Ruling on products scored from outside the captured sample:
   scored under the identical rubric, kept in `offsample-scores.csv`, never ranked or
