@@ -489,7 +489,7 @@ def ingredients_section(r, label, rel="../"):
                 f'<td class="muted">{e(x.get("dv", ""))}</td></tr>')
     extra = ""
     for key, lab in (("total_line", "Total line on the panel"), ("panel_note", "Panel footnote"),
-                     ("dv_columns", "Daily Value columns")):
+                     ("dv_columns", "Daily Value columns"), ("capture_note", "About this transcription")):
         if label.get(key):
             extra += f'<p class="prose" style="font-size:15px"><b class="sans">{lab}.</b> {e(label[key])}</p>'
     return f"""{head}

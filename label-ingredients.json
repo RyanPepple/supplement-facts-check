@@ -1,14 +1,27 @@
 {
-  "_about": "Supplement Facts panels transcribed to text from the panel captures in captures/. One entry per scored product, keyed by the product name in pilot-scores.csv. Wording, amounts and %DV are copied as printed; symbols (TM, (R)) are kept where legible. 'dv' is the %DV column as printed, with the panel's footnote marker resolved to 'not established' where the panel says so. Transcribed 2026-11-19; a transcription error is a site error, report it through the corrections process on about.html.",
+  "_about": "Supplement Facts panels transcribed to text from the panel captures in captures/. One entry per scored product, keyed by the product name in pilot-scores.csv. Wording, amounts and %DV are copied as printed; symbols (TM, (R)) are kept where legible. 'dv' is the %DV column as printed, with the panel's footnote marker resolved to 'not established' where the panel says so. Transcribed 2026-11-19. Where the capture a score was read from is cropped, the panel was re-captured from the live listing on 2026-11-19 and the entry's capture_note says so; a transcription error is a site error, report it through the corrections process on about.html.",
   "products": {
     "BIOMA Probiotics": {
       "panel_capture": "captures/bioma-probiotics-panel-2026-09-07.png",
       "serving_size": "2 Vegan Capsules",
       "servings_per_container": "30",
       "rows": [
-        {"name": "iXOS™ Xylooligosaccharide from Corn (Zea mays L.) Cob Extract", "amount": "100 mg", "dv": "not established"},
-        {"name": "Tributyrin (as Corebiome®)", "amount": "90 mg", "dv": "not established"},
-        {"name": "Proprietary Probiotic Blend (9 Bil CFU/serving)", "amount": "29 mg", "dv": "not established", "contains": "Bifidobacterium breve, Bifidobacterium lactis, Bifidobacterium longum"}
+        {
+          "name": "iXOS™ Xylooligosaccharide from Corn (Zea mays L.) Cob Extract",
+          "amount": "100 mg",
+          "dv": "not established"
+        },
+        {
+          "name": "Tributyrin (as Corebiome®)",
+          "amount": "90 mg",
+          "dv": "not established"
+        },
+        {
+          "name": "Proprietary Probiotic Blend (9 Bil CFU/serving)",
+          "amount": "29 mg",
+          "dv": "not established",
+          "contains": "Bifidobacterium breve, Bifidobacterium lactis, Bifidobacterium longum"
+        }
       ],
       "other_ingredients": "Microcrystalline Cellulose, Delayed Release Capsule (Hypromellose), Magnesium Stearate, Silicon Dioxide."
     },
@@ -17,8 +30,18 @@
       "serving_size": "1 Capsule",
       "servings_per_container": "30",
       "rows": [
-        {"name": "Probiotic Blend", "amount": "220 mg", "dv": "not established", "contains": "Total Probiotic Activity 60 Billion CFUs. Lacticaseibacillus casei, Lactobacillus acidophilus, Lacticaseibacillus paracasei, Ligilactobacillus salivarius, Lactiplantibacillus plantarum, Bifidobacterium lactis, Bifidobacterium bifidum, Bifidobacterium longum, Bifidobacterium breve, Lactobacillus bulgaricus"},
-        {"name": "Prebiotic Blend", "amount": "150 mg", "dv": "not established", "contains": "Organic Inulin (from Jerusalem Artichoke), Organic Acacia Fiber, Organic Inulin (from Chicory)"}
+        {
+          "name": "Probiotic Blend",
+          "amount": "220 mg",
+          "dv": "not established",
+          "contains": "Total Probiotic Activity 60 Billion CFUs. Lacticaseibacillus casei, Lactobacillus acidophilus, Lacticaseibacillus paracasei, Ligilactobacillus salivarius, Lactiplantibacillus plantarum, Bifidobacterium lactis, Bifidobacterium bifidum, Bifidobacterium longum, Bifidobacterium breve, Lactobacillus bulgaricus"
+        },
+        {
+          "name": "Prebiotic Blend",
+          "amount": "150 mg",
+          "dv": "not established",
+          "contains": "Organic Inulin (from Jerusalem Artichoke), Organic Acacia Fiber, Organic Inulin (from Chicory)"
+        }
       ],
       "other_ingredients": "Vegetable capsule (hypromellose, gellan gum), rice flour, rice hull concentrate, gum arabic, and sunflower oil."
     },
@@ -27,11 +50,35 @@
       "serving_size": "2 ViaCaps®",
       "servings_per_container": "not stated on the captured panel",
       "rows": [
-        {"name": "Digestive Health Probiotic Blend", "amount": "224 mg / 38.7 Billion AFU", "dv": "not established", "contains": "B. breve SD-BR3-IT, B. longum SD-BB536-JP, L. rhamnosus HRVD113-US, L. plantarum SD-LP1-IT, L. rhamnosus SD-LR6-IT, B. lactis HRVD524-US, B. infantis SD-M63-JP, B. lactis SD-BS5-IT, L. casei HRVD300-US, B. breve HRVD521-US, B. lactis SD-150-BE, B. longum HRVD90b-US, L. rhamnosus SD-GG-BE, L. reuteri RD830-FR, L. crispatus SD-LCR01-IT, L. fermentum SD-LF8-IT"},
-        {"name": "Micronutrient Synthesis Probiotic Blend", "amount": "36 mg / 7.32 Billion AFU", "dv": "not established", "contains": "B. lactis SD-BA5-IT (identical strain, f.k.a. B. adolescentis SD-BA5-IT), L. reuteri SD-LRE2-IT"},
-        {"name": "Dermatological Health Probiotic Blend", "amount": "36 mg / 3.34 Billion AFU", "dv": "not established", "contains": "L. salivarius SD-LS1-IT, B. longum SD-CECT7347-SP, L. casei SD-CECT9104-SP, B. lactis SD-CECT8145-SP"},
-        {"name": "Cardiovascular Health Probiotic Blend", "amount": "13 mg / 4.21 Billion AFU", "dv": "not established", "contains": "L. plantarum SD-LPLDL-UK, B. lactis SD-MB2409-IT"},
-        {"name": "MAPP Microbiota-Accessible Polyphenolic Precursors®: Indian pomegranate (Punica granatum) extract (fruit) (>40% polyphenolic + phenolic bioactives)", "amount": "400 mg", "dv": "not established"}
+        {
+          "name": "Digestive Health Probiotic Blend",
+          "amount": "224 mg / 38.7 Billion AFU",
+          "dv": "not established",
+          "contains": "B. breve SD-BR3-IT, B. longum SD-BB536-JP, L. rhamnosus HRVD113-US, L. plantarum SD-LP1-IT, L. rhamnosus SD-LR6-IT, B. lactis HRVD524-US, B. infantis SD-M63-JP, B. lactis SD-BS5-IT, L. casei HRVD300-US, B. breve HRVD521-US, B. lactis SD-150-BE, B. longum HRVD90b-US, L. rhamnosus SD-GG-BE, L. reuteri RD830-FR, L. crispatus SD-LCR01-IT, L. fermentum SD-LF8-IT"
+        },
+        {
+          "name": "Micronutrient Synthesis Probiotic Blend",
+          "amount": "36 mg / 7.32 Billion AFU",
+          "dv": "not established",
+          "contains": "B. lactis SD-BA5-IT (identical strain, f.k.a. B. adolescentis SD-BA5-IT), L. reuteri SD-LRE2-IT"
+        },
+        {
+          "name": "Dermatological Health Probiotic Blend",
+          "amount": "36 mg / 3.34 Billion AFU",
+          "dv": "not established",
+          "contains": "L. salivarius SD-LS1-IT, B. longum SD-CECT7347-SP, L. casei SD-CECT9104-SP, B. lactis SD-CECT8145-SP"
+        },
+        {
+          "name": "Cardiovascular Health Probiotic Blend",
+          "amount": "13 mg / 4.21 Billion AFU",
+          "dv": "not established",
+          "contains": "L. plantarum SD-LPLDL-UK, B. lactis SD-MB2409-IT"
+        },
+        {
+          "name": "MAPP Microbiota-Accessible Polyphenolic Precursors®: Indian pomegranate (Punica granatum) extract (fruit) (>40% polyphenolic + phenolic bioactives)",
+          "amount": "400 mg",
+          "dv": "not established"
+        }
       ],
       "total_line": "Amount Per Serving: 53.6 Billion AFU",
       "other_ingredients": "Vegan Outer [Hypromellose, Sodium Copper Chlorophyllin Color] and Inner [Hypromellose, Water] Capsules, Organic Rice Fiber, Organic Rice Extract."
@@ -41,12 +88,36 @@
       "serving_size": "One (1) Capsule",
       "servings_per_container": "not stated on the captured panel",
       "rows": [
-        {"name": "Calories", "amount": "0", "dv": ""},
-        {"name": "Total Carbohydrate", "amount": "0 g", "dv": "0%"},
-        {"name": "Total Sugars", "amount": "0 g", "dv": "not established"},
-        {"name": "Incl. 0g Added Sugars", "amount": "", "dv": "0%"},
-        {"name": "Lactobacillus rhamnosus GG", "amount": "46 mg (12 billion CFUs)", "dv": "not established"},
-        {"name": "Inulin (Chicory Root Extract)", "amount": "200 mg", "dv": "not established"}
+        {
+          "name": "Calories",
+          "amount": "0",
+          "dv": ""
+        },
+        {
+          "name": "Total Carbohydrate",
+          "amount": "0 g",
+          "dv": "0%"
+        },
+        {
+          "name": "Total Sugars",
+          "amount": "0 g",
+          "dv": "not established"
+        },
+        {
+          "name": "Incl. 0g Added Sugars",
+          "amount": "",
+          "dv": "0%"
+        },
+        {
+          "name": "Lactobacillus rhamnosus GG",
+          "amount": "46 mg (12 billion CFUs)",
+          "dv": "not established"
+        },
+        {
+          "name": "Inulin (Chicory Root Extract)",
+          "amount": "200 mg",
+          "dv": "not established"
+        }
       ],
       "other_ingredients": "hydroxypropyl methylcellulose, vegetable magnesium stearate, and titanium dioxide (color)."
     },
@@ -55,7 +126,11 @@
       "serving_size": "1 Tablet",
       "servings_per_container": "not stated on the captured panel",
       "rows": [
-        {"name": "Lactobacillus acidophilus La-14 (100 million CFU)", "amount": "0.5 mg", "dv": "not established"}
+        {
+          "name": "Lactobacillus acidophilus La-14 (100 million CFU)",
+          "amount": "0.5 mg",
+          "dv": "not established"
+        }
       ],
       "other_ingredients": "Vegetable Cellulose, Vegetable Stearic Acid, Silica, Vegetable Magnesium Stearate."
     },
@@ -64,61 +139,117 @@
       "serving_size": "2 capsules",
       "servings_per_container": "50",
       "rows": [
-        {"name": "Saccharomyces boulardii CNCM I-745™", "amount": "500 mg", "dv": "not established"}
+        {
+          "name": "Saccharomyces boulardii CNCM I-745™",
+          "amount": "500 mg",
+          "dv": "not established"
+        }
       ],
       "other_ingredients": "Lactose, magnesium stearate, hydroxypropyl methylcellulose (derived from pine bark). Contains: Lactose (derived from milk)."
     },
     "Align Probiotic Pro Formula": {
-      "panel_capture": "captures/align-pro-formula-panel-2026-09-27.png",
+      "panel_capture": "captures/align-pro-formula-panel-2026-11-19.png",
       "serving_size": "1 Capsule",
       "servings_per_container": "63",
       "rows": [
-        {"name": "Bifidobacterium longum subsp. longum 35624™", "amount": "10 mg", "dv": "footnote (††) cut off in the capture"}
+        {
+          "name": "Bifidobacterium longum subsp. longum 35624™",
+          "amount": "10 mg",
+          "dv": "not established"
+        }
       ],
       "panel_note": "Contains one billion (1 x 10^9 CFU) probiotic cells when manufactured, and provides 1 x 10^7 probiotic cells until the \"best by\" date.",
-      "other_ingredients": "not shown in the captured image"
+      "other_ingredients": "Microcrystalline cellulose, hydroxypropyl methylcellulose; Less than 2% of: magnesium stearate, caramel (color)",
+      "capture_note": "Transcribed from the full panel re-captured 2026-11-19, which matches the panel the score was read from."
     },
     "Align Probiotic Bloating Relief + Food Digestion": {
-      "panel_capture": "captures/align-bloating-relief-panel-2026-09-27.png",
+      "panel_capture": "captures/align-bloating-relief-panel-2026-11-19.png",
       "serving_size": "1 Capsule",
       "servings_per_container": "28",
       "rows": [
-        {"name": "Vitamin B12 (as cyanocobalamin)", "amount": "2.4 mcg", "dv": "100%"},
-        {"name": "Bifidobacterium longum subsp. longum 35624™", "amount": "10 mg", "dv": "not established"},
-        {"name": "DIGEZYME® Multi-enzyme Complex", "amount": "23 mg", "dv": "not established", "contains": "Alpha-amylase, neutral protease, lactase, cellulase, lipase"}
+        {
+          "name": "Vitamin B12 (as cyanocobalamin)",
+          "amount": "2.4 mcg",
+          "dv": "100%"
+        },
+        {
+          "name": "Bifidobacterium longum subsp. longum 35624™",
+          "amount": "10 mg",
+          "dv": "not established"
+        },
+        {
+          "name": "DIGEZYME® Multi-enzyme Complex",
+          "amount": "23 mg",
+          "dv": "not established",
+          "contains": "Alpha-amylase, neutral protease, lactase, cellulase, lipase"
+        }
       ],
       "panel_note": "Contains one billion (1 x 10^9 CFU) probiotic cells when manufactured, and provides 1 x 10^7 probiotic cells until the \"best by\" date.",
-      "other_ingredients": "Start of the list cut off in the capture; visible part reads: \"...hydroxypropyl methylcellulose, maltodextrin; Less than 2% of: magnesium stearate, silicon dioxide\""
+      "other_ingredients": "Microcrystalline cellulose, hydroxypropyl methylcellulose, maltodextrin; Less than 2% of: magnesium stearate, silicon dioxide",
+      "capture_note": "Transcribed from the full panel re-captured 2026-11-19, which matches the panel the score was read from."
     },
     "Garden of Life Dr Formulated Probiotics for Men": {
-      "panel_capture": "captures/garden-of-life-men-panel-2026-09-27.png",
-      "serving_size": "1 Capsule (top line partly cropped in the capture)",
+      "panel_capture": "captures/garden-of-life-men-panel-2026-11-19.png",
+      "serving_size": "1 Capsule",
       "servings_per_container": "30",
       "rows": [
-        {"name": "Men's Daily Probiotic Blend", "amount": "218 mg", "dv": "footnote (+) cut off in the capture", "contains": "Lactobacillus acidophilus, Lactobacillus casei, Lactobacillus gasseri, Lactobacillus plantarum, Lactobacillus paracasei, Lactobacillus brevis, Lactobacillus bulgaricus, Lactobacillus rhamnosus, Lactobacillus salivarius, Lactobacillus fermentum (Total Lacto Cultures 35 Billion CFU); Bifidobacterium lactis, Bifidobacterium bifidum, Bifidobacterium breve, Bifidobacterium infantis, Bifidobacterium longum (Total Bifido Cultures 15 Billion CFU)"}
+        {
+          "name": "Men's Daily Probiotic Blend",
+          "amount": "218 mg",
+          "dv": "not established",
+          "contains": "Lactobacillus acidophilus, Lactobacillus casei, Lactobacillus gasseri, Lactobacillus plantarum, Lactobacillus paracasei, Lactobacillus brevis, Lactobacillus bulgaricus, Lactobacillus rhamnosus, Lactobacillus salivarius, Lactobacillus fermentum (Total Lacto Cultures 35 Billion CFU); Bifidobacterium lactis, Bifidobacterium bifidum, Bifidobacterium breve, Bifidobacterium infantis, Bifidobacterium longum (Total Bifido Cultures 15 Billion CFU)"
+        },
+        {
+          "name": "Organic Prebiotic Fiber Blend",
+          "amount": "365 mg",
+          "dv": "not established",
+          "contains": "Organic Potato [Resistant Starch] (tuber), Organic Acacia Fiber (A. senegal)"
+        }
       ],
-      "total_line": "Total Probiotic Cultures 50 Billion CFU (footnote cut off in the capture)",
-      "other_ingredients": "not shown in the captured image"
+      "total_line": "Total Probiotic Cultures 50 Billion CFU (superscript 1; its definition is not printed in this panel image)",
+      "other_ingredients": "not shown in the captured image",
+      "capture_note": "Transcribed from the full panel re-captured 2026-11-19. Its Organic Prebiotic Fiber Blend row matches the scoring notes; the earlier capture was cropped above it."
     },
     "Doctor's Recipes Women's Probiotic": {
-      "panel_capture": "captures/doctors-recipes-womens-panel-2026-09-27.png",
+      "panel_capture": "captures/doctors-recipes-womens-panel-2026-11-19.png",
       "serving_size": "2 Veggie Capsules",
       "servings_per_container": "30",
       "rows": [
-        {"name": "Probiotic Blend", "amount": "50 Billion CFUs", "dv": "not established", "contains": "Lactobacillus rhamnosus, Lactobacillus reuteri, Lactobacillus acidophilus, Lactobacillus plantarum, Lactobacillus crispatus, Lactobacillus fermentum, Lactobacillus gasseri, Lactobacillus paracasei, Lactobacillus helveticus, Lactobacillus casei, Bifidobacterium longum, Bifidobacterium bifidum, Bifidobacterium infantis, Bifidobacterium lactis, Bifidobacterium breve, Bifidobacterium adolescentis"},
-        {"name": "Prebiotic Fiber Blend", "amount": "250 mg", "dv": "not established"},
-        {"name": "Organic Cranberry Extract", "amount": "50 mg", "dv": "not established"}
+        {
+          "name": "Probiotic Blend",
+          "amount": "50 Billion CFUs",
+          "dv": "not established",
+          "contains": "Lactobacillus rhamnosus, Lactobacillus reuteri, Lactobacillus acidophilus, Lactobacillus plantarum, Lactobacillus crispatus, Lactobacillus fermentum, Lactobacillus gasseri, Lactobacillus paracasei, Lactobacillus helveticus, Lactobacillus casei, Bifidobacterium longum, Bifidobacterium bifidum, Bifidobacterium infantis, Bifidobacterium lactis, Bifidobacterium breve, Bifidobacterium adolescentis"
+        },
+        {
+          "name": "Prebiotic Fiber Blend",
+          "amount": "250 mg",
+          "dv": "not established"
+        },
+        {
+          "name": "Organic Cranberry Extract",
+          "amount": "50 mg",
+          "dv": "not established"
+        }
       ],
-      "panel_note": "The capture ends below the Organic Cranberry Extract row; any rows or footnotes after it are not visible.",
-      "other_ingredients": "not shown in the captured image"
+      "other_ingredients": "veggie capsule (plant cellulose).",
+      "capture_note": "Transcribed from the full panel re-captured 2026-11-19, which matches the panel the score was read from."
     },
     "NOW Supplements Probiotic-10": {
-      "panel_capture": "captures/now-probiotic-10-panel-2026-09-27.png",
+      "panel_capture": "captures/now-probiotic-10-panel-2026-11-19.png",
       "serving_size": "1 Veg Capsule",
-      "servings_per_container": "not shown in the captured image",
-      "rows": [],
-      "transcription_gap": "The committed panel capture is cropped below the Serving Size line, so the ingredient rows cannot be read from it. Not transcribed; a full panel re-capture is pending.",
-      "other_ingredients": "not shown in the captured image"
+      "servings_per_container": "not stated on the panel",
+      "rows": [
+        {
+          "name": "Blend of 10 Strains of Probiotic Bacteria (25 Billion CFU)",
+          "amount": "160 mg",
+          "dv": "not established",
+          "contains": "Lactobacillus acidophilus (La-14), Bifidobacterium lactis (Bl-04), Lactobacillus plantarum (Lp-115), Lactobacillus casei (Lc-11), Lactobacillus rhamnosus (Lr-32), Lactobacillus paracasei (Lpc-37), Bifidobacterium breve (Bb-18), Streptococcus thermophilus (St-21), Lactobacillus salivarius (Ls-33), Bifidobacterium longum (Bl-05)"
+        }
+      ],
+      "panel_note": "This product is formulated to deliver a potency of 25 billion CFU through the Best By date.",
+      "other_ingredients": "Microcrystalline Cellulose, Hypromellose (cellulose capsule), FOS (Fructooligosaccharides), Ascorbyl Palmitate and Silicon Dioxide.",
+      "capture_note": "Transcribed from the full panel re-captured 2026-11-19; the panel capture the score was read from (2026-09-27) is cropped below Serving Size. The re-capture matches the scoring notes: 160 mg blend, 25 billion CFU, the same ten strain designations, no servings-per-container line."
     },
     "Culturelle Daily Chewable Probiotics for Kids": {
       "panel_capture": "captures/culturelle-kids-chewable-panel-2026-09-27.png",
@@ -126,12 +257,36 @@
       "servings_per_container": "not stated on the captured panel",
       "dv_columns": "The panel prints two %DV columns, for 3 years of age and for 4+ years of age; both are shown here as 3 yrs / 4+ yrs.",
       "rows": [
-        {"name": "Calories", "amount": "0", "dv": ""},
-        {"name": "Total Carbohydrate", "amount": "<1 g", "dv": "<1% / <1%"},
-        {"name": "Total Sugars", "amount": "0 g", "dv": "not established"},
-        {"name": "Incl 0g Added Sugars", "amount": "", "dv": "0% / 0%"},
-        {"name": "Sugar Alcohol", "amount": "<0.5 g", "dv": "not established"},
-        {"name": "Lactobacillus rhamnosus GG", "amount": "26 mg (5 billion CFUs)", "dv": "not established"}
+        {
+          "name": "Calories",
+          "amount": "0",
+          "dv": ""
+        },
+        {
+          "name": "Total Carbohydrate",
+          "amount": "<1 g",
+          "dv": "<1% / <1%"
+        },
+        {
+          "name": "Total Sugars",
+          "amount": "0 g",
+          "dv": "not established"
+        },
+        {
+          "name": "Incl 0g Added Sugars",
+          "amount": "",
+          "dv": "0% / 0%"
+        },
+        {
+          "name": "Sugar Alcohol",
+          "amount": "<0.5 g",
+          "dv": "not established"
+        },
+        {
+          "name": "Lactobacillus rhamnosus GG",
+          "amount": "26 mg (5 billion CFUs)",
+          "dv": "not established"
+        }
       ],
       "other_ingredients": "xylitol, microcrystalline cellulose, natural flavors, stearic acid, beet juice (color), citric acid, malic acid, magnesium stearate."
     },
@@ -140,39 +295,100 @@
       "serving_size": "2 Gummies",
       "servings_per_container": "30",
       "rows": [
-        {"name": "Calories", "amount": "15", "dv": ""},
-        {"name": "Total Carbohydrate", "amount": "4 g", "dv": "1%"},
-        {"name": "Total Sugars", "amount": "3 g", "dv": "not established"},
-        {"name": "Includes 3 g Added Sugars", "amount": "", "dv": "6%"},
-        {"name": "Xylooligosaccharides (XOS)", "amount": "80 mg", "dv": "not established"},
-        {"name": "Digestive Probiotic Blend", "amount": "44 mg", "dv": "not established", "contains": "Bacillus coagulans (MTCC 5856 LactoSpore®), Bacillus subtilis (DE111®)"}
+        {
+          "name": "Calories",
+          "amount": "15",
+          "dv": ""
+        },
+        {
+          "name": "Total Carbohydrate",
+          "amount": "4 g",
+          "dv": "1%"
+        },
+        {
+          "name": "Total Sugars",
+          "amount": "3 g",
+          "dv": "not established"
+        },
+        {
+          "name": "Includes 3 g Added Sugars",
+          "amount": "",
+          "dv": "6%"
+        },
+        {
+          "name": "Xylooligosaccharides (XOS)",
+          "amount": "80 mg",
+          "dv": "not established"
+        },
+        {
+          "name": "Digestive Probiotic Blend",
+          "amount": "44 mg",
+          "dv": "not established",
+          "contains": "Bacillus coagulans (MTCC 5856 LactoSpore®), Bacillus subtilis (DE111®)"
+        }
       ],
       "other_ingredients": "Tapioca Syrup, Organic Cane Sugar, Water, Pectin, Citric Acid, Natural Flavors, Fruit Juice (Color), Sodium Citrate, Coconut Oil, Carnauba Wax."
     },
     "MaryRuth Organics Kids Probiotics": {
-      "panel_capture": "captures/maryruth-kids-panel-2026-09-27.png",
-      "serving_size": "cropped above the visible area of the capture",
+      "panel_capture": "captures/maryruth-kids-panel-2026-11-19.png",
+      "serving_size": "1 Gummy",
       "servings_per_container": "60",
       "dv_columns": "%DV is printed for ages 4-13 years.",
       "rows": [
-        {"name": "Calories", "amount": "10", "dv": ""},
-        {"name": "Total Carbohydrate", "amount": "3 g", "dv": "1%"},
-        {"name": "Total Sugars", "amount": "2 g", "dv": "not established"},
-        {"name": "Includes 2g Added Sugars", "amount": "", "dv": "4%"},
-        {"name": "Sodium", "amount": "5 mg", "dv": "<1%"},
-        {"name": "Bacillus subtilis (DE111®)", "amount": "8.33 mg (2.5 Billion CFU)", "dv": "not established"}
+        {
+          "name": "Calories",
+          "amount": "10",
+          "dv": ""
+        },
+        {
+          "name": "Total Carbohydrate",
+          "amount": "3 g",
+          "dv": "1%"
+        },
+        {
+          "name": "Total Sugars",
+          "amount": "2 g",
+          "dv": "not established"
+        },
+        {
+          "name": "Includes 2g Added Sugars",
+          "amount": "",
+          "dv": "4%"
+        },
+        {
+          "name": "Sodium",
+          "amount": "5 mg",
+          "dv": "<1%"
+        },
+        {
+          "name": "Bacillus subtilis (DE111®)",
+          "amount": "8.33 mg (2.5 Billion CFU)",
+          "dv": "not established"
+        }
       ],
-      "other_ingredients": "Organic Tapioca Syrup, Organic Cane Sugar, Purified Water, Pectin; less than 2% of: Organic Natural Flavors, Citric Acid, Sodium Citrate, and Organic Vegetable Juice Color."
+      "other_ingredients": "Organic Tapioca Syrup, Organic Cane Sugar, Purified Water, Pectin; less than 2% of: Organic Natural Flavors, Citric Acid, Sodium Citrate, and Organic Vegetable Juice Color.",
+      "capture_note": "Transcribed from the full panel re-captured 2026-11-19, which matches the panel the score was read from."
     },
     "NewRhythm Probiotics 50 Billion CFU": {
-      "panel_capture": "captures/newrhythm-50-billion-panel-2026-09-27.png",
+      "panel_capture": "captures/newrhythm-50-billion-panel-2026-11-19.png",
       "serving_size": "2 Veggie Capsules",
       "servings_per_container": "30",
       "rows": [
-        {"name": "Probiotic Blend", "amount": "50 Billion CFU (** footnote cut off in the capture)", "dv": "not established", "contains": "L. acidophilus, L. rhamnosus, L. crispatus, L. plantarum, L. paracasei, L. bulgaricus, L. reuteri, L. casei, L. salivarius, L. helveticus, L. gasseri, B. lactis, Pediococcus pentosaceus, B. breve, B. adolescentis, B. infantis, B. longum, Lactococcus lactis, Pediococcus acidilactici, Streptococcus thermophilus"},
-        {"name": "Premium Prebiotic Fiber Blend", "amount": "150 mg", "dv": "not established"}
+        {
+          "name": "Probiotic Blend",
+          "amount": "50 Billion CFU",
+          "dv": "not established",
+          "contains": "L. acidophilus, L. rhamnosus, L. crispatus, L. plantarum, L. paracasei, L. bulgaricus, L. reuteri, L. casei, L. salivarius, L. helveticus, L. gasseri, B. lactis, Pediococcus pentosaceus, B. breve, B. adolescentis, B. infantis, B. longum, Lactococcus lactis, Pediococcus acidilactici, Streptococcus thermophilus"
+        },
+        {
+          "name": "Premium Prebiotic Fiber Blend",
+          "amount": "150 mg",
+          "dv": "not established"
+        }
       ],
-      "other_ingredients": "not shown in the captured image"
+      "other_ingredients": "Vegetable capsule.",
+      "panel_note": "** Contains a minimum of 50 billion live bacteria when manufactured, and provides viable levels until at least the \"best by\" date.",
+      "capture_note": "Transcribed from the full panel re-captured 2026-11-19, which matches the panel the score was read from."
     },
     "Digestive Advantage Probiotic Gummies": {
       "panel_capture": "captures/digestive-advantage-gummies-panel-2026-09-27.png",
@@ -180,41 +396,117 @@
       "servings_per_container": "40",
       "dv_columns": "The panel prints two %DV columns, for children 3 years of age and for adults and children 4 or more years of age; both are shown here as 3 yrs / 4+ yrs.",
       "rows": [
-        {"name": "Calories", "amount": "20", "dv": ""},
-        {"name": "Total Carbohydrate", "amount": "5 g", "dv": "3% / 2%"},
-        {"name": "Total Sugars", "amount": "3 g", "dv": "not established"},
-        {"name": "Includes 3g Added Sugars", "amount": "", "dv": "12% / 6%"},
-        {"name": "Vitamin D (as cholecalciferol)", "amount": "8 mcg", "dv": "53% / 40%"},
-        {"name": "BC30 Bacillus coagulans GBI-30, 6086 (1 Billion CFUs, ‡ footnote cut off in the capture)", "amount": "4.67 mg", "dv": "not established"}
+        {
+          "name": "Calories",
+          "amount": "20",
+          "dv": ""
+        },
+        {
+          "name": "Total Carbohydrate",
+          "amount": "5 g",
+          "dv": "3% / 2%"
+        },
+        {
+          "name": "Total Sugars",
+          "amount": "3 g",
+          "dv": "not established"
+        },
+        {
+          "name": "Includes 3g Added Sugars",
+          "amount": "",
+          "dv": "12% / 6%"
+        },
+        {
+          "name": "Vitamin D (as cholecalciferol)",
+          "amount": "8 mcg",
+          "dv": "53% / 40%"
+        },
+        {
+          "name": "BC30 Bacillus coagulans GBI-30, 6086 (1 Billion CFUs, ‡ footnote cut off in the capture)",
+          "amount": "4.67 mg",
+          "dv": "not established"
+        }
       ],
-      "other_ingredients": "not shown in the captured image"
+      "other_ingredients": "sugar, corn syrup, water, gelatin, citric acid, natural flavors, sodium citrate, pectin, lactic acid, colors from fruits and vegetables. Contains Soy. (Read from the 2026-11-19 re-capture.)",
+      "capture_note": "Rows are transcribed from the panel the score was read from (2026-09-27). The listing panel re-captured 2026-11-19 differs in two lines: Total Sugars 4 g, and Includes 4g Added Sugars at 16% / 8%. Every other row is unchanged, and the ‡ marker after the CFU count is still not defined on the panel.",
+      "later_capture": "captures/digestive-advantage-gummies-panel-2026-11-19.png"
     },
     "Phillips' Colon Health Daily Probiotic": {
-      "panel_capture": "captures/phillips-colon-health-panel-2026-09-27.png",
+      "panel_capture": "captures/phillips-colon-health-panel-2026-11-19.png",
       "serving_size": "1 Capsule",
-      "servings_per_container": "not stated on the captured panel",
+      "servings_per_container": "not stated on the panel",
       "rows": [
-        {"name": "Proprietary Blend", "amount": "3 Billion CFUs", "dv": "not established", "contains": "Lactobacillus rhamnosus (LGG®), Bifidobacterium animalis subsp. lactis (BB-12®)"}
+        {
+          "name": "Proprietary Blend",
+          "amount": "3 Billion CFUs",
+          "dv": "not established",
+          "contains": "Lactobacillus rhamnosus (LGG®), Bifidobacterium animalis subsp. lactis (BB-12®)"
+        }
       ],
-      "other_ingredients": "not shown in the captured image"
+      "other_ingredients": "Maltodextrin, Hydroxypropyl Methylcellulose, Microcrystalline Cellulose, Sucrose; Less than 2% of: Magnesium Stearate, Sodium Ascorbate.",
+      "capture_note": "Transcribed from the full panel re-captured 2026-11-19, which matches the panel the score was read from."
     },
     "Garden of Life Dr. Formulated Kids+ Probiotics": {
-      "panel_capture": "captures/garden-of-life-kids-panel-2026-09-27.png",
+      "panel_capture": "captures/garden-of-life-kids-panel-2026-11-19.png",
       "serving_size": "1 Chewable",
       "servings_per_container": "30",
       "rows": [
-        {"name": "Calories", "amount": "5", "dv": ""},
-        {"name": "Total Fat", "amount": "0 g", "dv": "0%"},
-        {"name": "Sodium", "amount": "0 mg", "dv": "0%"},
-        {"name": "Total Carbohydrate", "amount": "1 g", "dv": "0%"},
-        {"name": "Total Sugars", "amount": "less than 1 g", "dv": ""},
-        {"name": "Includes 0g Added Sugars", "amount": "", "dv": "0%"},
-        {"name": "Vitamin C (* footnote cut off in the capture)", "amount": "30 mg", "dv": "33%"},
-        {"name": "Vitamin D (as D3) (** footnote cut off in the capture)", "amount": "10 mcg (400 IU)", "dv": "50%"},
-        {"name": "Kids Probiotic Blend", "amount": "71 mg", "dv": "footnote (+) cut off in the capture", "contains": "Lactobacillus acidophilus, Lactobacillus gasseri, Lactobacillus paracasei, Lactobacillus plantarum, Lactobacillus casei, Lactobacillus brevis, Lactobacillus rhamnosus, Lactobacillus salivarius, Lactobacillus bulgaricus (Total Lacto Cultures 4 Billion CFU); Bifidobacterium lactis, Bifidobacterium breve, Bifidobacterium infantis, Bifidobacterium bifidum, Bifidobacterium longum (Total Bifido Cultures 1 Billion CFU)"}
+        {
+          "name": "Calories",
+          "amount": "5",
+          "dv": ""
+        },
+        {
+          "name": "Total Fat",
+          "amount": "0 g",
+          "dv": "0%"
+        },
+        {
+          "name": "Sodium",
+          "amount": "0 mg",
+          "dv": "0%"
+        },
+        {
+          "name": "Total Carbohydrate",
+          "amount": "1 g",
+          "dv": "0%"
+        },
+        {
+          "name": "Total Sugars",
+          "amount": "less than 1 g",
+          "dv": ""
+        },
+        {
+          "name": "Includes 0g Added Sugars",
+          "amount": "",
+          "dv": "0%"
+        },
+        {
+          "name": "Vitamin C (from Organic Emblic (Amla, Phyllanthus emblica) (fruit) Extract)",
+          "amount": "30 mg",
+          "dv": "33%"
+        },
+        {
+          "name": "Vitamin D (as D3) (RAW Food-Created Nutrients™)",
+          "amount": "10 mcg (400 IU)",
+          "dv": "50%"
+        },
+        {
+          "name": "Kids Probiotic Blend",
+          "amount": "71 mg",
+          "dv": "not established",
+          "contains": "Lactobacillus acidophilus, Lactobacillus gasseri, Lactobacillus paracasei, Lactobacillus plantarum, Lactobacillus casei, Lactobacillus brevis, Lactobacillus rhamnosus, Lactobacillus salivarius, Lactobacillus bulgaricus (Total Lacto Cultures 4 Billion CFU); Bifidobacterium lactis, Bifidobacterium breve, Bifidobacterium infantis, Bifidobacterium bifidum, Bifidobacterium longum (Total Bifido Cultures 1 Billion CFU)"
+        },
+        {
+          "name": "Organic Prebiotic Fiber Blend",
+          "amount": "310 mg",
+          "dv": "not established",
+          "contains": "Organic Acacia Fiber (A. senegal), Organic Whole Cranberry (Vaccinium macrocarpon) (fruit), Organic Emblic (Amla, Phyllanthus emblica) (fruit) Extract"
+        }
       ],
-      "total_line": "Total Probiotic Cultures 5 Billion CFU (footnote cut off in the capture)",
-      "other_ingredients": "not shown in the captured image"
+      "total_line": "Total Probiotic Cultures 5 Billion CFU. Footnote 1: At Expiration Date under recommended storage conditions.",
+      "other_ingredients": "Clean Tablet Technology™ Blend (Organic Dextrose, Organic Tapioca Maltodextrin, Organic Sunflower Lecithin, Organic Palm Oil, Organic Guar Gum), Organic Mixed Berry Flavor, Organic Dark Cherry Flavor.",
+      "capture_note": "Transcribed from the full panel re-captured 2026-11-19. Its Organic Prebiotic Fiber Blend row matches the scoring notes; the earlier capture was cropped above it."
     }
   }
 }
