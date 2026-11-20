@@ -1,6 +1,6 @@
 # Supplement Facts Check
 
-> An open-data audit of dose disclosure on gut-health supplement labels. Six binary criteria, 0-6 scale. Methodology v1.16, locked 2026-11-19. Sample: the top 30 of Amazon's Best Sellers in Probiotic Nutritional Supplements captured 09/26/2026; 18 pass the inclusion test, 12 are excluded as not gut-health-first, 0 undecided. All 18 eligible products are scored. Authored by Ryan Pepple, who owns a competing brand (CalmGut, operating as SHUVEN); author-owned products are scored separately and never ranked.
+> An open-data audit of dose disclosure on gut-health supplement labels. Six binary criteria, 0-6 scale. Methodology v1.17, locked 2026-11-19. Sample: the top 30 of Amazon's Best Sellers in Probiotic Nutritional Supplements captured 09/26/2026; 18 pass the inclusion test, 12 are excluded as not gut-health-first, 0 undecided. All 18 eligible products are scored. Authored by Ryan Pepple, who owns a competing brand (CalmGut, operating as SHUVEN); author-owned products are scored separately and never ranked.
 
 ## Pilot scores
 
@@ -60,6 +60,33 @@ Head-to-head pages, each comparing two scored labels on the same six criteria. A
 - 12 of 18 name every chemical form or probiotic strain (criterion 3): https://supplementfactscheck.org/findings/chemical-form-or-strain-named.html
 - 12 of 18 state both serving size and servings per container (criterion 6): https://supplementfactscheck.org/findings/per-serving-amounts-complete.html
 - 14 of 18 leave out no standardization percentage that potency depends on (criterion 2): https://supplementfactscheck.org/findings/standardization-percentage-stated.html
+
+## Fiber supplements (separate sample)
+
+Top 30 of Amazon Best Sellers in Fiber Supplements captured 11/19/2026; 23 formulas scored, reported separately from the probiotic sample: https://supplementfactscheck.org/fiber/
+- Metamucil Fiber Gummies, No Sugar Added Orange (Metamucil): 3/6, label captured 2026-11-19
+- Metamucil 4-in-1 Psyllium Fiber, Sugar-Free Orange (Metamucil): 5/6, label captured 2026-11-19
+- Amazon Basics Fiber 4g Gummy (Amazon Basics): 4/6, label captured 2026-11-19
+- MiraFIBER Vegan Formula Gummies (MiraFIBER): 4/6, label captured 2026-11-19
+- vitafusion FiberWell Sugar Free Fiber Gummies (vitafusion): 4/6, label captured 2026-11-19
+- Physician's CHOICE Fiber Gummies (GLP-1 Support) (Physician's Choice): 4/6, label captured 2026-11-19
+- Benefiber Prebiotic Fiber Powder, Unflavored (Benefiber): 4/6, label captured 2026-11-19
+- Benefiber Daily Prebiotic Fiber Gummies (Benefiber): 3/6, label captured 2026-11-19
+- Metamucil Fiber Gummies with Probiotics (Metamucil): 3/6, label captured 2026-11-19
+- OLLY Fiber Gummy Rings (OLLY): 5/6, label captured 2026-11-19
+- Metamucil 4-in-1 Psyllium Fiber, Real Sugar Orange (Metamucil): 4/6, label captured 2026-11-19
+- Metamucil Clear Fiber Blend, Unflavored (Metamucil): 3/6, label captured 2026-11-19
+- Metamucil Psyllium Husk Fiber Capsules, 300 ct (Metamucil): 3/6, label captured 2026-11-19
+- Pure for Men Stay Ready Fiber Supplement (Pure for Men): 2/6, label captured 2026-11-19
+- BelliWelli Daily Fiber + Probiotics (BelliWelli): 3/6, label captured 2026-11-19
+- L'il Critters Kids Fiber Gummies (L'il Critters): 4/6, label captured 2026-11-19
+- Kirkland Signature Fiber Capsules (psyllium) (Kirkland Signature): 4/6, label captured 2026-11-19
+- Konsyl Daily Psyllium Fiber Powder (Konsyl): 5/6, label captured 2026-11-19
+- Benefiber Chewable Prebiotic Fiber Tablets (Benefiber): 3/6, label captured 2026-11-19
+- Thorne FiberMend (Thorne): 4/6, label captured 2026-11-19
+- GOBIOTIX Prebiotic Fiber Boost (GOBIOTIX): 5/6, label captured 2026-11-19
+- Tomorrow's Nutrition Sunfiber (Tomorrow's Nutrition): 4/6, label captured 2026-11-19
+- Vitamatic Extra Strength Prebiotic 7g Fiber Gummies (Vitamatic): 4/6, label captured 2026-11-19
 
 ## Known limitations
 
