@@ -145,7 +145,7 @@
           "dv": "not established"
         }
       ],
-      "other_ingredients": "Lactose, magnesium stearate, hydroxypropyl methylcellulose (derived from pine bark). Contains: Lactose (derived from milk)."
+      "other_ingredients": "Lactose, magnesium stearate, hydroxypropyl methylcellulose (derived from pine bark). Contains: Lactose (derived from milk). Not a significant source of added sugars. Appropriate for lactose intolerance*"
     },
     "Align Probiotic Pro Formula": {
       "panel_capture": "captures/align-pro-formula-panel-2026-11-19.png",
@@ -422,13 +422,13 @@
           "dv": "53% / 40%"
         },
         {
-          "name": "BC30 Bacillus coagulans GBI-30, 6086 (1 Billion CFUs, ‡ footnote cut off in the capture)",
+          "name": "BC30 Bacillus coagulans GBI-30, 6086 (1 Billion CFUs‡; the ‡ marker is not defined anywhere on the panel)",
           "amount": "4.67 mg",
           "dv": "not established"
         }
       ],
       "other_ingredients": "sugar, corn syrup, water, gelatin, citric acid, natural flavors, sodium citrate, pectin, lactic acid, colors from fruits and vegetables. Contains Soy. (Read from the 2026-11-19 re-capture.)",
-      "capture_note": "Rows are transcribed from the panel the score was read from (2026-09-27). The listing panel re-captured 2026-11-19 differs in two lines: Total Sugars 4 g, and Includes 4g Added Sugars at 16% / 8%. Every other row is unchanged, and the ‡ marker after the CFU count is still not defined on the panel.",
+      "capture_note": "Rows are transcribed from the panel the score was read from (2026-09-27). The listing panel re-captured 2026-11-19 differs in two lines: Total Sugars 4 g, and Includes 4g Added Sugars at 16% / 8%. Every other row is unchanged, and the ‡ marker after the CFU count is not defined on either capture: the 2026-11-19 capture shows the full footnote block (*, **, †) with no ‡ entry.",
       "later_capture": "captures/digestive-advantage-gummies-panel-2026-11-19.png"
     },
     "Phillips' Colon Health Daily Probiotic": {
@@ -558,8 +558,8 @@
       "other_ingredients": "Delayed Release Vegetable Cellulose Capsule, Vegetable Oil Powder, Silica."
     },
     "Ritual Synbiotic+": {
-      "panel_capture": "captures/ritual-synbiotic-plus-panel-2026-10-26.png",
-      "serving_size": "cropped above the visible area of the capture (the scoring notes record one vegan capsule)",
+      "panel_capture": "captures/ritual-synbiotic-plus-panel-2026-11-19.png",
+      "serving_size": "One (1) vegan capsule",
       "servings_per_container": "30",
       "rows": [
         {
@@ -585,7 +585,8 @@
           "dv": "not established"
         }
       ],
-      "other_ingredients": "Stomach acid-resistant outer vegan capsule (hypromellose, gellan gum), medium chain triglycerides (from coconut), inner vegan capsule (hypromellose), silica, cellulose."
+      "other_ingredients": "Stomach acid-resistant outer vegan capsule (hypromellose, gellan gum), medium chain triglycerides (from coconut), inner vegan capsule (hypromellose), silica, cellulose.",
+      "capture_note": "Transcribed from the live panel re-captured 2026-11-19, which matches the 2026-10-26 capture this row was scored from and shows the serving size line that capture had cropped."
     }
   }
 }

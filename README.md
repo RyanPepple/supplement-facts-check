@@ -26,7 +26,7 @@ can reproduce, check, or dispute the results.
 
 ---
 
-## Methodology v1.11
+## Methodology v1.14
 
 ### Scoring rubric
 
@@ -192,15 +192,19 @@ trials use would mark a product down for a problem it does not have.
 Rank 9, Florastor, forced this. Its panel declares *Saccharomyces boulardii*
 CNCM I-745 at 500 mg per serving, not in CFU. A search of the literature found that
 independent adult randomised trials of this strain also dose in milligrams, across a
-range of 500 to 1000 mg per day: 250 mg twice daily (Seddik 2019, PMID 30694338),
-500 mg twice daily (Sjomina 2023, PMID 37942999) and 600 mg daily (Salazar-Parra
-2023, PMID 37400812). Both halves of the mismatch fail for this label, the disclosed
+range of 500 to 600 mg per day: 250 mg twice daily (Seddik 2019, PMID 30694338) and
+600 mg daily (Salazar-Parra 2023, PMID 37400812). *Corrected 2026-11-19:* this
+paragraph first gave the range as 500 to 1000 mg, counting 500 mg twice daily from
+Sjomina 2023 (PMID 37942999). That trial concluded the probiotic did not increase
+eradication, and its positive subgroup results lost significance after Type I error
+adjustment, so under the positive-outcome rule it does not set the range. Florastor's
+500 mg is inside either range and its score is unchanged. Both halves of the mismatch fail for this label, the disclosed
 dose can be checked, and it falls inside the range. The product scores 1.
 
 One trial was set aside under the independence rule rather than counted: Maev 2025
 (PMID 40884341) dosed 500 mg twice daily but administered Enterol, a Biocodex product,
 and Biocodex is the manufacturer of Florastor. It is recorded in the reference table
-and does not set the range. The three trials above carry only academic and hospital
+and does not set the range. The trials above carry only academic and hospital
 affiliations; their funding statements were not verifiable from the abstracts and are
 recorded as unverified rather than asserted to be independent.
 
@@ -465,6 +469,7 @@ Mitigations:
 | `sample.csv` | The captured Amazon ranking in rank order, with the first-listed claim, include/exclude decision, and reason for each exclusion |
 | `clinical-doses.csv` | Reference table: ingredient, form, trial dose range, unit, outcome measured, PubMed ID |
 | `pilot-scores.csv` | Pilot scoring worksheet: one row per ranked product, scored per criterion |
+| `label-ingredients.json` | Every scored product's Supplement Facts panel typed out as text, with the capture it was read from and any line the capture cuts off |
 | `captures/` | Label captures backing every scored row: Supplement Facts panel and product listing per product |
 | `offsample-scores.csv` | Same rubric, same columns, for products scored from outside the captured ranking — kept out of the ranked file so no ranking, mean or count can include them by accident |
 | `appendix-scores.csv` | Same rubric, same columns, for products in which the author has a commercial interest — kept out of the ranked file so they cannot be aggregated into it by accident |
@@ -498,6 +503,7 @@ https://github.com/RyanPepple/supplement-facts-check
 
 ## Revision history
 
+- **Correction, 2026-11-19.** No score changes. Sjomina 2023 removed from the *S. boulardii* range (fails the positive-outcome rule); range now 500 to 600 mg/day. Puhlmann 2025 inulin range flagged as manufacturer-co-authored. Ten cropped panel captures and Ritual's re-captured in full. Methodology heading brought in line with the stated version.
 - **v1.14 — 2026-10-26.** Ruling on products scored from outside the captured sample:
   scored under the identical rubric, kept in `offsample-scores.csv`, never ranked or
   averaged. Ritual Synbiotic+ added on that basis. Scoring rubric unchanged from v1.7.

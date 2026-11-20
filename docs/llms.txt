@@ -54,16 +54,16 @@ Head-to-head pages, each comparing two scored labels on the same six criteria. A
 
 ## Headline findings
 
-- None of 18 publish a publicly accessible third-party certificate of analysis (criterion 5): https://supplementfactscheck.org/findings/public-third-party-certificate-of-analysis.html
+- None of 18 have a public third-party certificate of analysis that could be located (criterion 5): https://supplementfactscheck.org/findings/public-third-party-certificate-of-analysis.html
 - Just one of 18 discloses a dose inside the clinical trial range (criterion 4): https://supplementfactscheck.org/findings/dose-within-clinical-trial-range.html
 - Only 7 of 18 disclose an exact amount for every active ingredient (criterion 1): https://supplementfactscheck.org/findings/exact-doses-disclosed.html
-- 12 of 18 state the standardization percentage (criterion 2): https://supplementfactscheck.org/findings/standardization-percentage-stated.html
+- 12 of 18 leave out no standardization percentage that potency depends on (criterion 2): https://supplementfactscheck.org/findings/standardization-percentage-stated.html
 - 12 of 18 name every chemical form or probiotic strain (criterion 3): https://supplementfactscheck.org/findings/chemical-form-or-strain-named.html
 - 12 of 18 state both serving size and servings per container (criterion 6): https://supplementfactscheck.org/findings/per-serving-amounts-complete.html
 
 ## Known limitations
 
-- 14 of 37 dose-reference rows have no range set; each records why, and criterion 4 cannot be scored from them.
+- 18 of 38 dose-reference rows have no range set; each records why, and criterion 4 cannot be scored from them.
 - Criterion 5 records a certificate of analysis as not publicly accessible when a documented search failed to find one. That is a negative finding, not a claim that none exists.
 - Scores describe what a label discloses on the capture date. Nothing here was lab-tested, and no claim is made about whether a product works.
 - Source problem, L-glutamine (free-form), PMID 39397201: UNRESOLVED: the subgroup statistic is printed as WMD -0.01 with 95% CI -0.10 to -0.08 (n=5 studies), an interval that excludes its own point estimate; full text gives no way to determine the correct figures. SEPARATE INCONSISTENCY: Table 1 defines duration subgroups as ≥4 weeks / <4 weeks, but the Discussion/Conclusion instead describe the significant effect as occurring in interventions "less than 2 weeks" -- a cutoff absent from the paper's own methodology. Flag this if this row is ever used for a duration-based judgment, not just dose.
