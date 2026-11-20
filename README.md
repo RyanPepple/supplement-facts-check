@@ -443,6 +443,26 @@ rank 4 of the captured sample, is the comparison a gut-health shopper reaches
 for most often, and Ritual is the product on the other side of it; Ritual sells
 direct and so cannot appear in an Amazon category ranking at all.
 
+**Second category: fiber supplements (in progress, 2026-11-19).** The top 30
+products in Amazon Best Sellers in Fiber Supplements, captured on 11/19/2026, are
+listed in `fiber-sample.csv`; the capture is committed at
+`captures/amazon-fiber-bestsellers-top38-2026-11-19.png`. The same first-listed
+claim test applies, with regularity or digestive health as the gut-health claim.
+Fiber results are reported on their own and are never combined with the probiotic
+sample in any total, mean or ranking, because the two lists come from different
+categories and were captured on different dates.
+
+**Ruling on duplicate formulas (2026-11-19).** A best-seller list often ranks the
+same formula several times: different sizes, counts or flavors of one product.
+Each distinct formula is scored once, at the rank of its highest-placed listing.
+A later listing whose label panel matches it ingredient for ingredient and amount
+for amount is recorded in the sample file as a duplicate, with the rank of the
+listing it duplicates, and is not scored again or counted a second time in any
+total. A listing whose panel differs in any ingredient or amount (a sugar-free
+version, an added ingredient) is a separate formula and is scored on its own.
+Scoring duplicates separately would let one product's label count several times
+in a category average just because it sells in several sizes.
+
 ### Data sources
 
 Primary: the NIH Office of Dietary Supplements
