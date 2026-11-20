@@ -986,9 +986,9 @@ FINDINGS = {
     },
     "criterion_2_standardization_pct": {
         "slug": "standardization-percentage-stated",
-        "met": "state the standardization percentage wherever potency depends on one",
-        "short": "state the standardization percentage",
-        "missing": "an ingredient whose potency depends on a percentage carries no percentage",
+        "met": "leave out no standardization percentage that potency depends on, either by stating it or by containing nothing that needs one",
+        "short": "leave out no standardization percentage that potency depends on",
+        "missing": "the potency of at least one ingredient depends on a percentage or activity measure the label does not state",
     },
     "criterion_3_chemical_form_named": {
         "slug": "chemical-form-or-strain-named",
@@ -1000,12 +1000,12 @@ FINDINGS = {
         "slug": "dose-within-clinical-trial-range",
         "met": "disclose a dose inside the range human trials used for the outcome claimed",
         "short": "disclose a dose inside the clinical trial range",
-        "missing": "the disclosed dose falls outside the trial range, or no dose is disclosed to check",
+        "missing": "the disclosed dose falls outside the trial range, no delivered dose can be established from the label, or no trial range exists to check it against",
     },
     "criterion_5_coa_publicly_accessible": {
         "slug": "public-third-party-certificate-of-analysis",
-        "met": "publish a third-party certificate of analysis reachable with no email gate and no account",
-        "short": "publish a publicly accessible third-party certificate of analysis",
+        "met": "have a third-party certificate of analysis that a documented search could locate, reachable with no email gate and no account",
+        "short": "have a public third-party certificate of analysis that could be located",
         "missing": "a documented search found no publicly accessible third-party certificate",
     },
     "criterion_6_per_serving_amounts": {
@@ -1688,7 +1688,13 @@ appreciated, and each <a href="findings.html">headline finding</a> has a sentenc
                 f'<td class="n{"" if lo else " muted"}">{e(rng)}</td><td>{e(text)}{flag}</td>'
                 f'<td class="n">{link}</td></tr>')
     flagged = [(d, source_caveat(d)[1]) for d in doses if source_caveat(d)[1]]
-    with_range = sum(1 for d in doses if d["dose_low"].strip())
+    # A row can carry numbers and still set no range for a gut outcome (a stress
+    # trial, an absorption enhancer, a superseded finished-product trial); its own
+    # text says so, and the count follows the text rather than the number.
+    _no_range = ("sets no gut reference range", "no longer sets a range", "absorption enhancer",
+                 "no gut-outcome trials identified")
+    with_range = sum(1 for d in doses if d["dose_low"].strip()
+                     and not any(m in (d["outcome_measured"] + " " + d["notes"]).lower() for m in _no_range))
     body = f"""<h1>Dose reference table</h1>
 <p class="lede">Criterion 4 checks a label’s dose against the range human trials actually used for the outcome the
 product claims. This is that table: {len(doses)} rows, {with_range} with a range set. Rows without one record why,
@@ -1773,6 +1779,11 @@ q.addEventListener('input',()=>{{const s=q.value.toLowerCase();rows.forEach(r=>r
     (OUT / "llms.txt").write_text("\n".join(lines), encoding="utf-8")
     if SITE_URL:
         urls = [p.relative_to(OUT).as_posix() for p in sorted(OUT.rglob("*.html"))]
+        # Pages that aggregate other pages change whenever any of those does.
+        newest = max(LASTMOD.values()) if LASTMOD else None
+        for hub in ("index.html", "comparisons.html", "findings.html", "reference.html", "conflict-of-interest.html"):
+            if newest and (OUT / hub).exists():
+                LASTMOD[hub] = max(LASTMOD.get(hub, ""), newest)
         sm = "".join(f"<url><loc>{SITE_URL}/{'' if u == 'index.html' else u}</loc>"
                      + (f"<lastmod>{LASTMOD[u]}</lastmod>" if u in LASTMOD else "") + "</url>" for u in urls)
         (OUT / "sitemap.xml").write_text(
