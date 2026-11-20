@@ -1203,6 +1203,7 @@ own page listing every scored row as evidence.</p>
 FIBER_SCORES = "fiber-scores.csv"
 FIBER_SAMPLE = "fiber-sample.csv"
 FIBER_CAPTURE = "amazon-fiber-bestsellers-top38-2026-11-19.png"
+FIBER_LABELS = "fiber-label-ingredients.json"
 
 
 def fiber_pages(ctx, ver, locked):
@@ -1214,6 +1215,9 @@ def fiber_pages(ctx, ver, locked):
         s = sum(int(r[k]) for k, _, _ in CRITERIA)
         assert s == int(r["total_score"]), f"{r['product']}: criteria sum {s} != total {r['total_score']}"
     rank = {s["asin"]: int(s["rank"]) for s in sample}
+    flabels = json.loads((ROOT / FIBER_LABELS).read_text(encoding="utf-8"))["products"]
+    for r in rows:
+        assert r["product"] in flabels, f"{FIBER_LABELS} has no entry for {r['product']!r}"
     rows.sort(key=lambda r: rank.get(r["asin"], 999))
 
     # panel captures, downsized like the probiotic captures
@@ -1260,7 +1264,7 @@ def fiber_pages(ctx, ver, locked):
         if src in caps:
             name, w, h = caps[src]
             stem = name[:-4]
-            img_html = (f'<figure class="cap"><picture><source srcset="../../captures/fiber/{stem}.webp" type="image/webp">'
+            img_html = (f'<figure class="cap" id="evidence"><picture><source srcset="../../captures/fiber/{stem}.webp" type="image/webp">'
                         f'<img src="../../captures/fiber/{name}" width="{w}" height="{h}" loading="lazy" '
                         f'alt="Supplement Facts panel of {e(r["product"])}, captured {e(r["capture_date"])}"></picture>'
                         f'<figcaption>Supplement Facts panel as captured {e(r["capture_date"])}. '
@@ -1283,6 +1287,7 @@ def fiber_pages(ctx, ver, locked):
 product works, and nothing was lab-tested.</p>
 <div class="grid">{panel(r, link=False)}</div>
 {f'<p class="prose">{e(pre_txt)}</p>' if pre_txt else ''}
+{ingredients_section(r, flabels[r["product"]], rel="../../")}
 <h2>Why it scored this way</h2>
 {items}
 {img_html}
@@ -1315,7 +1320,7 @@ in any figure on the <a href="../index.html">probiotic results</a>.</p>
 
 <h2>What the labels show</h2>
 <div class="why"><div class="m fail">!</div><div><b>{len(in_range)} of {n} state a daily dose that lands in a
-trial-backed range.</b><p>{e(", ".join(r["product"] for r in in_range))}. Most gummies deliver 4 to 5 g of fiber a
+trial-backed range.</b><p>{e(", ".join(r["product"] for r in in_range))}. Most gummies deliver 4 to 8 g of fiber a
 day, where the inulin and polydextrose trials that found an effect used 8 to 12 g.</p></div></div>
 <div class="why"><div class="m fail">!</div><div><b>{passes[k5]} of {n} publish a certificate of analysis.</b><p>Several
 carry NSF, USP or Informed Choice certification, which the product pages note. A certification listing is not a
@@ -1325,7 +1330,7 @@ every active.</b><p>Most fiber products have one fiber, and the fiber line state
 more fibers under one total.</p></div></div>
 <p class="prose">Highest score: {top}/6. Score spread: {", ".join(f"{c} at {s}/6" for s, c in sorted(dist.items(), reverse=True))}.
 Read the <a href="../methodology.html">fiber rulings in the methodology</a> for how fiber labels are read, including
-the objection that fiber grams understate psyllium husk weight, which affects three psyllium rows flagged on their
+the objection that fiber grams understate psyllium husk weight, which decides two close calls flagged on their
 pages.</p>
 
 <h2>All {n} scored formulas, in rank order</h2>

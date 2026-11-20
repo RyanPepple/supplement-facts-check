@@ -1,0 +1,1021 @@
+{
+ "_about": "Supplement Facts panels of the scored fiber formulas, typed out from the dated captures in captures/fiber/. Gaps in a capture are stated in capture_note rather than filled in. Transcribed 2026-11-19.",
+ "products": {
+  "Metamucil Fiber Gummies, No Sugar Added Orange": {
+   "panel_capture": "captures/fiber/B0BDP24LP4-panel-2026-11-19.png",
+   "serving_size": "3 Gummies",
+   "servings_per_container": "40",
+   "rows": [
+    {
+     "name": "Calories",
+     "amount": "25",
+     "dv": ""
+    },
+    {
+     "name": "Total Carbohydrate",
+     "amount": "10 g",
+     "dv": "4%"
+    },
+    {
+     "name": "Dietary Fiber",
+     "amount": "5 g",
+     "dv": "18%"
+    },
+    {
+     "name": "Total Sugars",
+     "amount": "2 g",
+     "dv": ""
+    },
+    {
+     "name": "Includes 0 g Added Sugars",
+     "amount": "",
+     "dv": "0%"
+    },
+    {
+     "name": "Sodium",
+     "amount": "20 mg",
+     "dv": "1%"
+    }
+   ],
+   "other_ingredients": "Inulin, soluble corn fiber (Fibersol®), water, xylitol; Less than 2% of: pectin, citric acid (pH adjuster), sodium citrate, natural orange flavor, coconut oil with carnauba wax, color (annatto).",
+   "capture_note": "The left edge of the ingredient line is cut off in the capture ('ngredients', 'vater', 'pH adjuster'); the words are read from what remains."
+  },
+  "Metamucil 4-in-1 Psyllium Fiber, Sugar-Free Orange": {
+   "panel_capture": "captures/fiber/B003CT2YQY-panel-2026-11-19.png",
+   "serving_size": "2 Rounded Teaspoons (11.6 g)",
+   "servings_per_container": "About 90",
+   "rows": [
+    {
+     "name": "Calories",
+     "amount": "30",
+     "dv": ""
+    },
+    {
+     "name": "Total Carbohydrate",
+     "amount": "10 g",
+     "dv": "4%"
+    },
+    {
+     "name": "Dietary Fiber",
+     "amount": "6 g",
+     "dv": "21%"
+    },
+    {
+     "name": "Soluble Fiber",
+     "amount": "5 g",
+     "dv": "not established"
+    },
+    {
+     "name": "Iron",
+     "amount": "0.7 mg",
+     "dv": "4%"
+    },
+    {
+     "name": "Sodium",
+     "amount": "10 mg",
+     "dv": "<1%"
+    },
+    {
+     "name": "Potassium",
+     "amount": "60 mg",
+     "dv": "1%"
+    }
+   ],
+   "other_ingredients": "Psyllium husk, maltodextrin, citric acid, natural and artificial orange flavor, aspartame, Yellow 6.",
+   "dv_columns": "A second column gives 1 Rounded Teaspoon (5.8 g), about 180 servings: 15 calories, 5 g carbohydrate, 3 g dietary fiber, 2 g soluble fiber, 0.4 mg iron, 5 mg sodium, 30 mg potassium.",
+   "panel_note": "Allergy alert: This product may cause allergic reactions in people sensitive to inhaled or ingested psyllium."
+  },
+  "Amazon Basics Fiber 4g Gummy": {
+   "panel_capture": "captures/fiber/B07GPGQJR4-panel-2026-11-19.jpg",
+   "serving_size": "2 Gummies",
+   "servings_per_container": "45",
+   "rows": [
+    {
+     "name": "Calories",
+     "amount": "15",
+     "dv": ""
+    },
+    {
+     "name": "Total Carbohydrate",
+     "amount": "6 g",
+     "dv": "2%"
+    },
+    {
+     "name": "Dietary Fiber",
+     "amount": "4 g",
+     "dv": "14%"
+    },
+    {
+     "name": "Soluble Fiber",
+     "amount": "4 g",
+     "dv": "not established"
+    },
+    {
+     "name": "Total Sugars",
+     "amount": "3 g",
+     "dv": "not established"
+    },
+    {
+     "name": "Includes <1 g Added Sugars",
+     "amount": "",
+     "dv": "2%"
+    },
+    {
+     "name": "Sodium",
+     "amount": "20 mg",
+     "dv": "1%"
+    }
+   ],
+   "other_ingredients": "Chicory root fiber (inulin), cane sugar; contains <2% of: citric acid, lo han fruit concentrate, natural flavors, organic annatto extract (color), organic black carrot juice concentrate, organic carnauba wax, organic sunflower oil, organic turmeric extract, pectin, sodium citrate.",
+   "capture_note": "The first two lines of the ingredient statement are legible in the panel capture; the rest is read from the full bottle photo (captures/fiber/B07GPGQJR4-full-2026-11-19.jpg) at lower resolution and should be checked against a sharper capture."
+  },
+  "MiraFIBER Vegan Formula Gummies": {
+   "panel_capture": "captures/fiber/B0FSWWF65H-panel-2026-11-19.png",
+   "serving_size": "4 gummies",
+   "servings_per_container": "18",
+   "rows": [
+    {
+     "name": "Calories",
+     "amount": "40",
+     "dv": ""
+    },
+    {
+     "name": "Total Carbohydrate",
+     "amount": "14 g",
+     "dv": "5%"
+    },
+    {
+     "name": "Dietary Fiber",
+     "amount": "8 g",
+     "dv": "29%"
+    },
+    {
+     "name": "Soluble Fiber",
+     "amount": "8 g",
+     "dv": "not established"
+    },
+    {
+     "name": "Total Sugars",
+     "amount": "2 g",
+     "dv": "not established"
+    },
+    {
+     "name": "Includes 2g Added Sugars",
+     "amount": "",
+     "dv": "4%"
+    },
+    {
+     "name": "Niacin (as niacinamide)",
+     "amount": "40 mg",
+     "dv": "250%"
+    },
+    {
+     "name": "Vitamin B6 (as pyridoxine hydrochloride)",
+     "amount": "4 mg",
+     "dv": "235%"
+    },
+    {
+     "name": "Vitamin B12 (as cyanocobalamin)",
+     "amount": "10 mcg",
+     "dv": "417%"
+    },
+    {
+     "name": "Pantothenic Acid (as D-calcium pantothenate)",
+     "amount": "5 mg",
+     "dv": "100%"
+    },
+    {
+     "name": "Sodium",
+     "amount": "45 mg",
+     "dv": "2%"
+    },
+    {
+     "name": "Inulin (as inulin syrup and inulin powder)",
+     "amount": "8 g",
+     "dv": "not established"
+    }
+   ],
+   "other_ingredients": "Water, Pectin; Less than 2% of: Carnauba Wax, Color (Apple, Carrot, Cherry, Chokeberry, and Elderberry Juice Concentrates), Lactic Acid, Monk Fruit (Luo Han Guo) Extract, Natural Flavors, Vegetable Oil (Canola and Coconut)."
+  },
+  "vitafusion FiberWell Sugar Free Fiber Gummies": {
+   "panel_capture": "captures/fiber/B002NPCMJC-panel-2026-11-19.png",
+   "serving_size": "2 Delicious Gummies; 3 Delicious Gummies",
+   "servings_per_container": "45; 30",
+   "rows": [
+    {
+     "name": "Calories",
+     "amount": "10",
+     "dv": ""
+    },
+    {
+     "name": "Total Carbohydrate",
+     "amount": "7 g",
+     "dv": "3%"
+    },
+    {
+     "name": "Dietary Fiber",
+     "amount": "5 g",
+     "dv": "18%"
+    },
+    {
+     "name": "Sugar Alcohol",
+     "amount": "1 g",
+     "dv": "not established"
+    }
+   ],
+   "other_ingredients": "Polydextrose, water, gelatin, sorbitol; less than 2% of: blend of oils (coconut and/or palm) with beeswax and/or carnauba wax, colors (annatto extract, blueberry and carrot concentrates, purple carrot juice concentrate), natural flavors, malic acid, and sucralose.",
+   "dv_columns": "The table above is the 2-gummy column. The 3-gummy column gives 15 calories, 11 g carbohydrate (4%), 7.5 g dietary fiber (27%), 2 g sugar alcohol.",
+   "panel_note": "Directions printed above the panel: For adults, take two (2) to three (3) delicious gummies daily."
+  },
+  "Physician's CHOICE Fiber Gummies (GLP-1 Support)": {
+   "panel_capture": "captures/fiber/B0FYZ9QQ9Z-panel-physicianschoice-com-2026-11-19.png",
+   "serving_size": "2 Gummies",
+   "servings_per_container": "30",
+   "rows": [
+    {
+     "name": "Calories",
+     "amount": "15",
+     "dv": ""
+    },
+    {
+     "name": "Total Carbohydrate",
+     "amount": "6 g",
+     "dv": "2%"
+    },
+    {
+     "name": "Dietary Fiber",
+     "amount": "5 g",
+     "dv": "18%"
+    },
+    {
+     "name": "Total Sugars",
+     "amount": "<1g",
+     "dv": "not established"
+    },
+    {
+     "name": "Includes 0g Added Sugars",
+     "amount": "",
+     "dv": "0%"
+    },
+    {
+     "name": "Sodium",
+     "amount": "5 mg",
+     "dv": "<1%"
+    }
+   ],
+   "other_ingredients": "Chicory root fiber, pectin, tapioca starch, agar agar, natural flavor, citric acid, trisodium citrate, black carrot (for color), and carnauba wax.",
+   "capture_note": "Panel captured from physicianschoice.com/products/fiber-gummies-glp1; the Amazon listing shows no Supplement Facts panel. The ingredient list matches the Amazon listing's Ingredients field.",
+   "panel_note": "Suggested use: Adults chew two (2) gummies daily."
+  },
+  "Benefiber Prebiotic Fiber Powder, Unflavored": {
+   "panel_capture": "captures/fiber/B00CX3ASFE-panel-2026-11-19.png",
+   "serving_size": "2 tsp (4 g)",
+   "servings_per_container": "38",
+   "rows": [
+    {
+     "name": "Calories",
+     "amount": "15",
+     "dv": ""
+    },
+    {
+     "name": "Total Carbohydrate",
+     "amount": "4 g",
+     "dv": "1%"
+    },
+    {
+     "name": "Dietary Fiber",
+     "amount": "3 g",
+     "dv": "11%"
+    },
+    {
+     "name": "Soluble Fiber",
+     "amount": "3 g",
+     "dv": "not established"
+    },
+    {
+     "name": "Total Sugars",
+     "amount": "0 g",
+     "dv": "not established"
+    }
+   ],
+   "other_ingredients": "Wheat dextrin.",
+   "capture_note": "Not printed on the captured panel image; transcribed from the Amazon listing's Ingredients field, read 2026-11-19. The panel image shows 38 servings, which does not match a 250-teaspoon jar (125 servings of 2 tsp); the image may come from a smaller size.",
+   "dv_columns": "The table above is the 12 years and above column. Ages 6-11: 1 tsp (2 g), 76 servings, 10 calories, 2 g carbohydrate, 2 g dietary fiber."
+  },
+  "Benefiber Daily Prebiotic Fiber Gummies": {
+   "panel_capture": "captures/fiber/B0BSKSTLR6-panel-2026-11-19.png",
+   "serving_size": "3 Gummies",
+   "servings_per_container": "27",
+   "rows": [
+    {
+     "name": "Calories",
+     "amount": "25",
+     "dv": ""
+    },
+    {
+     "name": "Total Carbohydrate",
+     "amount": "9 g",
+     "dv": "3%"
+    },
+    {
+     "name": "Dietary Fiber",
+     "amount": "6 g",
+     "dv": "21%"
+    },
+    {
+     "name": "Soluble Fiber",
+     "amount": "6 g",
+     "dv": "not established"
+    },
+    {
+     "name": "Total Sugars",
+     "amount": "2 g",
+     "dv": "not established"
+    },
+    {
+     "name": "Includes 1 g Added Sugars",
+     "amount": "",
+     "dv": "2%"
+    },
+    {
+     "name": "Sodium",
+     "amount": "15 mg",
+     "dv": "<1%"
+    }
+   ],
+   "other_ingredients": "Inulin (as chicory root fiber), soluble corn fiber, sugar, water. Contains <2%: annatto seed extract (color), citric acid, fruit and vegetable juice concentrates (purple carrot, maqui berry) (color/flavor), monk fruit extract (Siraitia grosvenorii), natural flavors, pectin, sodium citrate, sunflow[er ...]",
+   "capture_note": "Not printed on the captured panel image; transcribed from the Amazon listing's Ingredients field, read 2026-11-19. The listing text was read to the word 'sunflow' and the remainder was not captured."
+  },
+  "Metamucil Fiber Gummies with Probiotics": {
+   "panel_capture": "captures/fiber/B0CQF4PBGC-panel-2026-11-19.png",
+   "serving_size": "3 Gummies",
+   "servings_per_container": "30",
+   "rows": [
+    {
+     "name": "Calories",
+     "amount": "30",
+     "dv": ""
+    },
+    {
+     "name": "Total Carbohydrate",
+     "amount": "9 g",
+     "dv": "3%"
+    },
+    {
+     "name": "Dietary Fiber",
+     "amount": "5 g",
+     "dv": "18%"
+    },
+    {
+     "name": "Total Sugars",
+     "amount": "2 g",
+     "dv": "not established"
+    },
+    {
+     "name": "Includes 0 g Added Sugars",
+     "amount": "",
+     "dv": "0%"
+    },
+    {
+     "name": "Sodium",
+     "amount": "20 mg",
+     "dv": "1%"
+    },
+    {
+     "name": "Bacillus coagulans LactoSpore®",
+     "amount": "10 mg",
+     "dv": "not established"
+    }
+   ],
+   "other_ingredients": "Inulin, water, soluble corn fiber (Fibersol®), xylitol; Less than 2% of: pectin, citric acid, sodium citrate, color (black carrot extract, watermelon extract, huito extract), natural flavors, carnauba wax, corn starch, medium chain triglyceride oil.",
+   "panel_note": "Footnote to Bacillus coagulans: Provides 1 billion (1 x 10^9 CFU) until the \"best by\" date."
+  },
+  "OLLY Fiber Gummy Rings": {
+   "panel_capture": "captures/fiber/B0BYQZZTNH-panel-2026-11-19.png",
+   "serving_size": "2 Gummies",
+   "servings_per_container": "25",
+   "rows": [
+    {
+     "name": "Calories",
+     "amount": "20",
+     "dv": ""
+    },
+    {
+     "name": "Total Carbohydrate",
+     "amount": "8 g",
+     "dv": "3%"
+    },
+    {
+     "name": "Dietary Fiber",
+     "amount": "5 g",
+     "dv": "18%"
+    },
+    {
+     "name": "Total Sugars",
+     "amount": "2 g",
+     "dv": "not established"
+    },
+    {
+     "name": "Includes 2 g Added Sugars",
+     "amount": "",
+     "dv": "4%"
+    },
+    {
+     "name": "Protein",
+     "amount": "Less than 1g",
+     "dv": ""
+    },
+    {
+     "name": "Sodium",
+     "amount": "15 mg",
+     "dv": "1%"
+    },
+    {
+     "name": "Fructooligosaccharides (FOS)",
+     "amount": "5 g",
+     "dv": "not established"
+    }
+   ],
+   "other_ingredients": "Water, Sugar, Gelatin, Pectin, Natural Flavors, Spirulina and Curcumin (Color), Vegetable Juice (Color), Citric Acid, Sodium Citrate, Tartaric Acid."
+  },
+  "Metamucil 4-in-1 Psyllium Fiber, Real Sugar Orange": {
+   "panel_capture": "captures/fiber/B0013I4WLG-panel-2026-11-19.png",
+   "serving_size": "2 Rounded Tablespoons (24 g)",
+   "servings_per_container": "About 57",
+   "rows": [
+    {
+     "name": "Calories",
+     "amount": "80",
+     "dv": ""
+    },
+    {
+     "name": "Total Carbohydrate",
+     "amount": "23 g",
+     "dv": "8%"
+    },
+    {
+     "name": "Dietary Fiber",
+     "amount": "6 g",
+     "dv": "21%"
+    },
+    {
+     "name": "Soluble Fiber",
+     "amount": "5 g",
+     "dv": "not established"
+    },
+    {
+     "name": "Total Sugars",
+     "amount": "16 g",
+     "dv": ""
+    },
+    {
+     "name": "Incl. Added Sugars",
+     "amount": "16 g",
+     "dv": "32%"
+    },
+    {
+     "name": "Iron",
+     "amount": "0.7 mg",
+     "dv": "4%"
+    },
+    {
+     "name": "Sodium",
+     "amount": "20 mg",
+     "dv": "1%"
+    },
+    {
+     "name": "Potassium",
+     "amount": "60 mg",
+     "dv": "1%"
+    }
+   ],
+   "other_ingredients": "Sucrose, psyllium husk, citric acid, natural and artificial orange flavor, Yellow 6.",
+   "dv_columns": "A second column gives 1 Rounded Tablespoon (12 g), about 114 servings: 40 calories, 12 g carbohydrate, 3 g dietary fiber, 2 g soluble fiber, 8 g total and added sugars, 0.4 mg iron, 10 mg sodium, 30 mg potassium."
+  },
+  "Metamucil Clear Fiber Blend, Unflavored": {
+   "panel_capture": "captures/fiber/B0CZSFWZMH-panel-2026-11-19.png",
+   "serving_size": "One Rounded Teaspoon (4.4 g)",
+   "servings_per_container": "About 75",
+   "rows": [
+    {
+     "name": "Calories",
+     "amount": "10",
+     "dv": ""
+    },
+    {
+     "name": "Total Carbohydrate",
+     "amount": "4 g",
+     "dv": "1%"
+    },
+    {
+     "name": "Dietary Fiber",
+     "amount": "3 g",
+     "dv": "11%"
+    },
+    {
+     "name": "Total Sugars",
+     "amount": "0 g",
+     "dv": ""
+    },
+    {
+     "name": "Includes 0 g Added Sugars",
+     "amount": "",
+     "dv": "0%"
+    }
+   ],
+   "other_ingredients": "Soluble corn fiber (Fibersol®), inulin."
+  },
+  "Metamucil Psyllium Husk Fiber Capsules, 300 ct": {
+   "panel_capture": "captures/fiber/B001TH7K0G-panel-2026-11-19.png",
+   "serving_size": "5 Capsules",
+   "servings_per_container": "Not shown on the captured panel",
+   "rows": [
+    {
+     "name": "Calories",
+     "amount": "5",
+     "dv": ""
+    },
+    {
+     "name": "Total Carb",
+     "amount": "2 g",
+     "dv": "<1%"
+    },
+    {
+     "name": "Dietary Fiber",
+     "amount": "2 g",
+     "dv": "7%"
+    },
+    {
+     "name": "Soluble Fiber",
+     "amount": "2 g",
+     "dv": "not established"
+    },
+    {
+     "name": "Protein",
+     "amount": "less than 1 g",
+     "dv": ""
+    },
+    {
+     "name": "Iron",
+     "amount": "0.4 mg",
+     "dv": "2%"
+    },
+    {
+     "name": "Potassium",
+     "amount": "25 mg",
+     "dv": "<1%"
+    }
+   ],
+   "other_ingredients": "Psyllium husk, gelatin.",
+   "capture_note": "The listing panel does not print servings per container. The 340-capsule listing (rank 21, a duplicate of this formula) prints 68."
+  },
+  "Pure for Men Stay Ready Fiber Supplement": {
+   "panel_capture": "captures/fiber/B07CYNYLPB-panel-2026-11-19.png",
+   "serving_size": "3 Vegetable Capsules",
+   "servings_per_container": "Not shown on the captured panel",
+   "rows": [
+    {
+     "name": "Proprietary Blend",
+     "amount": "2265mg",
+     "dv": "not established",
+     "contains": "Psyllium Husk Powder, Aloe Vera Leaf Extract, Black Chia Seed Powder, and Flaxseed Powder"
+    }
+   ],
+   "other_ingredients": "Chia, Flaxseed, Aloe, Psyllium Husk Plant-based.",
+   "capture_note": "Transcribed from a listing graphic headed 'Results backed by science', which reproduces the panel; the bottle panel itself was not captured at readable size.",
+   "panel_note": "Printed below the graphic: Take 3 vitamins twice daily (for adults)."
+  },
+  "BelliWelli Daily Fiber + Probiotics": {
+   "panel_capture": "captures/fiber/B0D1HF4CR4-panel-2026-11-19.png",
+   "serving_size": "1 Scoop (11.2 g)",
+   "servings_per_container": "About 16",
+   "rows": [
+    {
+     "name": "Calories",
+     "amount": "25",
+     "dv": ""
+    },
+    {
+     "name": "Total Carbohydrates",
+     "amount": "6 g",
+     "dv": "2%"
+    },
+    {
+     "name": "Dietary Fiber",
+     "amount": "4 g",
+     "dv": "14%"
+    },
+    {
+     "name": "Total Sugars",
+     "amount": "2 g",
+     "dv": "not established"
+    },
+    {
+     "name": "Includes 2g Added Sugars",
+     "amount": "",
+     "dv": "4%"
+    },
+    {
+     "name": "Protein",
+     "amount": "2 g",
+     "dv": "0%"
+    },
+    {
+     "name": "Collagen Peptides (Bovine)",
+     "amount": "2 g",
+     "dv": "not established"
+    },
+    {
+     "name": "Niacin (as Niacinamide)",
+     "amount": "7.5 mg",
+     "dv": "47%"
+    },
+    {
+     "name": "Calcium",
+     "amount": "30 mg",
+     "dv": "2%"
+    },
+    {
+     "name": "Iron",
+     "amount": "0.4 mg",
+     "dv": "2%"
+    },
+    {
+     "name": "Magnesium (as Magnesium Citrate)",
+     "amount": "75 mg",
+     "dv": "18%"
+    },
+    {
+     "name": "Sodium (as Sea Salt)",
+     "amount": "75 mg",
+     "dv": "3%"
+    },
+    {
+     "name": "Potassium (as Potassium Chloride)",
+     "amount": "100 mg",
+     "dv": "2%"
+    },
+    {
+     "name": "Bacillus coagulans, MTCC 5656",
+     "amount": "10 mg (1 billion CFU)",
+     "dv": "not established"
+    },
+    {
+     "name": "Acacia Fiber",
+     "amount": "4.0 g",
+     "dv": "not established"
+    }
+   ],
+   "other_ingredients": "organic cane sugar, natural flavors, malic acid, citric acid, silicon dioxide, stevia leaf extract, beta carotene (color), beet juice powder (color).",
+   "capture_note": "Transcribed from a listing graphic titled 'What's in every scoop', laid out as two tables ('BelliWelli Outer Beauty Blend' and 'BelliWelli Inner Beauty Blend') rather than a formatted Supplement Facts panel. The jar reads '8G FIBER IN 2 SCOOPS'."
+  },
+  "L'il Critters Kids Fiber Gummies": {
+   "panel_capture": "captures/fiber/B009VGEHFS-panel-2026-11-19.png",
+   "serving_size": "2 Gummies",
+   "servings_per_container": "45",
+   "rows": [
+    {
+     "name": "Calories",
+     "amount": "10",
+     "dv": ""
+    },
+    {
+     "name": "Total Carbohydrate",
+     "amount": "5 g",
+     "dv": "3% (2-3 yrs); 2% (4 & up)"
+    },
+    {
+     "name": "Dietary Fiber",
+     "amount": "3 g",
+     "dv": "21% (2-3 yrs); 11% (4 & up)"
+    },
+    {
+     "name": "Soluble Fiber",
+     "amount": "3 g",
+     "dv": "not established"
+    },
+    {
+     "name": "Sugar Alcohol",
+     "amount": "1g",
+     "dv": "not established"
+    }
+   ],
+   "other_ingredients": "Polydextrose, water, sorbitol, gelatin; less than 2% of: blend of oils (coconut and/or palm) with beeswax and/or carnauba wax, colors (purple carrot juice concentrate, turmeric), flavors, malic acid, and sucralose. Contains: tree nuts (coconut).",
+   "panel_note": "Suggested use: Adult to give child two (2) gummies daily. Not recommended for children under two years of age due to choking."
+  },
+  "Kirkland Signature Fiber Capsules (psyllium)": {
+   "panel_capture": "captures/fiber/B00BH3HPZW-panel-2026-11-19.png",
+   "serving_size": "5 Capsules",
+   "servings_per_container": "72",
+   "rows": [
+    {
+     "name": "Calories",
+     "amount": "5",
+     "dv": ""
+    },
+    {
+     "name": "Total Carbohydrate",
+     "amount": "2 g",
+     "dv": "<1%"
+    },
+    {
+     "name": "Dietary Fiber",
+     "amount": "2 g",
+     "dv": "7%"
+    },
+    {
+     "name": "Soluble Fiber",
+     "amount": "2 g",
+     "dv": "not established"
+    },
+    {
+     "name": "Protein",
+     "amount": "Less than 1 g",
+     "dv": ""
+    },
+    {
+     "name": "Iron",
+     "amount": "0.4 mg",
+     "dv": "2%"
+    },
+    {
+     "name": "Potassium",
+     "amount": "25 mg",
+     "dv": "<1%"
+    }
+   ],
+   "other_ingredients": "Psyllium husk, gelatin.",
+   "capture_note": "Read from an angled photo of the bottle. The %DV column is printed offset from its rows on the label and is transcribed as aligned by line. The listing's Ingredients field gives a different list (caramel color, gelatin, iron oxide, polysorbate 80, shellac); the bottle panel is used here.",
+   "panel_note": "Directions table on the bottle: digestive health by promoting regularity, 2 to 5 capsules up to 4 times daily (adults 12 years and older)."
+  },
+  "Konsyl Daily Psyllium Fiber Powder": {
+   "panel_capture": "captures/fiber/B0D1DB2D6V-panel-2026-11-19.png",
+   "serving_size": "1 teaspoon (6g)",
+   "servings_per_container": "90",
+   "rows": [
+    {
+     "name": "Calories",
+     "amount": "20",
+     "dv": ""
+    },
+    {
+     "name": "Total Carbohydrate",
+     "amount": "5g",
+     "dv": "2%"
+    },
+    {
+     "name": "Dietary Fiber",
+     "amount": "5g",
+     "dv": "18%"
+    },
+    {
+     "name": "Soluble Fiber",
+     "amount": "3g",
+     "dv": "not established"
+    },
+    {
+     "name": "Iron",
+     "amount": "1mg",
+     "dv": "6%"
+    }
+   ],
+   "other_ingredients": "Ingredient: powdered psyllium husks.",
+   "panel_note": "Directions on the bag: adults and children 12 years and over, one teaspoon 1 to 3 times daily.",
+   "capture_note": "Read from a photo of the bag back; the directions paragraph is small and is summarized, not transcribed word for word."
+  },
+  "Benefiber Chewable Prebiotic Fiber Tablets": {
+   "panel_capture": "captures/fiber/B07Q1SYTQS-panel-2026-11-19.png",
+   "serving_size": "3 Tablets",
+   "servings_per_container": "Not shown on the captured panel",
+   "rows": [
+    {
+     "name": "Calories",
+     "amount": "30",
+     "dv": ""
+    },
+    {
+     "name": "Total Carbohydrate",
+     "amount": "8 g",
+     "dv": "3%"
+    },
+    {
+     "name": "Dietary Fiber",
+     "amount": "3 g",
+     "dv": "11%"
+    },
+    {
+     "name": "Soluble Fiber",
+     "amount": "3 g",
+     "dv": "not established"
+    },
+    {
+     "name": "Total Sugars",
+     "amount": "0 g",
+     "dv": "not established"
+    }
+   ],
+   "other_ingredients": "Wheat dextrin, sorbitol, corn starch, microcrystalline cellulose, dextrates, citric acid, natural and artificial flavor (soy), magnesium stearate, silicon dioxide, sucralose, aspartame, acesulfame potassium, red 40 lake, yellow 6 lake, blue 1 lake. Phenylketonurics: contains phenylalanine.",
+   "capture_note": "Not printed on the captured panel image; transcribed from the Amazon listing's Ingredients field, read 2026-11-19.",
+   "dv_columns": "The table above is the 12 years and above column. Ages 6-11: 1 1/2 tablets, 15 calories, 4 g carbohydrate, 2 g dietary fiber."
+  },
+  "Thorne FiberMend": {
+   "panel_capture": "captures/fiber/B00BGJ7EBC-panel-2026-11-19.png",
+   "serving_size": "One Scoop (11 g)",
+   "servings_per_container": "About 30",
+   "rows": [
+    {
+     "name": "Calories",
+     "amount": "45",
+     "dv": ""
+    },
+    {
+     "name": "Total Fat",
+     "amount": "1 g",
+     "dv": "1%"
+    },
+    {
+     "name": "Total Carbohydrate",
+     "amount": "9 g",
+     "dv": "3%"
+    },
+    {
+     "name": "Dietary Fiber",
+     "amount": "7 g",
+     "dv": "25%"
+    },
+    {
+     "name": "Soluble Fiber",
+     "amount": "6 g",
+     "dv": "not established"
+    },
+    {
+     "name": "Partially Hydrolyzed Guar Gum",
+     "amount": "8 g",
+     "dv": "not established"
+    },
+    {
+     "name": "Rice Bran",
+     "amount": "2.5 g",
+     "dv": "not established"
+    },
+    {
+     "name": "Arabinogalactan (from Larch) (Larix spp.)",
+     "amount": "300 mg",
+     "dv": "not established"
+    },
+    {
+     "name": "Pectin (from Apple)",
+     "amount": "150 mg",
+     "dv": "not established"
+    },
+    {
+     "name": "Green Tea Phytosome (Camellia sinensis extract (leaf) decaffeinated / Phospholipid complex from Sunflower)",
+     "amount": "50 mg",
+     "dv": "not established"
+    }
+   ],
+   "other_ingredients": "Not shown in the captured panel graphic.",
+   "capture_note": "The listing graphic reproduces the panel without the other-ingredients line or the footnotes marked by the daggers."
+  },
+  "GOBIOTIX Prebiotic Fiber Boost": {
+   "panel_capture": "captures/fiber/B077MFYLSS-panel-2026-11-19.jpg",
+   "serving_size": "1 Servings (5.4g)",
+   "servings_per_container": "35",
+   "rows": [
+    {
+     "name": "Calories",
+     "amount": "10",
+     "dv": ""
+    },
+    {
+     "name": "Total Carbohydrate",
+     "amount": "5g",
+     "dv": "2%"
+    },
+    {
+     "name": "Dietary Fiber",
+     "amount": "5g",
+     "dv": "18%"
+    },
+    {
+     "name": "Total Sugars",
+     "amount": "0g",
+     "dv": "not established"
+    },
+    {
+     "name": "Added Sugars",
+     "amount": "0g",
+     "dv": "0%"
+    },
+    {
+     "name": "Fructooligosaccharides (FOSSENCE® P95)",
+     "amount": "5g",
+     "dv": "not established"
+    }
+   ],
+   "other_ingredients": "Silicon Dioxide."
+  },
+  "Tomorrow's Nutrition Sunfiber": {
+   "panel_capture": "captures/fiber/B08ZT51X8V-panel-2026-11-19.png",
+   "serving_size": "Approx. 1 Scoop (7 g)",
+   "servings_per_container": "90",
+   "rows": [
+    {
+     "name": "Calories",
+     "amount": "15",
+     "dv": ""
+    },
+    {
+     "name": "Total Carbohydrate",
+     "amount": "7 g",
+     "dv": "3%"
+    },
+    {
+     "name": "Dietary Fiber",
+     "amount": "6 g",
+     "dv": "21%"
+    },
+    {
+     "name": "Total Sugars",
+     "amount": "0 g",
+     "dv": "not established"
+    },
+    {
+     "name": "Sunfiber® Guar Fiber",
+     "amount": "7 g",
+     "dv": "not established"
+    }
+   ],
+   "other_ingredients": "None."
+  },
+  "Vitamatic Extra Strength Prebiotic 7g Fiber Gummies": {
+   "panel_capture": "captures/fiber/B0BSGHGD2W-panel-2026-11-19.png",
+   "serving_size": "3 Gummies",
+   "servings_per_container": "20",
+   "rows": [
+    {
+     "name": "Calories",
+     "amount": "15",
+     "dv": ""
+    },
+    {
+     "name": "Total Fat",
+     "amount": "0 g",
+     "dv": "0%"
+    },
+    {
+     "name": "Saturated Fat",
+     "amount": "0 g",
+     "dv": "0%"
+    },
+    {
+     "name": "Trans Fat",
+     "amount": "0 g",
+     "dv": "0%"
+    },
+    {
+     "name": "Cholesterol",
+     "amount": "0 g",
+     "dv": "0%"
+    },
+    {
+     "name": "Sodium",
+     "amount": "10 mg",
+     "dv": "<1%"
+    },
+    {
+     "name": "Total Carbohydrate",
+     "amount": "7 g",
+     "dv": "3%"
+    },
+    {
+     "name": "Dietary Fiber",
+     "amount": "7 g",
+     "dv": "25%"
+    },
+    {
+     "name": "Total Sugars",
+     "amount": "0 g",
+     "dv": "not established"
+    },
+    {
+     "name": "Includes 0g added sugars",
+     "amount": "",
+     "dv": "0%"
+    },
+    {
+     "name": "Protein",
+     "amount": "0 g",
+     "dv": "0%"
+    },
+    {
+     "name": "GOFOS™ (from beets)",
+     "amount": "7.9 g",
+     "dv": "not established"
+    }
+   ],
+   "other_ingredients": "Fructo-Oligosaccharides, Pectin, Citric Acid, Natural Flavors, Natural Colors (Annatto and Vegetable Juice), Sodium Citrate, Starch (for anti-sticking).",
+   "panel_note": "GOFOS™ is a registered trademark of Galam Ltd."
+  }
+ }
+}
