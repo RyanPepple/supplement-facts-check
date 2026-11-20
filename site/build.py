@@ -131,6 +131,12 @@ OFFSAMPLE_COMPARISONS = [
     # brand it is most often weighed against, which sells direct and so cannot
     # appear in an Amazon category ranking at all.
     ("Seed DS-01 Daily Synbiotic", "Ritual Synbiotic+"),
+    # The two 1MD Nutrition probiotics, added 2026-11-19 because searches reaching
+    # the site ask whether they are third-party tested. Each is set against the
+    # sampled product a shopper would weigh it against: the 50+ billion CFU
+    # multi-strain capsules with a prebiotic.
+    ("Physician's CHOICE Probiotics 60 Billion CFU", "1MD Complete Probiotics Platinum"),
+    ("NewRhythm Probiotics 50 Billion CFU", "1MD BiomeMD"),
 ]
 
 e = html.escape
@@ -535,8 +541,8 @@ def label_faq(r, why, label):
                 + why.get(5, "")))
     out.append((f"Are the doses in {name} backed by clinical trials?",
                 ("The label discloses a dose inside the range human trials used, so it scored 1 on criterion 4. "
-                 if c4 else "It scored 0 on criterion 4: no disclosed dose could be matched to the range human "
-                            "trials used. ")
+                 if c4 else "It scored 0 on criterion 4: no disclosed dose could be shown to fall inside the "
+                            "range human trials used. ")
                 + why.get(4, "")))
     return [(q, a.strip()) for q, a in out]
 

@@ -507,6 +507,55 @@
       "total_line": "Total Probiotic Cultures 5 Billion CFU. Footnote 1: At Expiration Date under recommended storage conditions.",
       "other_ingredients": "Clean Tablet Technology™ Blend (Organic Dextrose, Organic Tapioca Maltodextrin, Organic Sunflower Lecithin, Organic Palm Oil, Organic Guar Gum), Organic Mixed Berry Flavor, Organic Dark Cherry Flavor.",
       "capture_note": "Transcribed from the full panel re-captured 2026-11-19. Its Organic Prebiotic Fiber Blend row matches the scoring notes; the earlier capture was cropped above it."
+    },
+    "1MD Complete Probiotics Platinum": {
+      "panel_capture": "captures/1md-complete-probiotics-platinum-panel-2026-11-19.png",
+      "serving_size": "1 Capsule",
+      "servings_per_container": "30",
+      "rows": [
+        {
+          "name": "Complete Probiotic Blend",
+          "amount": "51 B CFU (308 mg)",
+          "dv": "not established",
+          "contains": "Lactobacillus acidophilus, Bifidobacterium lactis, Bifidobacterium longum, Bifidobacterium bifidum, Lactobacillus plantarum, Lactobacillus bulgaricus, Lactobacillus casei, Lactobacillus salivarius, LactoSpore® (Bacillus coagulans MTCC 5856), Lactobacillus gasseri, Lactobacillus rhamnosus"
+        },
+        {
+          "name": "NutraFlora® Prebiotic FOS (Fructo-oligosaccharides)",
+          "amount": "50 mg",
+          "dv": "not established"
+        }
+      ],
+      "other_ingredients": "Delayed Release Vegetable Cellulose Capsule, Rice Flour, Silica."
+    },
+    "1MD BiomeMD": {
+      "panel_capture": "captures/1md-biomemd-panel-2026-11-19.png",
+      "serving_size": "1 Capsule",
+      "servings_per_container": "30",
+      "rows": [
+        {
+          "name": "Bifidobacterium lactis UABla-12®",
+          "amount": "20 mg (10 B CFU)",
+          "dv": "not established"
+        },
+        {
+          "name": "Lactobacillus acidophilus DDS-1®",
+          "amount": "40 mg (10 B CFU)",
+          "dv": "not established"
+        },
+        {
+          "name": "BiomeMD® Probiotic Blend",
+          "amount": "121 mg (42 B CFU)",
+          "dv": "not established",
+          "contains": "Lactobacillus plantarum, Bacillus coagulans, Lactobacillus reuteri, Bifidobacterium longum, Bifidobacterium bifidum, Lactobacillus rhamnosus, Lactobacillus gasseri, Lactobacillus acidophilus, Lactobacillus salivarius, Lactobacillus fermentum, Lactobacillus casei, Lactobacillus paracasei, Streptococcus thermophilus"
+        },
+        {
+          "name": "Advanced Prebiotic Blend",
+          "amount": "380 mg",
+          "dv": "not established",
+          "contains": "Acacia seyal Gum, Xylo-oligosaccharides (XOS), Fructo-oligosaccharides (FOS)"
+        }
+      ],
+      "other_ingredients": "Delayed Release Vegetable Cellulose Capsule, Vegetable Oil Powder, Silica."
     }
   }
 }
