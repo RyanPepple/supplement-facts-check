@@ -127,7 +127,8 @@
     }
    ],
    "other_ingredients": "Chicory root fiber (inulin), cane sugar; contains <2% of: citric acid, lo han fruit concentrate, natural flavors, organic annatto extract (color), organic black carrot juice concentrate, organic carnauba wax, organic sunflower oil, organic turmeric extract, pectin, sodium citrate.",
-   "capture_note": "The first two lines of the ingredient statement are legible in the panel capture; the rest is read from the full bottle photo (captures/fiber/B07GPGQJR4-full-2026-11-19.jpg) at lower resolution and should be checked against a sharper capture."
+   "capture_note": "The ingredient statement is cut off in the panel capture; it is transcribed from a sharper bottle capture (captures/fiber/B07GPGQJR4-ingredients-2026-11-19.jpg).",
+   "panel_note": "Suggested use on the bottle: Adults chew two (2) gummies per day. Chew completely before swallowing. Reduce daily dosage if minor gas or bloating occurs."
   },
   "MiraFIBER Vegan Formula Gummies": {
    "panel_capture": "captures/fiber/B0FSWWF65H-panel-2026-11-19.png",
