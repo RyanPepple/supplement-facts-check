@@ -1247,6 +1247,18 @@ def build():
     # --------------------------------------------------------- findings
     findings_llms, findings_teaser = findings_pages(pilot, ctx, ver, locked)
 
+    # Products scored outside the captured ranking get their own block on the
+    # home page, below the ranked results and set apart from them, so they can be
+    # found without being read as part of any figure above.
+    offsample_home = "" if not offsample_scored else f"""
+<h2>Also scored, outside the sample</h2>
+<p class="lede" style="font-size:18px">{len(offsample_scored)} more {"product is" if len(offsample_scored) == 1 else "products are"}
+scored on the same six criteria, by the same rules, from the same kind of dated label capture. They are not in the
+captured Amazon ranking, so they are kept in a separate file and counted in no figure on this page.</p>
+<div class="grid">{"".join(panel(r) for r in sorted(offsample_scored, key=lambda r: r["product"]))}</div>
+<p class="prose" style="font-size:15px">Why each was added is recorded in its row of
+<a href="{REPO_URL}/blob/main/offsample-scores.csv">offsample-scores.csv</a>.</p>"""
+
     # ------------------------------------------------------------ home
     n = len(pilot)
     no_blend = sum(r[CRITERIA[0][0]] == "1" for r in pilot)
@@ -1302,6 +1314,7 @@ certificate of analysis could not be located for {no_coa}. The highest score was
 <h3>Every scorecard in full</h3>
 <div class="grid">{''.join(panel(r) for r in pilot)}</div>
 {findings_teaser}
+{offsample_home}
 <h2>The sample</h2>
 <p class="lede" style="font-size:18px">All {len(sample)} products in the captured ranking, in rank order.
 {n_inc} pass the inclusion test, {n_exc} are excluded, {n_pend} are undecided. Exclusions stay visible: a sample
