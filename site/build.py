@@ -184,7 +184,7 @@ def source_caveat(dose_row):
 
 
 def version_and_status(readme):
-    ver = re.search(r"\*\*Methodology version:\*\*\s*([\d.]+)\s*—\s*locked\s*([\d-]+)", readme)
+    ver = re.search(r"\*\*Methodology version:\*\*\s*([\d.]+)\s*(?:—|,)\s*locked\s*([\d-]+)", readme)
     return (ver.group(1), ver.group(2)) if ver else ("", "")
 
 
@@ -372,7 +372,7 @@ table.sc td.s{text-align:center;font-weight:900;font-size:15px;white-space:nowra
 """
 
 NAV = [("index.html", "Results"), ("findings.html", "Findings"),
-       ("comparisons.html", "Comparisons"),
+       ("comparisons.html", "Comparisons"), ("fiber/index.html", "Fiber"),
        ("methodology.html", "Methodology"), ("reference.html", "Dose reference"),
        ("conflict-of-interest.html", "Conflict of interest"), ("about.html", "About")]
 
@@ -1195,6 +1195,173 @@ own page listing every scored row as evidence.</p>
 """
 
 
+# ------------------------------------------------------------------ fiber
+# The fiber category is a second, separately captured sample. It is read from its
+# own files and rendered under /fiber/, and no figure computed here is ever
+# combined with the probiotic sample, because the two lists come from different
+# Amazon categories captured on different dates.
+FIBER_SCORES = "fiber-scores.csv"
+FIBER_SAMPLE = "fiber-sample.csv"
+FIBER_CAPTURE = "amazon-fiber-bestsellers-top38-2026-11-19.png"
+
+
+def fiber_pages(ctx, ver, locked):
+    rows = [r for r in read_csv(FIBER_SCORES) if r["total_score"].strip()]
+    sample = read_csv(FIBER_SAMPLE)
+    if not rows:
+        return "", []
+    for r in rows:
+        s = sum(int(r[k]) for k, _, _ in CRITERIA)
+        assert s == int(r["total_score"]), f"{r['product']}: criteria sum {s} != total {r['total_score']}"
+    rank = {s["asin"]: int(s["rank"]) for s in sample}
+    rows.sort(key=lambda r: rank.get(r["asin"], 999))
+
+    # panel captures, downsized like the probiotic captures
+    capdir = OUT / "captures" / "fiber"
+    capdir.mkdir(parents=True, exist_ok=True)
+    caps = {}
+    for p in sorted((ROOT / "captures" / "fiber").iterdir()):
+        if p.suffix.lower() not in (".png", ".jpg", ".jpeg"):
+            continue
+        im = Image.open(p).convert("RGB")
+        if im.width > 1400:
+            im = im.resize((1400, round(im.height * 1400 / im.width)))
+        name = p.stem + ".jpg"
+        im.save(capdir / name, "JPEG", quality=82, optimize=True)
+        im.save(capdir / (p.stem + ".webp"), "WEBP", quality=72, method=6)
+        caps[p.name] = (name, im.width, im.height)
+
+    n = len(rows)
+    passes = {k: sum(1 for r in rows if r[k] == "1") for k, _, _ in CRITERIA}
+    dist = {}
+    for r in rows:
+        dist[int(r["total_score"])] = dist.get(int(r["total_score"]), 0) + 1
+    top = max(int(r["total_score"]) for r in rows)
+    k4, k5 = CRITERIA[3][0], CRITERIA[4][0]
+    excluded = [s for s in sample if s["included"] == "no"]
+    dups = [s for s in sample if s["included"].startswith("duplicate")]
+    unscored = [s for s in sample if s["included"] == "not scored"]
+
+    def prod_path(r):
+        return f"fiber/products/{slugify(r['product'])}.html"
+
+    def fpanel(r, rel):
+        return panel(r, link=False).replace(
+            "</article>",
+            f'<a class="btn" href="{rel}products/{slugify(r["product"])}.html">Why it scored this way →</a></article>')
+
+    # ---------------------------------------------------------------- products
+    for r in rows:
+        path = prod_path(r)
+        pre, why = split_notes(r["notes"])
+        m = re.search(r"Panel: captures/fiber/(\S+)$", r["notes"])
+        src = m.group(1) if m else ""
+        img_html, images = "", []
+        if src in caps:
+            name, w, h = caps[src]
+            stem = name[:-4]
+            img_html = (f'<figure class="cap"><picture><source srcset="../../captures/fiber/{stem}.webp" type="image/webp">'
+                        f'<img src="../../captures/fiber/{name}" width="{w}" height="{h}" loading="lazy" '
+                        f'alt="Supplement Facts panel of {e(r["product"])}, captured {e(r["capture_date"])}"></picture>'
+                        f'<figcaption>Supplement Facts panel as captured {e(r["capture_date"])}. '
+                        f'<a href="{RAW_URL}captures/fiber/{e(src)}">Full-size original</a>.</figcaption></figure>')
+            images = [{"@type": "ImageObject", "contentUrl": f"{SITE_URL}/captures/fiber/{name}",
+                       "width": w, "height": h, "license": LICENSE_URL,
+                       "caption": f"Supplement Facts panel of {r['product']}, captured {r['capture_date']}",
+                       "dateCreated": r["capture_date"], "creditText": "Supplement Facts Check",
+                       "sameAs": f"{RAW_URL}captures/fiber/{src}"}]
+        items = ""
+        for i, (key, label, _) in enumerate(CRITERIA, 1):
+            ok = r[key] == "1"
+            items += (f'<div class="why"><div class="m {"pass" if ok else "fail"}">{"✓" if ok else "✗"}</div>'
+                      f'<div><b>{i}. {e(label)}: {r[key]}</b><p>{e(why.get(i, "No reasoning recorded."))}</p></div></div>')
+        pre_txt = re.sub(r"^Fiber rank \d+\.\s*", "", pre).strip()
+        body = f"""<p class="crumb"><a href="../index.html">Fiber supplements</a></p>
+<h1>{e(r['product'])}: {e(r['total_score'])}/6 for label disclosure</h1>
+<p class="lede">{e(r['brand'])}, rank {rank.get(r['asin'], '?')} in Amazon Best Sellers in Fiber Supplements on
+11/19/2026. Label captured {e(r['capture_date'])}. This scores what the label discloses. It does not say whether the
+product works, and nothing was lab-tested.</p>
+<div class="grid">{panel(r, link=False)}</div>
+{f'<p class="prose">{e(pre_txt)}</p>' if pre_txt else ''}
+<h2>Why it scored this way</h2>
+{items}
+{img_html}
+<p class="prose">Fiber labels are read under the
+<a href="../../methodology.html">methodology</a>'s fiber rulings (v1.17): where one fiber supplies all the fiber, the
+dietary fiber line is read as its dose; where several share one total with no split, their amounts count as
+undisclosed. Dose ranges come from the <a href="../../reference.html">dose reference table</a>. The full row is in
+<a href="{RAW_URL}{FIBER_SCORES}">{FIBER_SCORES}</a>.</p>"""
+        title = f"{r['product']} label score: {r['total_score']}/6 | Supplement Facts Check"
+        desc = (f"{r['product']} scores {r['total_score']}/6 on label disclosure: what its Supplement Facts panel "
+                f"states about dose, form and testing, criterion by criterion.")
+        product, review = review_node(r, pre_txt, why, path, images)
+        page(path, title, desc, body, ctx,
+             graph(website_node(), webpage_node(path, title, desc, main=page_url(path) + "#review",
+                                                modified=r["capture_date"]), product, review),
+             og=None)
+
+    # ---------------------------------------------------------------- hub
+    def lst(items):
+        return "".join(f"<li>{x}</li>" for x in items)
+    dup_li = lst(f'Rank {e(s["rank"])}, {e(s["product"])}: {e(s["included"])}' for s in dups)
+    exc_li = lst(f'Rank {e(s["rank"])}, {e(s["product"])}: {e(s["exclusion_reason"])}' for s in excluded)
+    uns_li = lst(f'Rank {e(s["rank"])}, {e(s["product"])}: {e(s["exclusion_reason"])}' for s in unscored)
+    in_range = [r for r in rows if r[k4] == "1"]
+    cap = caps.get(FIBER_CAPTURE)
+    body = f"""<h1>Fiber supplements: label disclosure scores</h1>
+<p class="lede">{n} fiber formulas from the top 30 of Amazon Best Sellers in Fiber Supplements, captured 11/19/2026,
+scored on the same six criteria as the probiotic sample. This is a separate sample, so none of these scores is counted
+in any figure on the <a href="../index.html">probiotic results</a>.</p>
+
+<h2>What the labels show</h2>
+<div class="why"><div class="m fail">!</div><div><b>{len(in_range)} of {n} state a daily dose that lands in a
+trial-backed range.</b><p>{e(", ".join(r["product"] for r in in_range))}. Most gummies deliver 4 to 5 g of fiber a
+day, where the inulin and polydextrose trials that found an effect used 8 to 12 g.</p></div></div>
+<div class="why"><div class="m fail">!</div><div><b>{passes[k5]} of {n} publish a certificate of analysis.</b><p>Several
+carry NSF, USP or Informed Choice certification, which the product pages note. A certification listing is not a
+certificate of analysis a buyer can match to a lot.</p></div></div>
+<div class="why"><div class="m pass">✓</div><div><b>{passes[CRITERIA[0][0]]} of {n} disclose an exact amount for
+every active.</b><p>Most fiber products have one fiber, and the fiber line states it. The ones that fail mix two or
+more fibers under one total.</p></div></div>
+<p class="prose">Highest score: {top}/6. Score spread: {", ".join(f"{c} at {s}/6" for s, c in sorted(dist.items(), reverse=True))}.
+Read the <a href="../methodology.html">fiber rulings in the methodology</a> for how fiber labels are read, including
+the objection that fiber grams understate psyllium husk weight, which affects three psyllium rows flagged on their
+pages.</p>
+
+<h2>All {n} scored formulas, in rank order</h2>
+<div class="grid">{"".join(fpanel(r, "") for r in rows)}</div>
+
+<h2>How the sample was built</h2>
+<p class="prose">The top 30 listings were captured on 11/19/2026 and each was kept only if its first-listed claim is
+regularity or digestive health. Each distinct formula is scored once, at its highest rank; a repeat size whose panel
+matches ingredient for ingredient and amount for amount is recorded as a duplicate. Every decision is in
+<a href="{RAW_URL}{FIBER_SAMPLE}">{FIBER_SAMPLE}</a>.</p>
+{f'<figure class="cap"><img src="../captures/{cap[0]}" width="{cap[1]}" height="{cap[2]}" loading="lazy" alt="Amazon Best Sellers in Fiber Supplements, captured 11/19/2026"><figcaption>The ranking as captured 11/19/2026.</figcaption></figure>' if cap else ''}
+<h3>Excluded</h3><ul class="prose">{exc_li}</ul>
+<h3>Duplicates, not scored twice</h3><ul class="prose">{dup_li}</ul>
+<h3>Not scored</h3><ul class="prose">{uns_li}</ul>"""
+    title = "Fiber supplement label scores | Supplement Facts Check"
+    desc = (f"{n} best-selling fiber supplements scored 0-6 on what their labels disclose: dose, form, "
+            f"trial-backed amounts and testing. {len(in_range)} of {n} reach a trial-backed daily dose.")
+    coll = {"@type": "CollectionPage", "@id": page_url("fiber/index.html") + "#page",
+            "url": page_url("fiber/index.html"), "name": title, "description": desc,
+            "isPartOf": {"@id": f"{SITE_URL}/#website"}, "license": LICENSE_URL, "dateModified": locked,
+            "hasPart": [{"@id": page_url(prod_path(r)) + "#review"} for r in rows]}
+    page("fiber/index.html", title, desc, body, ctx, graph(website_node(), coll))
+
+    home = f"""
+<h2>New: fiber supplements</h2>
+<p class="lede" style="font-size:18px">{n} best-selling fiber supplements, scored by the same six criteria in a
+separate sample. {len(in_range)} of {n} state a daily dose that lands in a trial-backed range, and
+{passes[k5]} publish a certificate of analysis.</p>
+<p><a class="btn" href="fiber/index.html">See the fiber scores →</a></p>"""
+    llms = ["", "## Fiber supplements (separate sample)", "",
+            f"Top 30 of Amazon Best Sellers in Fiber Supplements captured 11/19/2026; {n} formulas scored, "
+            f"reported separately from the probiotic sample: {SITE_URL}/fiber/"]
+    llms += [f"- {r['product']} ({r['brand']}): {r['total_score']}/6, label captured {r['capture_date']}" for r in rows]
+    return home, llms
+
+
 def build():
     if OUT.exists():
         shutil.rmtree(OUT)
@@ -1246,6 +1413,7 @@ def build():
 
     # --------------------------------------------------------- findings
     findings_llms, findings_teaser = findings_pages(pilot, ctx, ver, locked)
+    fiber_home, fiber_llms = fiber_pages(ctx, ver, locked)
 
     # Products scored outside the captured ranking get their own block on the
     # home page, below the ranked results and set apart from them, so they can be
@@ -1315,6 +1483,7 @@ certificate of analysis could not be located for {no_coa}. The highest score was
 <div class="grid">{''.join(panel(r) for r in pilot)}</div>
 {findings_teaser}
 {offsample_home}
+{fiber_home}
 <h2>The sample</h2>
 <p class="lede" style="font-size:18px">All {len(sample)} products in the captured ranking, in rank order.
 {n_inc} pass the inclusion test, {n_exc} are excluded, {n_pend} are undecided. Exclusions stay visible: a sample
@@ -1767,6 +1936,7 @@ q.addEventListener('input',()=>{{const s=q.value.toLowerCase();rows.forEach(r=>r
     lines += [f"- {a['product']} ({a['total_score']}/6) vs {b['product']} ({b['total_score']}/6): "
               f"{SITE_URL}/{path}" for (path, _), a, b in cmp_pages]
     lines += findings_llms
+    lines += fiber_llms
     lines += ["", "## Known limitations", "",
               f"- {len(doses) - with_range} of {len(doses)} dose-reference rows have no range set; each records "
               "why, and criterion 4 cannot be scored from them.",
@@ -1783,7 +1953,7 @@ q.addEventListener('input',()=>{{const s=q.value.toLowerCase();rows.forEach(r=>r
         urls = [p.relative_to(OUT).as_posix() for p in sorted(OUT.rglob("*.html"))]
         # Pages that aggregate other pages change whenever any of those does.
         newest = max(LASTMOD.values()) if LASTMOD else None
-        for hub in ("index.html", "comparisons.html", "findings.html", "reference.html", "conflict-of-interest.html"):
+        for hub in ("index.html", "fiber/index.html", "comparisons.html", "findings.html", "reference.html", "conflict-of-interest.html"):
             if newest and (OUT / hub).exists():
                 LASTMOD[hub] = max(LASTMOD.get(hub, ""), newest)
         sm = "".join(f"<url><loc>{SITE_URL}/{'' if u == 'index.html' else u}</loc>"
