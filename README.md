@@ -4,10 +4,10 @@ An open-data audit of dose disclosure on gut-health supplement labels.
 
 - **Status:** Rubric locked. Sample captured 09/26/2026; all 18 eligible products scored.
 - **Author:** Ryan Pepple
-- **Methodology version:** 1.15 — locked 2026-11-19. Clarifies when an ingredient
-  sold at graded purities needs a stated percentage (criterion 2), restates the
-  probiotic CFU rule to match rulings v1.11 to v1.13, and keeps the v1.14 off-sample
-  rule; scoring rubric unchanged since v1.7 (locked 2026-09-07).
+- **Methodology version:** 1.16 — locked 2026-11-19. Scores follow the current
+  label: a product whose label changes is re-scored on the new one (v1.16). Keeps the
+  v1.15 criterion 2 ruling and the v1.14 off-sample rule; scoring rubric unchanged
+  since v1.7 (locked 2026-09-07).
 
 ---
 
@@ -27,7 +27,7 @@ can reproduce, check, or dispute the results.
 
 ---
 
-## Methodology v1.15
+## Methodology v1.16
 
 ### Scoring rubric
 
@@ -313,6 +313,19 @@ that none exists. A certificate published later, or reachable by a route
 this search did not cover, would change the score, and the dated record
 makes that revision auditable rather than silent.
 
+### When a label changes
+
+**Ruling on label changes (v1.16, 2026-11-19).** A score describes the label a buyer
+can see now, so when a re-capture shows that a scored product's Supplement Facts panel
+has changed, the product is re-scored in full on the new panel, criterion 5 search
+included, and the row's capture date moves to the re-capture. The earlier capture stays
+in `captures/` and the earlier score stays in the commit history, so the change is
+visible rather than overwritten, and the product page shows both captures with their
+dates. A change that touches no criterion still triggers the re-score: the point is that
+the row is read from the current label, not that the score necessarily moves. Rank 21,
+Digestive Advantage, forced this: its 2026-11-19 re-capture shows Total Sugars 4 g and
+added sugars at 16% / 8% where the scored label showed 3 g and 12% / 6%.
+
 ### Criteria deliberately excluded
 
 The following were considered and rejected as scoring criteria:
@@ -537,6 +550,8 @@ https://github.com/RyanPepple/supplement-facts-check
 
 ## Revision history
 
+- **v1.16, 2026-11-19.** Ruling on label changes: scores follow the current label.
+  Digestive Advantage re-scored on its 2026-11-19 panel; 4/6 unchanged.
 - **v1.15, 2026-11-19.** Ruling on named compounds versus extract weights under
   criterion 2: Lemme Debloat 2 to 3; Garden of Life Dr Formulated Probiotics for Men
   1 to 2, provisionally, pending any resistant starch reference range. Probiotic CFU

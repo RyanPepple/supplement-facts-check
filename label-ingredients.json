@@ -391,7 +391,7 @@
       "capture_note": "Transcribed from the full panel re-captured 2026-11-19, which matches the panel the score was read from."
     },
     "Digestive Advantage Probiotic Gummies": {
-      "panel_capture": "captures/digestive-advantage-gummies-panel-2026-09-27.png",
+      "panel_capture": "captures/digestive-advantage-gummies-panel-2026-11-19.png",
       "serving_size": "2 Gummies",
       "servings_per_container": "40",
       "dv_columns": "The panel prints two %DV columns, for children 3 years of age and for adults and children 4 or more years of age; both are shown here as 3 yrs / 4+ yrs.",
@@ -408,13 +408,13 @@
         },
         {
           "name": "Total Sugars",
-          "amount": "3 g",
+          "amount": "4 g",
           "dv": "not established"
         },
         {
-          "name": "Includes 3g Added Sugars",
+          "name": "Includes 4g Added Sugars",
           "amount": "",
-          "dv": "12% / 6%"
+          "dv": "16% / 8%"
         },
         {
           "name": "Vitamin D (as cholecalciferol)",
@@ -427,9 +427,8 @@
           "dv": "not established"
         }
       ],
-      "other_ingredients": "sugar, corn syrup, water, gelatin, citric acid, natural flavors, sodium citrate, pectin, lactic acid, colors from fruits and vegetables. Contains Soy. (Read from the 2026-11-19 re-capture.)",
-      "capture_note": "Rows are transcribed from the panel the score was read from (2026-09-27). The listing panel re-captured 2026-11-19 differs in two lines: Total Sugars 4 g, and Includes 4g Added Sugars at 16% / 8%. Every other row is unchanged, and the ‡ marker after the CFU count is not defined on either capture: the 2026-11-19 capture shows the full footnote block (*, **, †) with no ‡ entry.",
-      "later_capture": "captures/digestive-advantage-gummies-panel-2026-11-19.png"
+      "other_ingredients": "sugar, corn syrup, water, gelatin, citric acid, natural flavors, sodium citrate, pectin, lactic acid, colors from fruits and vegetables. Contains Soy.",
+      "capture_note": "Transcribed from the current label, re-captured 2026-11-19, which the row is scored on under v1.16. The earlier 2026-09-27 panel showed Total Sugars 3 g and Includes 3g Added Sugars at 12% / 6%; every other line is the same. The ‡ marker after the CFU count is not defined on the panel."
     },
     "Phillips' Colon Health Daily Probiotic": {
       "panel_capture": "captures/phillips-colon-health-panel-2026-11-19.png",
