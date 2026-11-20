@@ -1438,7 +1438,9 @@ what was done about it, in the <a href="conflict-of-interest.html">conflict-of-i
             # Each capture is dated from its own filename, not from the row: a
             # re-capture pass adds files without restating when the score was read.
             when = capture_date(src) or r["capture_date"]
-            later = " (later capture, after this score was read)" if when > r["capture_date"] else ""
+            later = (" (later capture, after this score was read)" if when > r["capture_date"]
+                     else " (earlier label, replaced by the panel this score is read from)"
+                     if "-panel-" in src and when < r["capture_date"] else "")
             alt = f"{view} of {r['product']}, captured {when}"
             figs += (f'<figure><a href="../captures/{name}">{capture_img("../", name, w, h, alt)}</a>'
                      f'<figcaption>{view}, captured {e(when)}{later}. '
