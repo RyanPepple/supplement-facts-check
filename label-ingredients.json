@@ -556,6 +556,36 @@
         }
       ],
       "other_ingredients": "Delayed Release Vegetable Cellulose Capsule, Vegetable Oil Powder, Silica."
+    },
+    "Ritual Synbiotic+": {
+      "panel_capture": "captures/ritual-synbiotic-plus-panel-2026-10-26.png",
+      "serving_size": "cropped above the visible area of the capture (the scoring notes record one vegan capsule)",
+      "servings_per_container": "30",
+      "rows": [
+        {
+          "name": "Calories",
+          "amount": "5",
+          "dv": ""
+        },
+        {
+          "name": "Probiotic Blend",
+          "amount": "40 mg, 11B CFUs (at expiration date under recommended storage conditions)",
+          "dv": "not established",
+          "contains": "Lactobacillus rhamnosus (LGG®), Bifidobacterium animalis ssp. lactis (BB-12®)"
+        },
+        {
+          "name": "PreforPro®",
+          "amount": "15 mg",
+          "dv": "not established",
+          "contains": "LH01 - Myoviridae, LL5 - Siphoviridae, T4D - Myoviridae, LL12 - Myoviridae"
+        },
+        {
+          "name": "Tributyrin (as CoreBiome®)",
+          "amount": "300 mg",
+          "dv": "not established"
+        }
+      ],
+      "other_ingredients": "Stomach acid-resistant outer vegan capsule (hypromellose, gellan gum), medium chain triglycerides (from coconut), inner vegan capsule (hypromellose), silica, cellulose."
     }
   }
 }
